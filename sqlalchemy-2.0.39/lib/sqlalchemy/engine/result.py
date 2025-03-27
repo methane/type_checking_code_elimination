@@ -113,23 +113,24 @@ class ResultMetaData:
     def _for_freeze(self) -> ResultMetaData:
         raise NotImplementedError()
 
-    @overload
-    def _key_fallback(
-        self, key: Any, err: Optional[Exception], raiseerr: Literal[True] = ...
-    ) -> NoReturn: ...
+    if TYPE_CHECKING:
+        @overload
+        def _key_fallback(
+            self, key: Any, err: Optional[Exception], raiseerr: Literal[True] = ...
+        ) -> NoReturn: ...
 
-    @overload
-    def _key_fallback(
-        self,
-        key: Any,
-        err: Optional[Exception],
-        raiseerr: Literal[False] = ...,
-    ) -> None: ...
+        @overload
+        def _key_fallback(
+            self,
+            key: Any,
+            err: Optional[Exception],
+            raiseerr: Literal[False] = ...,
+        ) -> None: ...
 
-    @overload
-    def _key_fallback(
-        self, key: Any, err: Optional[Exception], raiseerr: bool = ...
-    ) -> Optional[NoReturn]: ...
+        @overload
+        def _key_fallback(
+            self, key: Any, err: Optional[Exception], raiseerr: bool = ...
+        ) -> Optional[NoReturn]: ...
 
     def _key_fallback(
         self, key: Any, err: Optional[Exception], raiseerr: bool = True
@@ -722,21 +723,22 @@ class ResultInternal(InPlaceGenerative, Generic[_R]):
 
         return manyrows
 
-    @overload
-    def _only_one_row(
-        self,
-        raise_for_second_row: bool,
-        raise_for_none: Literal[True],
-        scalar: bool,
-    ) -> _R: ...
+    if TYPE_CHECKING:
+        @overload
+        def _only_one_row(
+            self,
+            raise_for_second_row: bool,
+            raise_for_none: Literal[True],
+            scalar: bool,
+        ) -> _R: ...
 
-    @overload
-    def _only_one_row(
-        self,
-        raise_for_second_row: bool,
-        raise_for_none: bool,
-        scalar: bool,
-    ) -> Optional[_R]: ...
+        @overload
+        def _only_one_row(
+            self,
+            raise_for_second_row: bool,
+            raise_for_none: bool,
+            scalar: bool,
+        ) -> Optional[_R]: ...
 
     def _only_one_row(
         self,
@@ -1121,16 +1123,17 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
         """
         return self._column_slices(col_expressions)
 
-    @overload
-    def scalars(self: Result[Tuple[_T]]) -> ScalarResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalars(self: Result[Tuple[_T]]) -> ScalarResult[_T]: ...
 
-    @overload
-    def scalars(
-        self: Result[Tuple[_T]], index: Literal[0]
-    ) -> ScalarResult[_T]: ...
+        @overload
+        def scalars(
+            self: Result[Tuple[_T]], index: Literal[0]
+        ) -> ScalarResult[_T]: ...
 
-    @overload
-    def scalars(self, index: _KeyIndexType = 0) -> ScalarResult[Any]: ...
+        @overload
+        def scalars(self, index: _KeyIndexType = 0) -> ScalarResult[Any]: ...
 
     def scalars(self, index: _KeyIndexType = 0) -> ScalarResult[Any]:
         """Return a :class:`_engine.ScalarResult` filtering object which
@@ -1440,11 +1443,12 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
             raise_for_second_row=True, raise_for_none=False, scalar=False
         )
 
-    @overload
-    def scalar_one(self: Result[Tuple[_T]]) -> _T: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalar_one(self: Result[Tuple[_T]]) -> _T: ...
 
-    @overload
-    def scalar_one(self) -> Any: ...
+        @overload
+        def scalar_one(self) -> Any: ...
 
     def scalar_one(self) -> Any:
         """Return exactly one scalar result or raise an exception.
@@ -1463,11 +1467,12 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
             raise_for_second_row=True, raise_for_none=True, scalar=True
         )
 
-    @overload
-    def scalar_one_or_none(self: Result[Tuple[_T]]) -> Optional[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalar_one_or_none(self: Result[Tuple[_T]]) -> Optional[_T]: ...
 
-    @overload
-    def scalar_one_or_none(self) -> Optional[Any]: ...
+        @overload
+        def scalar_one_or_none(self) -> Optional[Any]: ...
 
     def scalar_one_or_none(self) -> Optional[Any]:
         """Return exactly one scalar result or ``None``.
@@ -1519,11 +1524,12 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
             raise_for_second_row=True, raise_for_none=True, scalar=False
         )
 
-    @overload
-    def scalar(self: Result[Tuple[_T]]) -> Optional[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalar(self: Result[Tuple[_T]]) -> Optional[_T]: ...
 
-    @overload
-    def scalar(self) -> Any: ...
+        @overload
+        def scalar(self) -> Any: ...
 
     def scalar(self) -> Any:
         """Fetch the first column of the first row, and close the result set.
@@ -1904,12 +1910,6 @@ class TupleResult(FilterResult[_R], util.TypingOnly):
 
             """
             ...
-
-        @overload
-        def scalar_one(self: TupleResult[Tuple[_T]]) -> _T: ...
-
-        @overload
-        def scalar_one(self) -> Any: ...
 
         def scalar_one(self) -> Any:
             """Return exactly one scalar result or raise an exception.

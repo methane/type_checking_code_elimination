@@ -110,16 +110,17 @@ def cte(
 _TypedSelectable = Union["Select[_TP]", "CompoundSelect[_TP]"]
 
 
-@overload
-def except_(
-    *selects: _TypedSelectable[_TP],
-) -> CompoundSelect[_TP]: ...
+if TYPE_CHECKING:
+    @overload
+    def except_(
+        *selects: _TypedSelectable[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
-@overload
-def except_(
-    *selects: _SelectStatementForCompoundArgument[_TP],
-) -> CompoundSelect[_TP]: ...
+    @overload
+    def except_(
+        *selects: _SelectStatementForCompoundArgument[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
 def except_(
@@ -137,16 +138,17 @@ def except_(
     return CompoundSelect._create_except(*selects)
 
 
-@overload
-def except_all(
-    *selects: _TypedSelectable[_TP],
-) -> CompoundSelect[_TP]: ...
+if TYPE_CHECKING:
+    @overload
+    def except_all(
+        *selects: _TypedSelectable[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
-@overload
-def except_all(
-    *selects: _SelectStatementForCompoundArgument[_TP],
-) -> CompoundSelect[_TP]: ...
+    @overload
+    def except_all(
+        *selects: _SelectStatementForCompoundArgument[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
 def except_all(
@@ -209,16 +211,17 @@ def exists(
     return Exists(__argument)
 
 
-@overload
-def intersect(
-    *selects: _TypedSelectable[_TP],
-) -> CompoundSelect[_TP]: ...
+if TYPE_CHECKING:
+    @overload
+    def intersect(
+        *selects: _TypedSelectable[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
-@overload
-def intersect(
-    *selects: _SelectStatementForCompoundArgument[_TP],
-) -> CompoundSelect[_TP]: ...
+    @overload
+    def intersect(
+        *selects: _SelectStatementForCompoundArgument[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
 def intersect(
@@ -236,16 +239,17 @@ def intersect(
     return CompoundSelect._create_intersect(*selects)
 
 
-@overload
-def intersect_all(
-    *selects: _TypedSelectable[_TP],
-) -> CompoundSelect[_TP]: ...
+if TYPE_CHECKING:
+    @overload
+    def intersect_all(
+        *selects: _TypedSelectable[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
-@overload
-def intersect_all(
-    *selects: _SelectStatementForCompoundArgument[_TP],
-) -> CompoundSelect[_TP]: ...
+    @overload
+    def intersect_all(
+        *selects: _SelectStatementForCompoundArgument[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
 def intersect_all(
@@ -378,119 +382,120 @@ def outerjoin(
     return Join(left, right, onclause, isouter=True, full=full)
 
 
-# START OVERLOADED FUNCTIONS select Select 1-10
+if TYPE_CHECKING:
+    # START OVERLOADED FUNCTIONS select Select 1-10
 
-# code within this block is **programmatically,
-# statically generated** by tools/generate_tuple_map_overloads.py
-
-
-@overload
-def select(__ent0: _TCCA[_T0]) -> Select[Tuple[_T0]]: ...
+    # code within this block is **programmatically,
+    # statically generated** by tools/generate_tuple_map_overloads.py
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0], __ent1: _TCCA[_T1]
-) -> Select[Tuple[_T0, _T1]]: ...
+    @overload
+    def select(__ent0: _TCCA[_T0]) -> Select[Tuple[_T0]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0], __ent1: _TCCA[_T1], __ent2: _TCCA[_T2]
-) -> Select[Tuple[_T0, _T1, _T2]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0], __ent1: _TCCA[_T1]
+    ) -> Select[Tuple[_T0, _T1]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0],
-    __ent1: _TCCA[_T1],
-    __ent2: _TCCA[_T2],
-    __ent3: _TCCA[_T3],
-) -> Select[Tuple[_T0, _T1, _T2, _T3]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0], __ent1: _TCCA[_T1], __ent2: _TCCA[_T2]
+    ) -> Select[Tuple[_T0, _T1, _T2]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0],
-    __ent1: _TCCA[_T1],
-    __ent2: _TCCA[_T2],
-    __ent3: _TCCA[_T3],
-    __ent4: _TCCA[_T4],
-) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0],
+        __ent1: _TCCA[_T1],
+        __ent2: _TCCA[_T2],
+        __ent3: _TCCA[_T3],
+    ) -> Select[Tuple[_T0, _T1, _T2, _T3]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0],
-    __ent1: _TCCA[_T1],
-    __ent2: _TCCA[_T2],
-    __ent3: _TCCA[_T3],
-    __ent4: _TCCA[_T4],
-    __ent5: _TCCA[_T5],
-) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0],
+        __ent1: _TCCA[_T1],
+        __ent2: _TCCA[_T2],
+        __ent3: _TCCA[_T3],
+        __ent4: _TCCA[_T4],
+    ) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0],
-    __ent1: _TCCA[_T1],
-    __ent2: _TCCA[_T2],
-    __ent3: _TCCA[_T3],
-    __ent4: _TCCA[_T4],
-    __ent5: _TCCA[_T5],
-    __ent6: _TCCA[_T6],
-) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0],
+        __ent1: _TCCA[_T1],
+        __ent2: _TCCA[_T2],
+        __ent3: _TCCA[_T3],
+        __ent4: _TCCA[_T4],
+        __ent5: _TCCA[_T5],
+    ) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0],
-    __ent1: _TCCA[_T1],
-    __ent2: _TCCA[_T2],
-    __ent3: _TCCA[_T3],
-    __ent4: _TCCA[_T4],
-    __ent5: _TCCA[_T5],
-    __ent6: _TCCA[_T6],
-    __ent7: _TCCA[_T7],
-) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0],
+        __ent1: _TCCA[_T1],
+        __ent2: _TCCA[_T2],
+        __ent3: _TCCA[_T3],
+        __ent4: _TCCA[_T4],
+        __ent5: _TCCA[_T5],
+        __ent6: _TCCA[_T6],
+    ) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0],
-    __ent1: _TCCA[_T1],
-    __ent2: _TCCA[_T2],
-    __ent3: _TCCA[_T3],
-    __ent4: _TCCA[_T4],
-    __ent5: _TCCA[_T5],
-    __ent6: _TCCA[_T6],
-    __ent7: _TCCA[_T7],
-    __ent8: _TCCA[_T8],
-) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7, _T8]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0],
+        __ent1: _TCCA[_T1],
+        __ent2: _TCCA[_T2],
+        __ent3: _TCCA[_T3],
+        __ent4: _TCCA[_T4],
+        __ent5: _TCCA[_T5],
+        __ent6: _TCCA[_T6],
+        __ent7: _TCCA[_T7],
+    ) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7]]: ...
 
 
-@overload
-def select(
-    __ent0: _TCCA[_T0],
-    __ent1: _TCCA[_T1],
-    __ent2: _TCCA[_T2],
-    __ent3: _TCCA[_T3],
-    __ent4: _TCCA[_T4],
-    __ent5: _TCCA[_T5],
-    __ent6: _TCCA[_T6],
-    __ent7: _TCCA[_T7],
-    __ent8: _TCCA[_T8],
-    __ent9: _TCCA[_T9],
-) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7, _T8, _T9]]: ...
+    @overload
+    def select(
+        __ent0: _TCCA[_T0],
+        __ent1: _TCCA[_T1],
+        __ent2: _TCCA[_T2],
+        __ent3: _TCCA[_T3],
+        __ent4: _TCCA[_T4],
+        __ent5: _TCCA[_T5],
+        __ent6: _TCCA[_T6],
+        __ent7: _TCCA[_T7],
+        __ent8: _TCCA[_T8],
+    ) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7, _T8]]: ...
 
 
-# END OVERLOADED FUNCTIONS select
+    @overload
+    def select(
+        __ent0: _TCCA[_T0],
+        __ent1: _TCCA[_T1],
+        __ent2: _TCCA[_T2],
+        __ent3: _TCCA[_T3],
+        __ent4: _TCCA[_T4],
+        __ent5: _TCCA[_T5],
+        __ent6: _TCCA[_T6],
+        __ent7: _TCCA[_T7],
+        __ent8: _TCCA[_T8],
+        __ent9: _TCCA[_T9],
+    ) -> Select[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7, _T8, _T9]]: ...
 
 
-@overload
-def select(
-    *entities: _ColumnsClauseArgument[Any], **__kw: Any
-) -> Select[Any]: ...
+    # END OVERLOADED FUNCTIONS select
+
+
+    @overload
+    def select(
+        *entities: _ColumnsClauseArgument[Any], **__kw: Any
+    ) -> Select[Any]: ...
 
 
 def select(*entities: _ColumnsClauseArgument[Any], **__kw: Any) -> Select[Any]:
@@ -609,16 +614,17 @@ def tablesample(
     return TableSample._factory(selectable, sampling, name=name, seed=seed)
 
 
-@overload
-def union(
-    *selects: _TypedSelectable[_TP],
-) -> CompoundSelect[_TP]: ...
+if TYPE_CHECKING:
+    @overload
+    def union(
+        *selects: _TypedSelectable[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
-@overload
-def union(
-    *selects: _SelectStatementForCompoundArgument[_TP],
-) -> CompoundSelect[_TP]: ...
+    @overload
+    def union(
+        *selects: _SelectStatementForCompoundArgument[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
 def union(
@@ -643,16 +649,17 @@ def union(
     return CompoundSelect._create_union(*selects)
 
 
-@overload
-def union_all(
-    *selects: _TypedSelectable[_TP],
-) -> CompoundSelect[_TP]: ...
+if TYPE_CHECKING:
+    @overload
+    def union_all(
+        *selects: _TypedSelectable[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
-@overload
-def union_all(
-    *selects: _SelectStatementForCompoundArgument[_TP],
-) -> CompoundSelect[_TP]: ...
+    @overload
+    def union_all(
+        *selects: _SelectStatementForCompoundArgument[_TP],
+    ) -> CompoundSelect[_TP]: ...
 
 
 def union_all(

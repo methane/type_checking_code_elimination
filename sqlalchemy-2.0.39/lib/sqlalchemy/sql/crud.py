@@ -385,25 +385,26 @@ def _get_crud_params(
     )
 
 
-@overload
-def _create_bind_param(
-    compiler: SQLCompiler,
-    col: ColumnElement[Any],
-    value: Any,
-    process: Literal[True] = ...,
-    required: bool = False,
-    name: Optional[str] = None,
-    **kw: Any,
-) -> str: ...
+if TYPE_CHECKING:
+    @overload
+    def _create_bind_param(
+        compiler: SQLCompiler,
+        col: ColumnElement[Any],
+        value: Any,
+        process: Literal[True] = ...,
+        required: bool = False,
+        name: Optional[str] = None,
+        **kw: Any,
+    ) -> str: ...
 
 
-@overload
-def _create_bind_param(
-    compiler: SQLCompiler,
-    col: ColumnElement[Any],
-    value: Any,
-    **kw: Any,
-) -> str: ...
+    @overload
+    def _create_bind_param(
+        compiler: SQLCompiler,
+        col: ColumnElement[Any],
+        value: Any,
+        **kw: Any,
+    ) -> str: ...
 
 
 def _create_bind_param(
@@ -1209,22 +1210,23 @@ def _append_param_update(
         compiler.implicit_returning.append(c)
 
 
-@overload
-def _create_insert_prefetch_bind_param(
-    compiler: SQLCompiler,
-    c: ColumnElement[Any],
-    process: Literal[True] = ...,
-    **kw: Any,
-) -> str: ...
+if TYPE_CHECKING:
+    @overload
+    def _create_insert_prefetch_bind_param(
+        compiler: SQLCompiler,
+        c: ColumnElement[Any],
+        process: Literal[True] = ...,
+        **kw: Any,
+    ) -> str: ...
 
 
-@overload
-def _create_insert_prefetch_bind_param(
-    compiler: SQLCompiler,
-    c: ColumnElement[Any],
-    process: Literal[False],
-    **kw: Any,
-) -> elements.BindParameter[Any]: ...
+    @overload
+    def _create_insert_prefetch_bind_param(
+        compiler: SQLCompiler,
+        c: ColumnElement[Any],
+        process: Literal[False],
+        **kw: Any,
+    ) -> elements.BindParameter[Any]: ...
 
 
 def _create_insert_prefetch_bind_param(
@@ -1241,22 +1243,23 @@ def _create_insert_prefetch_bind_param(
     return param
 
 
-@overload
-def _create_update_prefetch_bind_param(
-    compiler: SQLCompiler,
-    c: ColumnElement[Any],
-    process: Literal[True] = ...,
-    **kw: Any,
-) -> str: ...
+if TYPE_CHECKING:
+    @overload
+    def _create_update_prefetch_bind_param(
+        compiler: SQLCompiler,
+        c: ColumnElement[Any],
+        process: Literal[True] = ...,
+        **kw: Any,
+    ) -> str: ...
 
 
-@overload
-def _create_update_prefetch_bind_param(
-    compiler: SQLCompiler,
-    c: ColumnElement[Any],
-    process: Literal[False],
-    **kw: Any,
-) -> elements.BindParameter[Any]: ...
+    @overload
+    def _create_update_prefetch_bind_param(
+        compiler: SQLCompiler,
+        c: ColumnElement[Any],
+        process: Literal[False],
+        **kw: Any,
+    ) -> elements.BindParameter[Any]: ...
 
 
 def _create_update_prefetch_bind_param(

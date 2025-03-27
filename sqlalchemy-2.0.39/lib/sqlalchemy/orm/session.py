@@ -2109,31 +2109,32 @@ class Session(_SessionClassMethods, EventTarget):
             trans = self._autobegin_t()
         return trans._connection_for_bind(engine, execution_options)
 
-    @overload
-    def _execute_internal(
-        self,
-        statement: Executable,
-        params: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-        _scalar_result: Literal[True] = ...,
-    ) -> Any: ...
+    if TYPE_CHECKING:
+        @overload
+        def _execute_internal(
+            self,
+            statement: Executable,
+            params: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+            _scalar_result: Literal[True] = ...,
+        ) -> Any: ...
 
-    @overload
-    def _execute_internal(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-        _scalar_result: bool = ...,
-    ) -> Result[Any]: ...
+        @overload
+        def _execute_internal(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+            _scalar_result: bool = ...,
+        ) -> Result[Any]: ...
 
     def _execute_internal(
         self,
@@ -2266,41 +2267,42 @@ class Session(_SessionClassMethods, EventTarget):
         else:
             return result
 
-    @overload
-    def execute(
-        self,
-        statement: TypedReturnsRows[_T],
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-    ) -> Result[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def execute(
+            self,
+            statement: TypedReturnsRows[_T],
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+        ) -> Result[_T]: ...
 
-    @overload
-    def execute(
-        self,
-        statement: UpdateBase,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-    ) -> CursorResult[Any]: ...
+        @overload
+        def execute(
+            self,
+            statement: UpdateBase,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+        ) -> CursorResult[Any]: ...
 
-    @overload
-    def execute(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-    ) -> Result[Any]: ...
+        @overload
+        def execute(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+        ) -> Result[Any]: ...
 
     def execute(
         self,
@@ -2371,27 +2373,28 @@ class Session(_SessionClassMethods, EventTarget):
             _add_event=_add_event,
         )
 
-    @overload
-    def scalar(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        params: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> Optional[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalar(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            params: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> Optional[_T]: ...
 
-    @overload
-    def scalar(
-        self,
-        statement: Executable,
-        params: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> Any: ...
+        @overload
+        def scalar(
+            self,
+            statement: Executable,
+            params: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> Any: ...
 
     def scalar(
         self,
@@ -2419,27 +2422,28 @@ class Session(_SessionClassMethods, EventTarget):
             **kw,
         )
 
-    @overload
-    def scalars(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> ScalarResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalars(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> ScalarResult[_T]: ...
 
-    @overload
-    def scalars(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> ScalarResult[Any]: ...
+        @overload
+        def scalars(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> ScalarResult[Any]: ...
 
     def scalars(
         self,
@@ -2847,90 +2851,91 @@ class Session(_SessionClassMethods, EventTarget):
             f'{", ".join(context)} or this Session.'
         )
 
-    @overload
-    def query(self, _entity: _EntityType[_O]) -> Query[_O]: ...
+    if TYPE_CHECKING:
+        @overload
+        def query(self, _entity: _EntityType[_O]) -> Query[_O]: ...
 
-    @overload
-    def query(
-        self, _colexpr: TypedColumnsClauseRole[_T]
-    ) -> RowReturningQuery[Tuple[_T]]: ...
+        @overload
+        def query(
+            self, _colexpr: TypedColumnsClauseRole[_T]
+        ) -> RowReturningQuery[Tuple[_T]]: ...
 
-    # START OVERLOADED FUNCTIONS self.query RowReturningQuery 2-8
+        # START OVERLOADED FUNCTIONS self.query RowReturningQuery 2-8
 
-    # code within this block is **programmatically,
-    # statically generated** by tools/generate_tuple_map_overloads.py
+        # code within this block is **programmatically,
+        # statically generated** by tools/generate_tuple_map_overloads.py
 
-    @overload
-    def query(
-        self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1]
-    ) -> RowReturningQuery[Tuple[_T0, _T1]]: ...
+        @overload
+        def query(
+            self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1]
+        ) -> RowReturningQuery[Tuple[_T0, _T1]]: ...
 
-    @overload
-    def query(
-        self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1], __ent2: _TCCA[_T2]
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2]]: ...
+        @overload
+        def query(
+            self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1], __ent2: _TCCA[_T2]
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2]]: ...
 
-    @overload
-    def query(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3]]: ...
+        @overload
+        def query(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3]]: ...
 
-    @overload
-    def query(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4]]: ...
+        @overload
+        def query(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4]]: ...
 
-    @overload
-    def query(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-        __ent5: _TCCA[_T5],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5]]: ...
+        @overload
+        def query(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+            __ent5: _TCCA[_T5],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5]]: ...
 
-    @overload
-    def query(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-        __ent5: _TCCA[_T5],
-        __ent6: _TCCA[_T6],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6]]: ...
+        @overload
+        def query(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+            __ent5: _TCCA[_T5],
+            __ent6: _TCCA[_T6],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6]]: ...
 
-    @overload
-    def query(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-        __ent5: _TCCA[_T5],
-        __ent6: _TCCA[_T6],
-        __ent7: _TCCA[_T7],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7]]: ...
+        @overload
+        def query(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+            __ent5: _TCCA[_T5],
+            __ent6: _TCCA[_T6],
+            __ent7: _TCCA[_T7],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7]]: ...
 
-    # END OVERLOADED FUNCTIONS self.query
+        # END OVERLOADED FUNCTIONS self.query
 
-    @overload
-    def query(
-        self, *entities: _ColumnsClauseArgument[Any], **kwargs: Any
-    ) -> Query[Any]: ...
+        @overload
+        def query(
+            self, *entities: _ColumnsClauseArgument[Any], **kwargs: Any
+        ) -> Query[Any]: ...
 
     def query(
         self, *entities: _ColumnsClauseArgument[Any], **kwargs: Any
@@ -5026,28 +5031,29 @@ class sessionmaker(_SessionClassMethods, Generic[_S]):
 
     class_: Type[_S]
 
-    @overload
-    def __init__(
-        self,
-        bind: Optional[_SessionBind] = ...,
-        *,
-        class_: Type[_S],
-        autoflush: bool = ...,
-        expire_on_commit: bool = ...,
-        info: Optional[_InfoType] = ...,
-        **kw: Any,
-    ): ...
+    if TYPE_CHECKING:
+        @overload
+        def __init__(
+            self,
+            bind: Optional[_SessionBind] = ...,
+            *,
+            class_: Type[_S],
+            autoflush: bool = ...,
+            expire_on_commit: bool = ...,
+            info: Optional[_InfoType] = ...,
+            **kw: Any,
+        ): ...
 
-    @overload
-    def __init__(
-        self: "sessionmaker[Session]",
-        bind: Optional[_SessionBind] = ...,
-        *,
-        autoflush: bool = ...,
-        expire_on_commit: bool = ...,
-        info: Optional[_InfoType] = ...,
-        **kw: Any,
-    ): ...
+        @overload
+        def __init__(
+            self: "sessionmaker[Session]",
+            bind: Optional[_SessionBind] = ...,
+            *,
+            autoflush: bool = ...,
+            expire_on_commit: bool = ...,
+            info: Optional[_InfoType] = ...,
+            **kw: Any,
+        ): ...
 
     def __init__(
         self,

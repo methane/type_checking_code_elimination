@@ -672,13 +672,14 @@ class ExternalTraversal(util.MemoizedSlots):
         """
         return iterate(obj, self.__traverse_options__)
 
-    @overload
-    def traverse(self, obj: Literal[None]) -> None: ...
+    if TYPE_CHECKING:
+        @overload
+        def traverse(self, obj: Literal[None]) -> None: ...
 
-    @overload
-    def traverse(
-        self, obj: ExternallyTraversible
-    ) -> ExternallyTraversible: ...
+        @overload
+        def traverse(
+            self, obj: ExternallyTraversible
+        ) -> ExternallyTraversible: ...
 
     def traverse(
         self, obj: Optional[ExternallyTraversible]
@@ -738,13 +739,14 @@ class CloningExternalTraversal(ExternalTraversal):
         """
         return [self.traverse(x) for x in list_]
 
-    @overload
-    def traverse(self, obj: Literal[None]) -> None: ...
+    if TYPE_CHECKING:
+        @overload
+        def traverse(self, obj: Literal[None]) -> None: ...
 
-    @overload
-    def traverse(
-        self, obj: ExternallyTraversible
-    ) -> ExternallyTraversible: ...
+        @overload
+        def traverse(
+            self, obj: ExternallyTraversible
+        ) -> ExternallyTraversible: ...
 
     def traverse(
         self, obj: Optional[ExternallyTraversible]
@@ -778,13 +780,14 @@ class ReplacingExternalTraversal(CloningExternalTraversal):
         """
         return None
 
-    @overload
-    def traverse(self, obj: Literal[None]) -> None: ...
+    if TYPE_CHECKING:
+        @overload
+        def traverse(self, obj: Literal[None]) -> None: ...
 
-    @overload
-    def traverse(
-        self, obj: ExternallyTraversible
-    ) -> ExternallyTraversible: ...
+        @overload
+        def traverse(
+            self, obj: ExternallyTraversible
+        ) -> ExternallyTraversible: ...
 
     def traverse(
         self, obj: Optional[ExternallyTraversible]
@@ -854,20 +857,21 @@ def iterate(
             stack.append(t.get_children(**opts))
 
 
-@overload
-def traverse_using(
-    iterator: Iterable[ExternallyTraversible],
-    obj: Literal[None],
-    visitors: Mapping[str, _TraverseCallableType[Any]],
-) -> None: ...
+if TYPE_CHECKING:
+    @overload
+    def traverse_using(
+        iterator: Iterable[ExternallyTraversible],
+        obj: Literal[None],
+        visitors: Mapping[str, _TraverseCallableType[Any]],
+    ) -> None: ...
 
 
-@overload
-def traverse_using(
-    iterator: Iterable[ExternallyTraversible],
-    obj: ExternallyTraversible,
-    visitors: Mapping[str, _TraverseCallableType[Any]],
-) -> ExternallyTraversible: ...
+    @overload
+    def traverse_using(
+        iterator: Iterable[ExternallyTraversible],
+        obj: ExternallyTraversible,
+        visitors: Mapping[str, _TraverseCallableType[Any]],
+    ) -> ExternallyTraversible: ...
 
 
 def traverse_using(
@@ -906,20 +910,21 @@ def traverse_using(
     return obj
 
 
-@overload
-def traverse(
-    obj: Literal[None],
-    opts: Mapping[str, Any],
-    visitors: Mapping[str, _TraverseCallableType[Any]],
-) -> None: ...
+if TYPE_CHECKING:
+    @overload
+    def traverse(
+        obj: Literal[None],
+        opts: Mapping[str, Any],
+        visitors: Mapping[str, _TraverseCallableType[Any]],
+    ) -> None: ...
 
 
-@overload
-def traverse(
-    obj: ExternallyTraversible,
-    opts: Mapping[str, Any],
-    visitors: Mapping[str, _TraverseCallableType[Any]],
-) -> ExternallyTraversible: ...
+    @overload
+    def traverse(
+        obj: ExternallyTraversible,
+        opts: Mapping[str, Any],
+        visitors: Mapping[str, _TraverseCallableType[Any]],
+    ) -> ExternallyTraversible: ...
 
 
 def traverse(
@@ -961,24 +966,25 @@ def traverse(
     return traverse_using(iterate(obj, opts), obj, visitors)
 
 
-@overload
-def cloned_traverse(
-    obj: Literal[None],
-    opts: Mapping[str, Any],
-    visitors: Mapping[str, _TraverseCallableType[Any]],
-) -> None: ...
+if TYPE_CHECKING:
+    @overload
+    def cloned_traverse(
+        obj: Literal[None],
+        opts: Mapping[str, Any],
+        visitors: Mapping[str, _TraverseCallableType[Any]],
+    ) -> None: ...
 
 
-# a bit of controversy here, as the clone of the lead element
-# *could* in theory replace with an entirely different kind of element.
-# however this is really not how cloned_traverse is ever used internally
-# at least.
-@overload
-def cloned_traverse(
-    obj: _ET,
-    opts: Mapping[str, Any],
-    visitors: Mapping[str, _TraverseCallableType[Any]],
-) -> _ET: ...
+    # a bit of controversy here, as the clone of the lead element
+    # *could* in theory replace with an entirely different kind of element.
+    # however this is really not how cloned_traverse is ever used internally
+    # at least.
+    @overload
+    def cloned_traverse(
+        obj: _ET,
+        opts: Mapping[str, Any],
+        visitors: Mapping[str, _TraverseCallableType[Any]],
+    ) -> _ET: ...
 
 
 def cloned_traverse(
@@ -1071,29 +1077,29 @@ def cloned_traverse(
     clone = None  # type: ignore[assignment]  # remove gc cycles
     return obj
 
-
-@overload
-def replacement_traverse(
-    obj: Literal[None],
-    opts: Mapping[str, Any],
-    replace: _TraverseTransformCallableType[Any],
-) -> None: ...
-
-
-@overload
-def replacement_traverse(
-    obj: _CE,
-    opts: Mapping[str, Any],
-    replace: _TraverseTransformCallableType[Any],
-) -> _CE: ...
+if TYPE_CHECKING:
+    @overload
+    def replacement_traverse(
+        obj: Literal[None],
+        opts: Mapping[str, Any],
+        replace: _TraverseTransformCallableType[Any],
+    ) -> None: ...
 
 
-@overload
-def replacement_traverse(
-    obj: ExternallyTraversible,
-    opts: Mapping[str, Any],
-    replace: _TraverseTransformCallableType[Any],
-) -> ExternallyTraversible: ...
+    @overload
+    def replacement_traverse(
+        obj: _CE,
+        opts: Mapping[str, Any],
+        replace: _TraverseTransformCallableType[Any],
+    ) -> _CE: ...
+
+
+    @overload
+    def replacement_traverse(
+        obj: ExternallyTraversible,
+        opts: Mapping[str, Any],
+        replace: _TraverseTransformCallableType[Any],
+    ) -> ExternallyTraversible: ...
 
 
 def replacement_traverse(

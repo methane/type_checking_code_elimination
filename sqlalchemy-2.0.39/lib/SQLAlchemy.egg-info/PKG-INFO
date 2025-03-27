@@ -1,4 +1,4 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: SQLAlchemy
 Version: 2.0.39
 Summary: Database Abstraction Library
@@ -82,6 +82,7 @@ Requires-Dist: aiosqlite; extra == "aiosqlite"
 Requires-Dist: typing_extensions!=3.10.0.1; extra == "aiosqlite"
 Provides-Extra: sqlcipher
 Requires-Dist: sqlcipher3_binary; extra == "sqlcipher"
+Dynamic: license-file
 
 SQLAlchemy
 ==========

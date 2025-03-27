@@ -406,19 +406,20 @@ def _inspect_func_args(fn):
         )
 
 
-@overload
-def get_cls_kwargs(
-    cls: type,
-    *,
-    _set: Optional[Set[str]] = None,
-    raiseerr: Literal[True] = ...,
-) -> Set[str]: ...
+if TYPE_CHECKING:
+    @overload
+    def get_cls_kwargs(
+        cls: type,
+        *,
+        _set: Optional[Set[str]] = None,
+        raiseerr: Literal[True] = ...,
+    ) -> Set[str]: ...
 
 
-@overload
-def get_cls_kwargs(
-    cls: type, *, _set: Optional[Set[str]] = None, raiseerr: bool = False
-) -> Optional[Set[str]]: ...
+    @overload
+    def get_cls_kwargs(
+        cls: type, *, _set: Optional[Set[str]] = None, raiseerr: bool = False
+    ) -> Optional[Set[str]]: ...
 
 
 def get_cls_kwargs(
@@ -1094,11 +1095,12 @@ class generic_fn_descriptor(Generic[_T_co]):
         self.__doc__ = doc or fget.__doc__
         self.__name__ = fget.__name__
 
-    @overload
-    def __get__(self: _GFD, obj: None, cls: Any) -> _GFD: ...
+    if TYPE_CHECKING:
+        @overload
+        def __get__(self: _GFD, obj: None, cls: Any) -> _GFD: ...
 
-    @overload
-    def __get__(self, obj: object, cls: Any) -> _T_co: ...
+        @overload
+        def __get__(self, obj: object, cls: Any) -> _T_co: ...
 
     def __get__(self: _GFD, obj: Any, cls: Any) -> Union[_GFD, _T_co]:
         raise NotImplementedError()
@@ -1245,11 +1247,12 @@ class HasMemoized:
             self.__doc__ = doc or fget.__doc__
             self.__name__ = fget.__name__
 
-        @overload
-        def __get__(self: _MA, obj: None, cls: Any) -> _MA: ...
+        if TYPE_CHECKING:
+            @overload
+            def __get__(self: _MA, obj: None, cls: Any) -> _MA: ...
 
-        @overload
-        def __get__(self, obj: Any, cls: Any) -> _T: ...
+            @overload
+            def __get__(self, obj: Any, cls: Any) -> _T: ...
 
         def __get__(self, obj, cls):
             if obj is None:

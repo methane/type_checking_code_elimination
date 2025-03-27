@@ -442,12 +442,13 @@ def outparam(
     return BindParameter(key, None, type_=type_, unique=False, isoutparam=True)
 
 
-@overload
-def not_(clause: BinaryExpression[_T]) -> BinaryExpression[_T]: ...
+if TYPE_CHECKING:
+    @overload
+    def not_(clause: BinaryExpression[_T]) -> BinaryExpression[_T]: ...
 
 
-@overload
-def not_(clause: _ColumnExpressionArgument[_T]) -> ColumnElement[_T]: ...
+    @overload
+    def not_(clause: _ColumnExpressionArgument[_T]) -> ColumnElement[_T]: ...
 
 
 def not_(clause: _ColumnExpressionArgument[_T]) -> ColumnElement[_T]:

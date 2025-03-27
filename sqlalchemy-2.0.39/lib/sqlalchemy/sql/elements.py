@@ -128,28 +128,29 @@ _NT = TypeVar("_NT", bound="_NUMERIC")
 _NMT = TypeVar("_NMT", bound="_NUMBER")
 
 
-@overload
-def literal(
-    value: Any,
-    type_: _TypeEngineArgument[_T],
-    literal_execute: bool = False,
-) -> BindParameter[_T]: ...
+if TYPE_CHECKING:
+    @overload
+    def literal(
+        value: Any,
+        type_: _TypeEngineArgument[_T],
+        literal_execute: bool = False,
+    ) -> BindParameter[_T]: ...
 
 
-@overload
-def literal(
-    value: _T,
-    type_: None = None,
-    literal_execute: bool = False,
-) -> BindParameter[_T]: ...
+    @overload
+    def literal(
+        value: _T,
+        type_: None = None,
+        literal_execute: bool = False,
+    ) -> BindParameter[_T]: ...
 
 
-@overload
-def literal(
-    value: Any,
-    type_: Optional[_TypeEngineArgument[Any]] = None,
-    literal_execute: bool = False,
-) -> BindParameter[Any]: ...
+    @overload
+    def literal(
+        value: Any,
+        type_: Optional[_TypeEngineArgument[Any]] = None,
+        literal_execute: bool = False,
+    ) -> BindParameter[Any]: ...
 
 
 def literal(
@@ -1439,13 +1440,14 @@ class ColumnElement(
 
     _alt_names: Sequence[str] = ()
 
-    @overload
-    def self_group(self, against: None = None) -> ColumnElement[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def self_group(self, against: None = None) -> ColumnElement[_T]: ...
 
-    @overload
-    def self_group(
-        self, against: Optional[OperatorType] = None
-    ) -> ColumnElement[Any]: ...
+        @overload
+        def self_group(
+            self, against: Optional[OperatorType] = None
+        ) -> ColumnElement[Any]: ...
 
     def self_group(
         self, against: Optional[OperatorType] = None
@@ -1460,11 +1462,12 @@ class ColumnElement(
         else:
             return self
 
-    @overload
-    def _negate(self: ColumnElement[bool]) -> ColumnElement[bool]: ...
+    if TYPE_CHECKING:
+        @overload
+        def _negate(self: ColumnElement[bool]) -> ColumnElement[bool]: ...
 
-    @overload
-    def _negate(self: ColumnElement[_T]) -> ColumnElement[_T]: ...
+        @overload
+        def _negate(self: ColumnElement[_T]) -> ColumnElement[_T]: ...
 
     def _negate(self) -> ColumnElement[Any]:
         if self.type._type_affinity is type_api.BOOLEANTYPE._type_affinity:
@@ -4372,15 +4375,16 @@ class WithinGroup(ColumnElement[_T]):
             rows=rows,
         )
 
-    @overload
-    def filter(self) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def filter(self) -> Self: ...
 
-    @overload
-    def filter(
-        self,
-        __criterion0: _ColumnExpressionArgument[bool],
-        *criterion: _ColumnExpressionArgument[bool],
-    ) -> FunctionFilter[_T]: ...
+        @overload
+        def filter(
+            self,
+            __criterion0: _ColumnExpressionArgument[bool],
+            *criterion: _ColumnExpressionArgument[bool],
+        ) -> FunctionFilter[_T]: ...
 
     def filter(
         self, *criterion: _ColumnExpressionArgument[bool]
@@ -5241,13 +5245,14 @@ class quoted_name(util.MemoizedSlots, str):
 
     quote: Optional[bool]
 
-    @overload
-    @classmethod
-    def construct(cls, value: str, quote: Optional[bool]) -> quoted_name: ...
+    if TYPE_CHECKING:
+        @overload
+        @classmethod
+        def construct(cls, value: str, quote: Optional[bool]) -> quoted_name: ...
 
-    @overload
-    @classmethod
-    def construct(cls, value: None, quote: Optional[bool]) -> None: ...
+        @overload
+        @classmethod
+        def construct(cls, value: None, quote: Optional[bool]) -> None: ...
 
     @classmethod
     def construct(

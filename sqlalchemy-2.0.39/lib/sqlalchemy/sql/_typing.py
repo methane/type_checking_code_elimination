@@ -391,20 +391,21 @@ def _unexpected_kw(methname: str, kw: Dict[str, Any]) -> NoReturn:
     raise TypeError(f"{methname} got an unexpected keyword argument '{k}'")
 
 
-@overload
-def Nullable(
-    val: "SQLCoreOperations[_T]",
-) -> "SQLCoreOperations[Optional[_T]]": ...
+if TYPE_CHECKING:
+    @overload
+    def Nullable(
+        val: "SQLCoreOperations[_T]",
+    ) -> "SQLCoreOperations[Optional[_T]]": ...
 
 
-@overload
-def Nullable(
-    val: roles.ExpressionElementRole[_T],
-) -> roles.ExpressionElementRole[Optional[_T]]: ...
+    @overload
+    def Nullable(
+        val: roles.ExpressionElementRole[_T],
+    ) -> roles.ExpressionElementRole[Optional[_T]]: ...
 
 
-@overload
-def Nullable(val: Type[_T]) -> Type[Optional[_T]]: ...
+    @overload
+    def Nullable(val: Type[_T]) -> Type[Optional[_T]]: ...
 
 
 def Nullable(
@@ -425,24 +426,25 @@ def Nullable(
     return val
 
 
-@overload
-def NotNullable(
-    val: "SQLCoreOperations[Optional[_T]]",
-) -> "SQLCoreOperations[_T]": ...
+if TYPE_CHECKING:
+    @overload
+    def NotNullable(
+        val: "SQLCoreOperations[Optional[_T]]",
+    ) -> "SQLCoreOperations[_T]": ...
 
 
-@overload
-def NotNullable(
-    val: roles.ExpressionElementRole[Optional[_T]],
-) -> roles.ExpressionElementRole[_T]: ...
+    @overload
+    def NotNullable(
+        val: roles.ExpressionElementRole[Optional[_T]],
+    ) -> roles.ExpressionElementRole[_T]: ...
 
 
-@overload
-def NotNullable(val: Type[Optional[_T]]) -> Type[_T]: ...
+    @overload
+    def NotNullable(val: Type[Optional[_T]]) -> Type[_T]: ...
 
 
-@overload
-def NotNullable(val: Optional[Type[_T]]) -> Type[_T]: ...
+    @overload
+    def NotNullable(val: Optional[Type[_T]]) -> Type[_T]: ...
 
 
 def NotNullable(

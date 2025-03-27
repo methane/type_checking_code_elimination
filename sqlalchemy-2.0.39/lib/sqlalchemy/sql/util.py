@@ -870,20 +870,21 @@ def splice_joins(
     return ret
 
 
-@overload
-def reduce_columns(
-    columns: Iterable[ColumnElement[Any]],
-    *clauses: Optional[ClauseElement],
-    **kw: bool,
-) -> Sequence[ColumnElement[Any]]: ...
+if TYPE_CHECKING:
+    @overload
+    def reduce_columns(
+        columns: Iterable[ColumnElement[Any]],
+        *clauses: Optional[ClauseElement],
+        **kw: bool,
+    ) -> Sequence[ColumnElement[Any]]: ...
 
 
-@overload
-def reduce_columns(
-    columns: _SelectIterable,
-    *clauses: Optional[ClauseElement],
-    **kw: bool,
-) -> Sequence[Union[ColumnElement[Any], TextClause]]: ...
+    @overload
+    def reduce_columns(
+        columns: _SelectIterable,
+        *clauses: Optional[ClauseElement],
+        **kw: bool,
+    ) -> Sequence[Union[ColumnElement[Any], TextClause]]: ...
 
 
 def reduce_columns(
@@ -1214,17 +1215,18 @@ class ClauseAdapter(visitors.ReplacingExternalTraversal):
 
 
 class _ColumnLookup(Protocol):
-    @overload
-    def __getitem__(self, key: None) -> None: ...
+    if TYPE_CHECKING:
+        @overload
+        def __getitem__(self, key: None) -> None: ...
 
-    @overload
-    def __getitem__(self, key: ColumnClause[Any]) -> ColumnClause[Any]: ...
+        @overload
+        def __getitem__(self, key: ColumnClause[Any]) -> ColumnClause[Any]: ...
 
-    @overload
-    def __getitem__(self, key: ColumnElement[Any]) -> ColumnElement[Any]: ...
+        @overload
+        def __getitem__(self, key: ColumnElement[Any]) -> ColumnElement[Any]: ...
 
-    @overload
-    def __getitem__(self, key: _ET) -> _ET: ...
+        @overload
+        def __getitem__(self, key: _ET) -> _ET: ...
 
     def __getitem__(self, key: Any) -> Any: ...
 
@@ -1323,11 +1325,12 @@ class ColumnAdapter(ClauseAdapter):
 
         return ac
 
-    @overload
-    def traverse(self, obj: Literal[None]) -> None: ...
+    if TYPE_CHECKING:
+        @overload
+        def traverse(self, obj: Literal[None]) -> None: ...
 
-    @overload
-    def traverse(self, obj: _ET) -> _ET: ...
+        @overload
+        def traverse(self, obj: _ET) -> _ET: ...
 
     def traverse(
         self, obj: Optional[ExternallyTraversible]

@@ -18,6 +18,7 @@ from typing import Tuple
 from typing import Type as TypingType
 from typing import TypeVar
 from typing import Union
+from typing import TYPE_CHECKING
 
 from mypy import version
 from mypy.messages import format_type as _mypy_format_type
@@ -209,19 +210,20 @@ def add_global(
         module_globals[asname] = lookup_sym
 
 
-@overload
-def get_callexpr_kwarg(
-    callexpr: CallExpr, name: str, *, expr_types: None = ...
-) -> Optional[Union[CallExpr, NameExpr]]: ...
+if TYPE_CHECKING:
+    @overload
+    def get_callexpr_kwarg(
+        callexpr: CallExpr, name: str, *, expr_types: None = ...
+    ) -> Optional[Union[CallExpr, NameExpr]]: ...
 
 
-@overload
-def get_callexpr_kwarg(
-    callexpr: CallExpr,
-    name: str,
-    *,
-    expr_types: Tuple[TypingType[_TArgType], ...],
-) -> Optional[_TArgType]: ...
+    @overload
+    def get_callexpr_kwarg(
+        callexpr: CallExpr,
+        name: str,
+        *,
+        expr_types: Tuple[TypingType[_TArgType], ...],
+    ) -> Optional[_TArgType]: ...
 
 
 def get_callexpr_kwarg(

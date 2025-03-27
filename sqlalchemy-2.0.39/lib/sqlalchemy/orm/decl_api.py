@@ -1601,23 +1601,24 @@ class registry:
             deferred,
         ),
     )
-    @overload
-    def mapped_as_dataclass(self, __cls: Type[_O]) -> Type[_O]: ...
+    if TYPE_CHECKING:
+        @overload
+        def mapped_as_dataclass(self, __cls: Type[_O]) -> Type[_O]: ...
 
-    @overload
-    def mapped_as_dataclass(
-        self,
-        __cls: Literal[None] = ...,
-        *,
-        init: Union[_NoArg, bool] = ...,
-        repr: Union[_NoArg, bool] = ...,  # noqa: A002
-        eq: Union[_NoArg, bool] = ...,
-        order: Union[_NoArg, bool] = ...,
-        unsafe_hash: Union[_NoArg, bool] = ...,
-        match_args: Union[_NoArg, bool] = ...,
-        kw_only: Union[_NoArg, bool] = ...,
-        dataclass_callable: Union[_NoArg, Callable[..., Type[Any]]] = ...,
-    ) -> Callable[[Type[_O]], Type[_O]]: ...
+        @overload
+        def mapped_as_dataclass(
+            self,
+            __cls: Literal[None] = ...,
+            *,
+            init: Union[_NoArg, bool] = ...,
+            repr: Union[_NoArg, bool] = ...,  # noqa: A002
+            eq: Union[_NoArg, bool] = ...,
+            order: Union[_NoArg, bool] = ...,
+            unsafe_hash: Union[_NoArg, bool] = ...,
+            match_args: Union[_NoArg, bool] = ...,
+            kw_only: Union[_NoArg, bool] = ...,
+            dataclass_callable: Union[_NoArg, Callable[..., Type[Any]]] = ...,
+        ) -> Callable[[Type[_O]], Type[_O]]: ...
 
     def mapped_as_dataclass(
         self,

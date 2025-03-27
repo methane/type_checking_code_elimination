@@ -882,29 +882,30 @@ def name_for_collection_relationship(
 
 
 class GenerateRelationshipType(Protocol):
-    @overload
-    def __call__(
-        self,
-        base: Type[Any],
-        direction: RelationshipDirection,
-        return_fn: Callable[..., Relationship[Any]],
-        attrname: str,
-        local_cls: Type[Any],
-        referred_cls: Type[Any],
-        **kw: Any,
-    ) -> Relationship[Any]: ...
+    if TYPE_CHECKING:
+        @overload
+        def __call__(
+            self,
+            base: Type[Any],
+            direction: RelationshipDirection,
+            return_fn: Callable[..., Relationship[Any]],
+            attrname: str,
+            local_cls: Type[Any],
+            referred_cls: Type[Any],
+            **kw: Any,
+        ) -> Relationship[Any]: ...
 
-    @overload
-    def __call__(
-        self,
-        base: Type[Any],
-        direction: RelationshipDirection,
-        return_fn: Callable[..., ORMBackrefArgument],
-        attrname: str,
-        local_cls: Type[Any],
-        referred_cls: Type[Any],
-        **kw: Any,
-    ) -> ORMBackrefArgument: ...
+        @overload
+        def __call__(
+            self,
+            base: Type[Any],
+            direction: RelationshipDirection,
+            return_fn: Callable[..., ORMBackrefArgument],
+            attrname: str,
+            local_cls: Type[Any],
+            referred_cls: Type[Any],
+            **kw: Any,
+        ) -> ORMBackrefArgument: ...
 
     def __call__(
         self,
@@ -920,28 +921,29 @@ class GenerateRelationshipType(Protocol):
     ) -> Union[ORMBackrefArgument, Relationship[Any]]: ...
 
 
-@overload
-def generate_relationship(
-    base: Type[Any],
-    direction: RelationshipDirection,
-    return_fn: Callable[..., Relationship[Any]],
-    attrname: str,
-    local_cls: Type[Any],
-    referred_cls: Type[Any],
-    **kw: Any,
-) -> Relationship[Any]: ...
+if TYPE_CHECKING:
+    @overload
+    def generate_relationship(
+        base: Type[Any],
+        direction: RelationshipDirection,
+        return_fn: Callable[..., Relationship[Any]],
+        attrname: str,
+        local_cls: Type[Any],
+        referred_cls: Type[Any],
+        **kw: Any,
+    ) -> Relationship[Any]: ...
 
 
-@overload
-def generate_relationship(
-    base: Type[Any],
-    direction: RelationshipDirection,
-    return_fn: Callable[..., ORMBackrefArgument],
-    attrname: str,
-    local_cls: Type[Any],
-    referred_cls: Type[Any],
-    **kw: Any,
-) -> ORMBackrefArgument: ...
+    @overload
+    def generate_relationship(
+        base: Type[Any],
+        direction: RelationshipDirection,
+        return_fn: Callable[..., ORMBackrefArgument],
+        attrname: str,
+        local_cls: Type[Any],
+        referred_cls: Type[Any],
+        **kw: Any,
+    ) -> ORMBackrefArgument: ...
 
 
 def generate_relationship(

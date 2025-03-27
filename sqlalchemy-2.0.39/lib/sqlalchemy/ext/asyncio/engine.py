@@ -405,25 +405,26 @@ class AsyncConnection(
         else:
             return None
 
-    @overload
-    async def execution_options(
-        self,
-        *,
-        compiled_cache: Optional[CompiledCacheType] = ...,
-        logging_token: str = ...,
-        isolation_level: IsolationLevel = ...,
-        no_parameters: bool = False,
-        stream_results: bool = False,
-        max_row_buffer: int = ...,
-        yield_per: int = ...,
-        insertmanyvalues_page_size: int = ...,
-        schema_translate_map: Optional[SchemaTranslateMapType] = ...,
-        preserve_rowcount: bool = False,
-        **opt: Any,
-    ) -> AsyncConnection: ...
+    if TYPE_CHECKING:
+        @overload
+        async def execution_options(
+            self,
+            *,
+            compiled_cache: Optional[CompiledCacheType] = ...,
+            logging_token: str = ...,
+            isolation_level: IsolationLevel = ...,
+            no_parameters: bool = False,
+            stream_results: bool = False,
+            max_row_buffer: int = ...,
+            yield_per: int = ...,
+            insertmanyvalues_page_size: int = ...,
+            schema_translate_map: Optional[SchemaTranslateMapType] = ...,
+            preserve_rowcount: bool = False,
+            **opt: Any,
+        ) -> AsyncConnection: ...
 
-    @overload
-    async def execution_options(self, **opt: Any) -> AsyncConnection: ...
+        @overload
+        async def execution_options(self, **opt: Any) -> AsyncConnection: ...
 
     async def execution_options(self, **opt: Any) -> AsyncConnection:
         r"""Set non-SQL options for the connection which take effect
@@ -514,23 +515,24 @@ class AsyncConnection(
 
         return await _ensure_sync_result(result, self.exec_driver_sql)
 
-    @overload
-    def stream(
-        self,
-        statement: TypedReturnsRows[_T],
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> GeneratorStartableContext[AsyncResult[_T]]: ...
+    if TYPE_CHECKING:
+        @overload
+        def stream(
+            self,
+            statement: TypedReturnsRows[_T],
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> GeneratorStartableContext[AsyncResult[_T]]: ...
 
-    @overload
-    def stream(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> GeneratorStartableContext[AsyncResult[Any]]: ...
+        @overload
+        def stream(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> GeneratorStartableContext[AsyncResult[Any]]: ...
 
     @asyncstartablecontext
     async def stream(
@@ -599,23 +601,24 @@ class AsyncConnection(
             task = asyncio.create_task(ar.close())
             await asyncio.shield(task)
 
-    @overload
-    async def execute(
-        self,
-        statement: TypedReturnsRows[_T],
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> CursorResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def execute(
+            self,
+            statement: TypedReturnsRows[_T],
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> CursorResult[_T]: ...
 
-    @overload
-    async def execute(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> CursorResult[Any]: ...
+        @overload
+        async def execute(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> CursorResult[Any]: ...
 
     async def execute(
         self,
@@ -664,23 +667,24 @@ class AsyncConnection(
         )
         return await _ensure_sync_result(result, self.execute)
 
-    @overload
-    async def scalar(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        parameters: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> Optional[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def scalar(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            parameters: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> Optional[_T]: ...
 
-    @overload
-    async def scalar(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> Any: ...
+        @overload
+        async def scalar(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> Any: ...
 
     async def scalar(
         self,
@@ -704,23 +708,24 @@ class AsyncConnection(
         )
         return result.scalar()
 
-    @overload
-    async def scalars(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> ScalarResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def scalars(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> ScalarResult[_T]: ...
 
-    @overload
-    async def scalars(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> ScalarResult[Any]: ...
+        @overload
+        async def scalars(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> ScalarResult[Any]: ...
 
     async def scalars(
         self,
@@ -745,23 +750,24 @@ class AsyncConnection(
         )
         return result.scalars()
 
-    @overload
-    def stream_scalars(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        parameters: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> GeneratorStartableContext[AsyncScalarResult[_T]]: ...
+    if TYPE_CHECKING:
+        @overload
+        def stream_scalars(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            parameters: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> GeneratorStartableContext[AsyncScalarResult[_T]]: ...
 
-    @overload
-    def stream_scalars(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> GeneratorStartableContext[AsyncScalarResult[Any]]: ...
+        @overload
+        def stream_scalars(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> GeneratorStartableContext[AsyncScalarResult[Any]]: ...
 
     @asyncstartablecontext
     async def stream_scalars(
@@ -1093,20 +1099,21 @@ class AsyncEngine(ProxyComparable[Engine], AsyncConnectable):
         """
         return await greenlet_spawn(self.sync_engine.raw_connection)
 
-    @overload
-    def execution_options(
-        self,
-        *,
-        compiled_cache: Optional[CompiledCacheType] = ...,
-        logging_token: str = ...,
-        isolation_level: IsolationLevel = ...,
-        insertmanyvalues_page_size: int = ...,
-        schema_translate_map: Optional[SchemaTranslateMapType] = ...,
-        **opt: Any,
-    ) -> AsyncEngine: ...
+    if TYPE_CHECKING:
+        @overload
+        def execution_options(
+            self,
+            *,
+            compiled_cache: Optional[CompiledCacheType] = ...,
+            logging_token: str = ...,
+            isolation_level: IsolationLevel = ...,
+            insertmanyvalues_page_size: int = ...,
+            schema_translate_map: Optional[SchemaTranslateMapType] = ...,
+            **opt: Any,
+        ) -> AsyncEngine: ...
 
-    @overload
-    def execution_options(self, **opt: Any) -> AsyncEngine: ...
+        @overload
+        def execution_options(self, **opt: Any) -> AsyncEngine: ...
 
     def execution_options(self, **opt: Any) -> AsyncEngine:
         """Return a new :class:`_asyncio.AsyncEngine` that will provide
@@ -1418,14 +1425,15 @@ class AsyncTransaction(
         await greenlet_spawn(self._proxied.__exit__, type_, value, traceback)
 
 
-@overload
-def _get_sync_engine_or_connection(async_engine: AsyncEngine) -> Engine: ...
+if TYPE_CHECKING:
+    @overload
+    def _get_sync_engine_or_connection(async_engine: AsyncEngine) -> Engine: ...
 
 
-@overload
-def _get_sync_engine_or_connection(
-    async_engine: AsyncConnection,
-) -> Connection: ...
+    @overload
+    def _get_sync_engine_or_connection(
+        async_engine: AsyncConnection,
+    ) -> Connection: ...
 
 
 def _get_sync_engine_or_connection(

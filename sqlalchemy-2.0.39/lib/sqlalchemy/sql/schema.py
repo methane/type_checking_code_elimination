@@ -3190,15 +3190,16 @@ class ForeignKey(DialectKWArgs, SchemaItem):
 
         return self._resolve_column()
 
-    @overload
-    def _resolve_column(
-        self, *, raiseerr: Literal[True] = ...
-    ) -> Column[Any]: ...
+    if TYPE_CHECKING:
+        @overload
+        def _resolve_column(
+            self, *, raiseerr: Literal[True] = ...
+        ) -> Column[Any]: ...
 
-    @overload
-    def _resolve_column(
-        self, *, raiseerr: bool = ...
-    ) -> Optional[Column[Any]]: ...
+        @overload
+        def _resolve_column(
+            self, *, raiseerr: bool = ...
+        ) -> Optional[Column[Any]]: ...
 
     def _resolve_column(
         self, *, raiseerr: bool = True
@@ -3419,21 +3420,22 @@ class ColumnDefault(DefaultGenerator, ABC):
 
     arg: Any
 
-    @overload
-    def __new__(
-        cls, arg: Callable[..., Any], for_update: bool = ...
-    ) -> CallableColumnDefault: ...
+    if TYPE_CHECKING:
+        @overload
+        def __new__(
+            cls, arg: Callable[..., Any], for_update: bool = ...
+        ) -> CallableColumnDefault: ...
 
-    @overload
-    def __new__(
-        cls, arg: ColumnElement[Any], for_update: bool = ...
-    ) -> ColumnElementColumnDefault: ...
+        @overload
+        def __new__(
+            cls, arg: ColumnElement[Any], for_update: bool = ...
+        ) -> ColumnElementColumnDefault: ...
 
-    # if I return ScalarElementColumnDefault here, which is what's actually
-    # returned, mypy complains that
-    # overloads overlap w/ incompatible return types.
-    @overload
-    def __new__(cls, arg: object, for_update: bool = ...) -> ColumnDefault: ...
+        # if I return ScalarElementColumnDefault here, which is what's actually
+        # returned, mypy complains that
+        # overloads overlap w/ incompatible return types.
+        @overload
+        def __new__(cls, arg: object, for_update: bool = ...) -> ColumnDefault: ...
 
     def __new__(
         cls, arg: Any = None, for_update: bool = False
@@ -5666,37 +5668,38 @@ class MetaData(HasSchemaAttr):
             sorted(self.tables.values(), key=lambda t: t.key)  # type: ignore
         )
 
-    # overload needed to work around mypy this mypy
-    # https://github.com/python/mypy/issues/17093
-    @overload
-    def reflect(
-        self,
-        bind: Engine,
-        schema: Optional[str] = ...,
-        views: bool = ...,
-        only: Union[
-            _typing_Sequence[str], Callable[[str, MetaData], bool], None
-        ] = ...,
-        extend_existing: bool = ...,
-        autoload_replace: bool = ...,
-        resolve_fks: bool = ...,
-        **dialect_kwargs: Any,
-    ) -> None: ...
+    if TYPE_CHECKING:
+        # overload needed to work around mypy this mypy
+        # https://github.com/python/mypy/issues/17093
+        @overload
+        def reflect(
+            self,
+            bind: Engine,
+            schema: Optional[str] = ...,
+            views: bool = ...,
+            only: Union[
+                _typing_Sequence[str], Callable[[str, MetaData], bool], None
+            ] = ...,
+            extend_existing: bool = ...,
+            autoload_replace: bool = ...,
+            resolve_fks: bool = ...,
+            **dialect_kwargs: Any,
+        ) -> None: ...
 
-    @overload
-    def reflect(
-        self,
-        bind: Connection,
-        schema: Optional[str] = ...,
-        views: bool = ...,
-        only: Union[
-            _typing_Sequence[str], Callable[[str, MetaData], bool], None
-        ] = ...,
-        extend_existing: bool = ...,
-        autoload_replace: bool = ...,
-        resolve_fks: bool = ...,
-        **dialect_kwargs: Any,
-    ) -> None: ...
+        @overload
+        def reflect(
+            self,
+            bind: Connection,
+            schema: Optional[str] = ...,
+            views: bool = ...,
+            only: Union[
+                _typing_Sequence[str], Callable[[str, MetaData], bool], None
+            ] = ...,
+            extend_existing: bool = ...,
+            autoload_replace: bool = ...,
+            resolve_fks: bool = ...,
+            **dialect_kwargs: Any,
+        ) -> None: ...
 
     @util.preload_module("sqlalchemy.engine.reflection")
     def reflect(

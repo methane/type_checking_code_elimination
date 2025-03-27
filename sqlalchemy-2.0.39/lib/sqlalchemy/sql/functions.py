@@ -488,15 +488,16 @@ class FunctionElement(Executable, ColumnElement[_T], FromClause, Generative):
         """
         return WithinGroup(self, *order_by)
 
-    @overload
-    def filter(self) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def filter(self) -> Self: ...
 
-    @overload
-    def filter(
-        self,
-        __criterion0: _ColumnExpressionArgument[bool],
-        *criterion: _ColumnExpressionArgument[bool],
-    ) -> FunctionFilter[_T]: ...
+        @overload
+        def filter(
+            self,
+            __criterion0: _ColumnExpressionArgument[bool],
+            *criterion: _ColumnExpressionArgument[bool],
+        ) -> FunctionFilter[_T]: ...
 
     def filter(
         self, *criterion: _ColumnExpressionArgument[bool]
@@ -948,13 +949,14 @@ class _FunctionGenerator:
         f.__names = list(self.__names) + [name]
         return f
 
-    @overload
-    def __call__(
-        self, *c: Any, type_: _TypeEngineArgument[_T], **kwargs: Any
-    ) -> Function[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def __call__(
+            self, *c: Any, type_: _TypeEngineArgument[_T], **kwargs: Any
+        ) -> Function[_T]: ...
 
-    @overload
-    def __call__(self, *c: Any, **kwargs: Any) -> Function[Any]: ...
+        @overload
+        def __call__(self, *c: Any, **kwargs: Any) -> Function[Any]: ...
 
     def __call__(self, *c: Any, **kwargs: Any) -> Function[Any]:
         o = self.opts.copy()
@@ -1292,23 +1294,24 @@ class Function(FunctionElement[_T]):
 
     """
 
-    @overload
-    def __init__(
-        self,
-        name: str,
-        *clauses: _ColumnExpressionOrLiteralArgument[_T],
-        type_: None = ...,
-        packagenames: Optional[Tuple[str, ...]] = ...,
-    ): ...
+    if TYPE_CHECKING:
+        @overload
+        def __init__(
+            self,
+            name: str,
+            *clauses: _ColumnExpressionOrLiteralArgument[_T],
+            type_: None = ...,
+            packagenames: Optional[Tuple[str, ...]] = ...,
+        ): ...
 
-    @overload
-    def __init__(
-        self,
-        name: str,
-        *clauses: _ColumnExpressionOrLiteralArgument[Any],
-        type_: _TypeEngineArgument[_T] = ...,
-        packagenames: Optional[Tuple[str, ...]] = ...,
-    ): ...
+        @overload
+        def __init__(
+            self,
+            name: str,
+            *clauses: _ColumnExpressionOrLiteralArgument[Any],
+            type_: _TypeEngineArgument[_T] = ...,
+            packagenames: Optional[Tuple[str, ...]] = ...,
+        ): ...
 
     def __init__(
         self,
@@ -1584,29 +1587,30 @@ class ReturnTypeFromArgs(GenericFunction[_T]):
     # all non-generic types are removed from it, so reasons remain unclear for
     # why this does not work
 
-    @overload
-    def __init__(
-        self,
-        col: ColumnElement[_T],
-        *args: _ColumnExpressionOrLiteralArgument[Any],
-        **kwargs: Any,
-    ): ...
+    if TYPE_CHECKING:
+        @overload
+        def __init__(
+            self,
+            col: ColumnElement[_T],
+            *args: _ColumnExpressionOrLiteralArgument[Any],
+            **kwargs: Any,
+        ): ...
 
-    @overload
-    def __init__(
-        self,
-        col: _ColumnExpressionArgument[_T],
-        *args: _ColumnExpressionOrLiteralArgument[Any],
-        **kwargs: Any,
-    ): ...
+        @overload
+        def __init__(
+            self,
+            col: _ColumnExpressionArgument[_T],
+            *args: _ColumnExpressionOrLiteralArgument[Any],
+            **kwargs: Any,
+        ): ...
 
-    @overload
-    def __init__(
-        self,
-        col: _ColumnExpressionOrLiteralArgument[_T],
-        *args: _ColumnExpressionOrLiteralArgument[Any],
-        **kwargs: Any,
-    ): ...
+        @overload
+        def __init__(
+            self,
+            col: _ColumnExpressionOrLiteralArgument[_T],
+            *args: _ColumnExpressionOrLiteralArgument[Any],
+            **kwargs: Any,
+        ): ...
 
     def __init__(
         self, *args: _ColumnExpressionOrLiteralArgument[Any], **kwargs: Any

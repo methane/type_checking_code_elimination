@@ -31,6 +31,7 @@ from typing import overload
 from typing import Tuple
 from typing import Type
 from typing import Union
+from typing import TYPE_CHECKING
 import weakref
 
 from .attr import _ClsLevelDispatch
@@ -436,13 +437,14 @@ class dispatcher(Generic[_ET]):
         self.dispatch = events.dispatch
         self.events = events
 
-    @overload
-    def __get__(
-        self, obj: Literal[None], cls: Type[Any]
-    ) -> Type[_Dispatch[_ET]]: ...
+    if TYPE_CHECKING:
+        @overload
+        def __get__(
+            self, obj: Literal[None], cls: Type[Any]
+        ) -> Type[_Dispatch[_ET]]: ...
 
-    @overload
-    def __get__(self, obj: Any, cls: Type[Any]) -> _DispatchCommon[_ET]: ...
+        @overload
+        def __get__(self, obj: Any, cls: Type[Any]) -> _DispatchCommon[_ET]: ...
 
     def __get__(self, obj: Any, cls: Type[Any]) -> Any:
         if obj is None:

@@ -606,70 +606,71 @@ def column_property(
     )
 
 
-@overload
-def composite(
-    _class_or_attr: _CompositeAttrType[Any],
-    *attrs: _CompositeAttrType[Any],
-    group: Optional[str] = None,
-    deferred: bool = False,
-    raiseload: bool = False,
-    comparator_factory: Optional[Type[Composite.Comparator[_T]]] = None,
-    active_history: bool = False,
-    init: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    repr: Union[_NoArg, bool] = _NoArg.NO_ARG,  # noqa: A002
-    default: Optional[Any] = _NoArg.NO_ARG,
-    default_factory: Union[_NoArg, Callable[[], _T]] = _NoArg.NO_ARG,
-    compare: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    kw_only: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    hash: Union[_NoArg, bool, None] = _NoArg.NO_ARG,  # noqa: A002
-    info: Optional[_InfoType] = None,
-    doc: Optional[str] = None,
-    **__kw: Any,
-) -> Composite[Any]: ...
+if TYPE_CHECKING:
+    @overload
+    def composite(
+        _class_or_attr: _CompositeAttrType[Any],
+        *attrs: _CompositeAttrType[Any],
+        group: Optional[str] = None,
+        deferred: bool = False,
+        raiseload: bool = False,
+        comparator_factory: Optional[Type[Composite.Comparator[_T]]] = None,
+        active_history: bool = False,
+        init: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        repr: Union[_NoArg, bool] = _NoArg.NO_ARG,  # noqa: A002
+        default: Optional[Any] = _NoArg.NO_ARG,
+        default_factory: Union[_NoArg, Callable[[], _T]] = _NoArg.NO_ARG,
+        compare: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        kw_only: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        hash: Union[_NoArg, bool, None] = _NoArg.NO_ARG,  # noqa: A002
+        info: Optional[_InfoType] = None,
+        doc: Optional[str] = None,
+        **__kw: Any,
+    ) -> Composite[Any]: ...
 
 
-@overload
-def composite(
-    _class_or_attr: Type[_CC],
-    *attrs: _CompositeAttrType[Any],
-    group: Optional[str] = None,
-    deferred: bool = False,
-    raiseload: bool = False,
-    comparator_factory: Optional[Type[Composite.Comparator[_T]]] = None,
-    active_history: bool = False,
-    init: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    repr: Union[_NoArg, bool] = _NoArg.NO_ARG,  # noqa: A002
-    default: Optional[Any] = _NoArg.NO_ARG,
-    default_factory: Union[_NoArg, Callable[[], _T]] = _NoArg.NO_ARG,
-    compare: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    kw_only: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    hash: Union[_NoArg, bool, None] = _NoArg.NO_ARG,  # noqa: A002
-    info: Optional[_InfoType] = None,
-    doc: Optional[str] = None,
-    **__kw: Any,
-) -> Composite[_CC]: ...
+    @overload
+    def composite(
+        _class_or_attr: Type[_CC],
+        *attrs: _CompositeAttrType[Any],
+        group: Optional[str] = None,
+        deferred: bool = False,
+        raiseload: bool = False,
+        comparator_factory: Optional[Type[Composite.Comparator[_T]]] = None,
+        active_history: bool = False,
+        init: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        repr: Union[_NoArg, bool] = _NoArg.NO_ARG,  # noqa: A002
+        default: Optional[Any] = _NoArg.NO_ARG,
+        default_factory: Union[_NoArg, Callable[[], _T]] = _NoArg.NO_ARG,
+        compare: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        kw_only: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        hash: Union[_NoArg, bool, None] = _NoArg.NO_ARG,  # noqa: A002
+        info: Optional[_InfoType] = None,
+        doc: Optional[str] = None,
+        **__kw: Any,
+    ) -> Composite[_CC]: ...
 
 
-@overload
-def composite(
-    _class_or_attr: Callable[..., _CC],
-    *attrs: _CompositeAttrType[Any],
-    group: Optional[str] = None,
-    deferred: bool = False,
-    raiseload: bool = False,
-    comparator_factory: Optional[Type[Composite.Comparator[_T]]] = None,
-    active_history: bool = False,
-    init: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    repr: Union[_NoArg, bool] = _NoArg.NO_ARG,  # noqa: A002
-    default: Optional[Any] = _NoArg.NO_ARG,
-    default_factory: Union[_NoArg, Callable[[], _T]] = _NoArg.NO_ARG,
-    compare: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    kw_only: Union[_NoArg, bool] = _NoArg.NO_ARG,
-    hash: Union[_NoArg, bool, None] = _NoArg.NO_ARG,  # noqa: A002
-    info: Optional[_InfoType] = None,
-    doc: Optional[str] = None,
-    **__kw: Any,
-) -> Composite[_CC]: ...
+    @overload
+    def composite(
+        _class_or_attr: Callable[..., _CC],
+        *attrs: _CompositeAttrType[Any],
+        group: Optional[str] = None,
+        deferred: bool = False,
+        raiseload: bool = False,
+        comparator_factory: Optional[Type[Composite.Comparator[_T]]] = None,
+        active_history: bool = False,
+        init: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        repr: Union[_NoArg, bool] = _NoArg.NO_ARG,  # noqa: A002
+        default: Optional[Any] = _NoArg.NO_ARG,
+        default_factory: Union[_NoArg, Callable[[], _T]] = _NoArg.NO_ARG,
+        compare: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        kw_only: Union[_NoArg, bool] = _NoArg.NO_ARG,
+        hash: Union[_NoArg, bool, None] = _NoArg.NO_ARG,  # noqa: A002
+        info: Optional[_InfoType] = None,
+        doc: Optional[str] = None,
+        **__kw: Any,
+    ) -> Composite[_CC]: ...
 
 
 def composite(
@@ -2264,34 +2265,35 @@ def clear_mappers() -> None:
 AliasedType = Annotated[Type[_O], "aliased"]
 
 
-@overload
-def aliased(
-    element: Type[_O],
-    alias: Optional[FromClause] = None,
-    name: Optional[str] = None,
-    flat: bool = False,
-    adapt_on_names: bool = False,
-) -> AliasedType[_O]: ...
+if TYPE_CHECKING:
+    @overload
+    def aliased(
+        element: Type[_O],
+        alias: Optional[FromClause] = None,
+        name: Optional[str] = None,
+        flat: bool = False,
+        adapt_on_names: bool = False,
+    ) -> AliasedType[_O]: ...
 
 
-@overload
-def aliased(
-    element: Union[AliasedClass[_O], Mapper[_O], AliasedInsp[_O]],
-    alias: Optional[FromClause] = None,
-    name: Optional[str] = None,
-    flat: bool = False,
-    adapt_on_names: bool = False,
-) -> AliasedClass[_O]: ...
+    @overload
+    def aliased(
+        element: Union[AliasedClass[_O], Mapper[_O], AliasedInsp[_O]],
+        alias: Optional[FromClause] = None,
+        name: Optional[str] = None,
+        flat: bool = False,
+        adapt_on_names: bool = False,
+    ) -> AliasedClass[_O]: ...
 
 
-@overload
-def aliased(
-    element: FromClause,
-    alias: None = None,
-    name: Optional[str] = None,
-    flat: bool = False,
-    adapt_on_names: bool = False,
-) -> FromClause: ...
+    @overload
+    def aliased(
+        element: FromClause,
+        alias: None = None,
+        name: Optional[str] = None,
+        flat: bool = False,
+        adapt_on_names: bool = False,
+    ) -> FromClause: ...
 
 
 def aliased(

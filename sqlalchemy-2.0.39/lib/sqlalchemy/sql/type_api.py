@@ -187,19 +187,20 @@ class TypeEngine(Visitable, Generic[_T]):
         def __reduce__(self) -> Any:
             return self.__class__, (self.expr,)
 
-        @overload
-        def operate(
-            self,
-            op: OperatorType,
-            *other: Any,
-            result_type: Type[TypeEngine[_RT]],
-            **kwargs: Any,
-        ) -> ColumnElement[_RT]: ...
+        if TYPE_CHECKING:
+            @overload
+            def operate(
+                self,
+                op: OperatorType,
+                *other: Any,
+                result_type: Type[TypeEngine[_RT]],
+                **kwargs: Any,
+            ) -> ColumnElement[_RT]: ...
 
-        @overload
-        def operate(
-            self, op: OperatorType, *other: Any, **kwargs: Any
-        ) -> ColumnElement[_CT]: ...
+            @overload
+            def operate(
+                self, op: OperatorType, *other: Any, **kwargs: Any
+            ) -> ColumnElement[_CT]: ...
 
         @util.preload_module("sqlalchemy.sql.default_comparator")
         def operate(
@@ -1011,13 +1012,14 @@ class TypeEngine(Visitable, Generic[_T]):
             and self.__dict__[k] is not None
         )
 
-    @overload
-    def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
+    if TYPE_CHECKING:
+        @overload
+        def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
 
-    @overload
-    def adapt(
-        self, cls: Type[TypeEngineMixin], **kw: Any
-    ) -> TypeEngine[Any]: ...
+        @overload
+        def adapt(
+            self, cls: Type[TypeEngineMixin], **kw: Any
+        ) -> TypeEngine[Any]: ...
 
     def adapt(
         self, cls: Type[Union[TypeEngine[Any], TypeEngineMixin]], **kw: Any
@@ -1428,13 +1430,14 @@ class Emulated(TypeEngineMixin):
         """
         return super().adapt(impltype, **kw)
 
-    @overload
-    def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
+    if TYPE_CHECKING:
+        @overload
+        def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
 
-    @overload
-    def adapt(
-        self, cls: Type[TypeEngineMixin], **kw: Any
-    ) -> TypeEngine[Any]: ...
+        @overload
+        def adapt(
+            self, cls: Type[TypeEngineMixin], **kw: Any
+        ) -> TypeEngine[Any]: ...
 
     def adapt(
         self, cls: Type[Union[TypeEngine[Any], TypeEngineMixin]], **kw: Any
@@ -2312,14 +2315,15 @@ class Variant(TypeDecorator[_T]):
         )
 
 
-@overload
-def to_instance(
-    typeobj: Union[Type[_TE], _TE], *arg: Any, **kw: Any
-) -> _TE: ...
+if TYPE_CHECKING:
+    @overload
+    def to_instance(
+        typeobj: Union[Type[_TE], _TE], *arg: Any, **kw: Any
+    ) -> _TE: ...
 
 
-@overload
-def to_instance(typeobj: None, *arg: Any, **kw: Any) -> TypeEngine[None]: ...
+    @overload
+    def to_instance(typeobj: None, *arg: Any, **kw: Any) -> TypeEngine[None]: ...
 
 
 def to_instance(

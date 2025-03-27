@@ -23,6 +23,7 @@ from typing import Optional
 from typing import overload
 from typing import Tuple
 from typing import TypeVar
+from typing import TYPE_CHECKING
 import weakref
 
 from . import exc as async_exc
@@ -43,11 +44,12 @@ class ReversibleProxy(Generic[_PT]):
     ] = {}
     __slots__ = ("__weakref__",)
 
-    @overload
-    def _assign_proxied(self, target: _PT) -> _PT: ...
+    if TYPE_CHECKING:
+        @overload
+        def _assign_proxied(self, target: _PT) -> _PT: ...
 
-    @overload
-    def _assign_proxied(self, target: None) -> None: ...
+        @overload
+        def _assign_proxied(self, target: None) -> None: ...
 
     def _assign_proxied(self, target: Optional[_PT]) -> Optional[_PT]:
         if target is not None:
@@ -74,19 +76,20 @@ class ReversibleProxy(Generic[_PT]):
     def _regenerate_proxy_for_target(cls, target: _PT) -> Self:
         raise NotImplementedError()
 
-    @overload
-    @classmethod
-    def _retrieve_proxy_for_target(
-        cls,
-        target: _PT,
-        regenerate: Literal[True] = ...,
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        @classmethod
+        def _retrieve_proxy_for_target(
+            cls,
+            target: _PT,
+            regenerate: Literal[True] = ...,
+        ) -> Self: ...
 
-    @overload
-    @classmethod
-    def _retrieve_proxy_for_target(
-        cls, target: _PT, regenerate: bool = True
-    ) -> Optional[Self]: ...
+        @overload
+        @classmethod
+        def _retrieve_proxy_for_target(
+            cls, target: _PT, regenerate: bool = True
+        ) -> Optional[Self]: ...
 
     @classmethod
     def _retrieve_proxy_for_target(

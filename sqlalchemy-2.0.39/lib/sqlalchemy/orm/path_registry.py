@@ -182,24 +182,25 @@ class PathRegistry(HasCacheKey):
     def __hash__(self) -> int:
         return id(self)
 
-    @overload
-    def __getitem__(self, entity: _StrPathToken) -> TokenRegistry: ...
+    if TYPE_CHECKING:
+        @overload
+        def __getitem__(self, entity: _StrPathToken) -> TokenRegistry: ...
 
-    @overload
-    def __getitem__(self, entity: int) -> _PathElementType: ...
+        @overload
+        def __getitem__(self, entity: int) -> _PathElementType: ...
 
-    @overload
-    def __getitem__(self, entity: slice) -> _PathRepresentation: ...
+        @overload
+        def __getitem__(self, entity: slice) -> _PathRepresentation: ...
 
-    @overload
-    def __getitem__(
-        self, entity: _InternalEntityType[Any]
-    ) -> AbstractEntityRegistry: ...
+        @overload
+        def __getitem__(
+            self, entity: _InternalEntityType[Any]
+        ) -> AbstractEntityRegistry: ...
 
-    @overload
-    def __getitem__(
-        self, entity: StrategizedProperty[Any]
-    ) -> PropRegistry: ...
+        @overload
+        def __getitem__(
+            self, entity: StrategizedProperty[Any]
+        ) -> PropRegistry: ...
 
     def __getitem__(
         self,
@@ -313,13 +314,14 @@ class PathRegistry(HasCacheKey):
         p = cls._deserialize_path(path)
         return cls.coerce(p)
 
-    @overload
-    @classmethod
-    def per_mapper(cls, mapper: Mapper[Any]) -> CachingEntityRegistry: ...
+    if TYPE_CHECKING:
+        @overload
+        @classmethod
+        def per_mapper(cls, mapper: Mapper[Any]) -> CachingEntityRegistry: ...
 
-    @overload
-    @classmethod
-    def per_mapper(cls, mapper: AliasedInsp[Any]) -> SlotsEntityRegistry: ...
+        @overload
+        @classmethod
+        def per_mapper(cls, mapper: AliasedInsp[Any]) -> SlotsEntityRegistry: ...
 
     @classmethod
     def per_mapper(

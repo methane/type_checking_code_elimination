@@ -423,18 +423,19 @@ def is_fwd_ref(
         return False
 
 
-@overload
-def de_optionalize_union_types(type_: str) -> str: ...
+if TYPE_CHECKING:
+    @overload
+    def de_optionalize_union_types(type_: str) -> str: ...
 
 
-@overload
-def de_optionalize_union_types(type_: Type[Any]) -> Type[Any]: ...
+    @overload
+    def de_optionalize_union_types(type_: Type[Any]) -> Type[Any]: ...
 
 
-@overload
-def de_optionalize_union_types(
-    type_: _AnnotationScanType,
-) -> _AnnotationScanType: ...
+    @overload
+    def de_optionalize_union_types(
+        type_: _AnnotationScanType,
+    ) -> _AnnotationScanType: ...
 
 
 def de_optionalize_union_types(
@@ -478,16 +479,17 @@ def de_optionalize_union_types(
         return type_
 
 
-@overload
-def _de_optionalize_fwd_ref_union_types(
-    type_: ForwardRef, return_has_none: Literal[True]
-) -> bool: ...
+if TYPE_CHECKING:
+    @overload
+    def _de_optionalize_fwd_ref_union_types(
+        type_: ForwardRef, return_has_none: Literal[True]
+    ) -> bool: ...
 
 
-@overload
-def _de_optionalize_fwd_ref_union_types(
-    type_: ForwardRef, return_has_none: Literal[False]
-) -> _AnnotationScanType: ...
+    @overload
+    def _de_optionalize_fwd_ref_union_types(
+        type_: ForwardRef, return_has_none: Literal[False]
+    ) -> _AnnotationScanType: ...
 
 
 def _de_optionalize_fwd_ref_union_types(

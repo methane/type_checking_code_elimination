@@ -443,23 +443,24 @@ class Numeric(HasExpressionLookup, TypeEngine[_N]):
 
     _default_decimal_return_scale = 10
 
-    @overload
-    def __init__(
-        self: Numeric[decimal.Decimal],
-        precision: Optional[int] = ...,
-        scale: Optional[int] = ...,
-        decimal_return_scale: Optional[int] = ...,
-        asdecimal: Literal[True] = ...,
-    ): ...
+    if TYPE_CHECKING:
+        @overload
+        def __init__(
+            self: Numeric[decimal.Decimal],
+            precision: Optional[int] = ...,
+            scale: Optional[int] = ...,
+            decimal_return_scale: Optional[int] = ...,
+            asdecimal: Literal[True] = ...,
+        ): ...
 
-    @overload
-    def __init__(
-        self: Numeric[float],
-        precision: Optional[int] = ...,
-        scale: Optional[int] = ...,
-        decimal_return_scale: Optional[int] = ...,
-        asdecimal: Literal[False] = ...,
-    ): ...
+        @overload
+        def __init__(
+            self: Numeric[float],
+            precision: Optional[int] = ...,
+            scale: Optional[int] = ...,
+            decimal_return_scale: Optional[int] = ...,
+            asdecimal: Literal[False] = ...,
+        ): ...
 
     def __init__(
         self,
@@ -606,21 +607,22 @@ class Float(Numeric[_N]):
 
     scale = None
 
-    @overload
-    def __init__(
-        self: Float[float],
-        precision: Optional[int] = ...,
-        asdecimal: Literal[False] = ...,
-        decimal_return_scale: Optional[int] = ...,
-    ): ...
+    if TYPE_CHECKING:
+        @overload
+        def __init__(
+            self: Float[float],
+            precision: Optional[int] = ...,
+            asdecimal: Literal[False] = ...,
+            decimal_return_scale: Optional[int] = ...,
+        ): ...
 
-    @overload
-    def __init__(
-        self: Float[decimal.Decimal],
-        precision: Optional[int] = ...,
-        asdecimal: Literal[True] = ...,
-        decimal_return_scale: Optional[int] = ...,
-    ): ...
+        @overload
+        def __init__(
+            self: Float[decimal.Decimal],
+            precision: Optional[int] = ...,
+            asdecimal: Literal[True] = ...,
+            decimal_return_scale: Optional[int] = ...,
+        ): ...
 
     def __init__(
         self: Float[_N],
@@ -1100,13 +1102,14 @@ class SchemaType(SchemaEventTarget, TypeEngineMixin):
             ),
         )
 
-    @overload
-    def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
+    if TYPE_CHECKING:
+        @overload
+        def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
 
-    @overload
-    def adapt(
-        self, cls: Type[TypeEngineMixin], **kw: Any
-    ) -> TypeEngine[Any]: ...
+        @overload
+        def adapt(
+            self, cls: Type[TypeEngineMixin], **kw: Any
+        ) -> TypeEngine[Any]: ...
 
     def adapt(
         self, cls: Type[Union[TypeEngine[Any], TypeEngineMixin]], **kw: Any
@@ -3586,19 +3589,20 @@ class Uuid(Emulated, TypeEngine[_UUID_RETURN]):
 
     collation: Optional[str] = None
 
-    @overload
-    def __init__(
-        self: Uuid[_python_UUID],
-        as_uuid: Literal[True] = ...,
-        native_uuid: bool = ...,
-    ): ...
+    if TYPE_CHECKING:
+        @overload
+        def __init__(
+            self: Uuid[_python_UUID],
+            as_uuid: Literal[True] = ...,
+            native_uuid: bool = ...,
+        ): ...
 
-    @overload
-    def __init__(
-        self: Uuid[str],
-        as_uuid: Literal[False] = ...,
-        native_uuid: bool = ...,
-    ): ...
+        @overload
+        def __init__(
+            self: Uuid[str],
+            as_uuid: Literal[False] = ...,
+            native_uuid: bool = ...,
+        ): ...
 
     def __init__(self, as_uuid: bool = True, native_uuid: bool = True):
         """Construct a :class:`_sqltypes.Uuid` type.
@@ -3743,11 +3747,12 @@ class UUID(Uuid[_UUID_RETURN], type_api.NativeForEmulated):
 
     __visit_name__ = "UUID"
 
-    @overload
-    def __init__(self: UUID[_python_UUID], as_uuid: Literal[True] = ...): ...
+    if TYPE_CHECKING:
+        @overload
+        def __init__(self: UUID[_python_UUID], as_uuid: Literal[True] = ...): ...
 
-    @overload
-    def __init__(self: UUID[str], as_uuid: Literal[False] = ...): ...
+        @overload
+        def __init__(self: UUID[str], as_uuid: Literal[False] = ...): ...
 
     def __init__(self, as_uuid: bool = True):
         """Construct a :class:`_sqltypes.UUID` type.

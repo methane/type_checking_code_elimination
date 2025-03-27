@@ -730,18 +730,19 @@ class Query(
             .label(name)
         )
 
-    @overload
-    def as_scalar(  # type: ignore[overload-overlap]
-        self: Query[Tuple[_MAYBE_ENTITY]],
-    ) -> ScalarSelect[_MAYBE_ENTITY]: ...
+    if TYPE_CHECKING:
+        @overload
+        def as_scalar(  # type: ignore[overload-overlap]
+            self: Query[Tuple[_MAYBE_ENTITY]],
+        ) -> ScalarSelect[_MAYBE_ENTITY]: ...
 
-    @overload
-    def as_scalar(
-        self: Query[Tuple[_NOT_ENTITY]],
-    ) -> ScalarSelect[_NOT_ENTITY]: ...
+        @overload
+        def as_scalar(
+            self: Query[Tuple[_NOT_ENTITY]],
+        ) -> ScalarSelect[_NOT_ENTITY]: ...
 
-    @overload
-    def as_scalar(self) -> ScalarSelect[Any]: ...
+        @overload
+        def as_scalar(self) -> ScalarSelect[Any]: ...
 
     @util.deprecated(
         "1.4",
@@ -756,18 +757,19 @@ class Query(
         """
         return self.scalar_subquery()
 
-    @overload
-    def scalar_subquery(
-        self: Query[Tuple[_MAYBE_ENTITY]],
-    ) -> ScalarSelect[Any]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalar_subquery(
+            self: Query[Tuple[_MAYBE_ENTITY]],
+        ) -> ScalarSelect[Any]: ...
 
-    @overload
-    def scalar_subquery(
-        self: Query[Tuple[_NOT_ENTITY]],
-    ) -> ScalarSelect[_NOT_ENTITY]: ...
+        @overload
+        def scalar_subquery(
+            self: Query[Tuple[_NOT_ENTITY]],
+        ) -> ScalarSelect[_NOT_ENTITY]: ...
 
-    @overload
-    def scalar_subquery(self) -> ScalarSelect[Any]: ...
+        @overload
+        def scalar_subquery(self) -> ScalarSelect[Any]: ...
 
     def scalar_subquery(self) -> ScalarSelect[Any]:
         """Return the full SELECT statement represented by this
@@ -814,15 +816,16 @@ class Query(
             .statement
         )
 
-    @overload
-    def only_return_tuples(
-        self: Query[_O], value: Literal[True]
-    ) -> RowReturningQuery[Tuple[_O]]: ...
+    if TYPE_CHECKING:
+        @overload
+        def only_return_tuples(
+            self: Query[_O], value: Literal[True]
+        ) -> RowReturningQuery[Tuple[_O]]: ...
 
-    @overload
-    def only_return_tuples(
-        self: Query[_O], value: Literal[False]
-    ) -> Query[_O]: ...
+        @overload
+        def only_return_tuples(
+            self: Query[_O], value: Literal[False]
+        ) -> Query[_O]: ...
 
     @_generative
     def only_return_tuples(self, value: bool) -> Query[Any]:
@@ -1464,91 +1467,92 @@ class Query(
         except StopIteration:
             return None
 
-    @overload
-    def with_entities(self, _entity: _EntityType[_O]) -> Query[_O]: ...
+    if TYPE_CHECKING:
+        @overload
+        def with_entities(self, _entity: _EntityType[_O]) -> Query[_O]: ...
 
-    @overload
-    def with_entities(
-        self,
-        _colexpr: roles.TypedColumnsClauseRole[_T],
-    ) -> RowReturningQuery[Tuple[_T]]: ...
+        @overload
+        def with_entities(
+            self,
+            _colexpr: roles.TypedColumnsClauseRole[_T],
+        ) -> RowReturningQuery[Tuple[_T]]: ...
 
-    # START OVERLOADED FUNCTIONS self.with_entities RowReturningQuery 2-8
+        # START OVERLOADED FUNCTIONS self.with_entities RowReturningQuery 2-8
 
-    # code within this block is **programmatically,
-    # statically generated** by tools/generate_tuple_map_overloads.py
+        # code within this block is **programmatically,
+        # statically generated** by tools/generate_tuple_map_overloads.py
 
-    @overload
-    def with_entities(
-        self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1]
-    ) -> RowReturningQuery[Tuple[_T0, _T1]]: ...
+        @overload
+        def with_entities(
+            self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1]
+        ) -> RowReturningQuery[Tuple[_T0, _T1]]: ...
 
-    @overload
-    def with_entities(
-        self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1], __ent2: _TCCA[_T2]
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2]]: ...
+        @overload
+        def with_entities(
+            self, __ent0: _TCCA[_T0], __ent1: _TCCA[_T1], __ent2: _TCCA[_T2]
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2]]: ...
 
-    @overload
-    def with_entities(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3]]: ...
+        @overload
+        def with_entities(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3]]: ...
 
-    @overload
-    def with_entities(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4]]: ...
+        @overload
+        def with_entities(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4]]: ...
 
-    @overload
-    def with_entities(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-        __ent5: _TCCA[_T5],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5]]: ...
+        @overload
+        def with_entities(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+            __ent5: _TCCA[_T5],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5]]: ...
 
-    @overload
-    def with_entities(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-        __ent5: _TCCA[_T5],
-        __ent6: _TCCA[_T6],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6]]: ...
+        @overload
+        def with_entities(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+            __ent5: _TCCA[_T5],
+            __ent6: _TCCA[_T6],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6]]: ...
 
-    @overload
-    def with_entities(
-        self,
-        __ent0: _TCCA[_T0],
-        __ent1: _TCCA[_T1],
-        __ent2: _TCCA[_T2],
-        __ent3: _TCCA[_T3],
-        __ent4: _TCCA[_T4],
-        __ent5: _TCCA[_T5],
-        __ent6: _TCCA[_T6],
-        __ent7: _TCCA[_T7],
-    ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7]]: ...
+        @overload
+        def with_entities(
+            self,
+            __ent0: _TCCA[_T0],
+            __ent1: _TCCA[_T1],
+            __ent2: _TCCA[_T2],
+            __ent3: _TCCA[_T3],
+            __ent4: _TCCA[_T4],
+            __ent5: _TCCA[_T5],
+            __ent6: _TCCA[_T6],
+            __ent7: _TCCA[_T7],
+        ) -> RowReturningQuery[Tuple[_T0, _T1, _T2, _T3, _T4, _T5, _T6, _T7]]: ...
 
-    # END OVERLOADED FUNCTIONS self.with_entities
+        # END OVERLOADED FUNCTIONS self.with_entities
 
-    @overload
-    def with_entities(
-        self, *entities: _ColumnsClauseArgument[Any]
-    ) -> Query[Any]: ...
+        @overload
+        def with_entities(
+            self, *entities: _ColumnsClauseArgument[Any]
+        ) -> Query[Any]: ...
 
     @_generative
     def with_entities(
@@ -1699,27 +1703,28 @@ class Query(
         """
         return self._execution_options
 
-    @overload
-    def execution_options(
-        self,
-        *,
-        compiled_cache: Optional[CompiledCacheType] = ...,
-        logging_token: str = ...,
-        isolation_level: IsolationLevel = ...,
-        no_parameters: bool = False,
-        stream_results: bool = False,
-        max_row_buffer: int = ...,
-        yield_per: int = ...,
-        insertmanyvalues_page_size: int = ...,
-        schema_translate_map: Optional[SchemaTranslateMapType] = ...,
-        populate_existing: bool = False,
-        autoflush: bool = False,
-        preserve_rowcount: bool = False,
-        **opt: Any,
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def execution_options(
+            self,
+            *,
+            compiled_cache: Optional[CompiledCacheType] = ...,
+            logging_token: str = ...,
+            isolation_level: IsolationLevel = ...,
+            no_parameters: bool = False,
+            stream_results: bool = False,
+            max_row_buffer: int = ...,
+            yield_per: int = ...,
+            insertmanyvalues_page_size: int = ...,
+            schema_translate_map: Optional[SchemaTranslateMapType] = ...,
+            populate_existing: bool = False,
+            autoflush: bool = False,
+            preserve_rowcount: bool = False,
+            **opt: Any,
+        ) -> Self: ...
 
-    @overload
-    def execution_options(self, **opt: Any) -> Self: ...
+        @overload
+        def execution_options(self, **opt: Any) -> Self: ...
 
     @_generative
     def execution_options(self, **kwargs: Any) -> Self:

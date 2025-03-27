@@ -541,13 +541,14 @@ class InstrumentedAttribute(QueryableAttribute[_T_co]):
     def __delete__(self, instance: object) -> None:
         self.impl.delete(instance_state(instance), instance_dict(instance))
 
-    @overload
-    def __get__(
-        self, instance: None, owner: Any
-    ) -> InstrumentedAttribute[_T_co]: ...
+    if TYPE_CHECKING:
+        @overload
+        def __get__(
+            self, instance: None, owner: Any
+        ) -> InstrumentedAttribute[_T_co]: ...
 
-    @overload
-    def __get__(self, instance: object, owner: Any) -> _T_co: ...
+        @overload
+        def __get__(self, instance: object, owner: Any) -> _T_co: ...
 
     def __get__(
         self, instance: Optional[object], owner: Any
@@ -1531,34 +1532,35 @@ class HasCollectionAdapter:
     ) -> None:
         raise NotImplementedError()
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: Literal[None] = ...,
-        passive: Literal[PassiveFlag.PASSIVE_OFF] = ...,
-    ) -> CollectionAdapter: ...
+    if TYPE_CHECKING:
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: Literal[None] = ...,
+            passive: Literal[PassiveFlag.PASSIVE_OFF] = ...,
+        ) -> CollectionAdapter: ...
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: _AdaptedCollectionProtocol = ...,
-        passive: PassiveFlag = ...,
-    ) -> CollectionAdapter: ...
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: _AdaptedCollectionProtocol = ...,
+            passive: PassiveFlag = ...,
+        ) -> CollectionAdapter: ...
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: Optional[_AdaptedCollectionProtocol] = ...,
-        passive: PassiveFlag = ...,
-    ) -> Union[
-        Literal[LoaderCallableStatus.PASSIVE_NO_RESULT], CollectionAdapter
-    ]: ...
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: Optional[_AdaptedCollectionProtocol] = ...,
+            passive: PassiveFlag = ...,
+        ) -> Union[
+            Literal[LoaderCallableStatus.PASSIVE_NO_RESULT], CollectionAdapter
+        ]: ...
 
     def get_collection(
         self,
@@ -2038,34 +2040,35 @@ class CollectionAttributeImpl(HasCollectionAdapter, AttributeImpl):
 
         return user_data
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: Literal[None] = ...,
-        passive: Literal[PassiveFlag.PASSIVE_OFF] = ...,
-    ) -> CollectionAdapter: ...
+    if TYPE_CHECKING:
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: Literal[None] = ...,
+            passive: Literal[PassiveFlag.PASSIVE_OFF] = ...,
+        ) -> CollectionAdapter: ...
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: _AdaptedCollectionProtocol = ...,
-        passive: PassiveFlag = ...,
-    ) -> CollectionAdapter: ...
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: _AdaptedCollectionProtocol = ...,
+            passive: PassiveFlag = ...,
+        ) -> CollectionAdapter: ...
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: Optional[_AdaptedCollectionProtocol] = ...,
-        passive: PassiveFlag = PASSIVE_OFF,
-    ) -> Union[
-        Literal[LoaderCallableStatus.PASSIVE_NO_RESULT], CollectionAdapter
-    ]: ...
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: Optional[_AdaptedCollectionProtocol] = ...,
+            passive: PassiveFlag = PASSIVE_OFF,
+        ) -> Union[
+            Literal[LoaderCallableStatus.PASSIVE_NO_RESULT], CollectionAdapter
+        ]: ...
 
     def get_collection(
         self,

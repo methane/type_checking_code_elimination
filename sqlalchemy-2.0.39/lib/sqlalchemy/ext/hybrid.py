@@ -1037,15 +1037,16 @@ class hybrid_method(interfaces.InspectionAttrInfo, Generic[_P, _R]):
         """
         return self
 
-    @overload
-    def __get__(
-        self, instance: Literal[None], owner: Type[object]
-    ) -> Callable[_P, SQLCoreOperations[_R]]: ...
+    if TYPE_CHECKING:
+        @overload
+        def __get__(
+            self, instance: Literal[None], owner: Type[object]
+        ) -> Callable[_P, SQLCoreOperations[_R]]: ...
 
-    @overload
-    def __get__(
-        self, instance: object, owner: Type[object]
-    ) -> Callable[_P, _R]: ...
+        @overload
+        def __get__(
+            self, instance: object, owner: Type[object]
+        ) -> Callable[_P, _R]: ...
 
     def __get__(
         self, instance: Optional[object], owner: Type[object]
@@ -1119,16 +1120,17 @@ class hybrid_property(interfaces.InspectionAttrInfo, ORMDescriptor[_T]):
         self.update_expr = _unwrap_classmethod(update_expr)
         util.update_wrapper(self, fget)  # type: ignore[arg-type]
 
-    @overload
-    def __get__(self, instance: Any, owner: Literal[None]) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def __get__(self, instance: Any, owner: Literal[None]) -> Self: ...
 
-    @overload
-    def __get__(
-        self, instance: Literal[None], owner: Type[object]
-    ) -> _HybridClassLevelAccessor[_T]: ...
+        @overload
+        def __get__(
+            self, instance: Literal[None], owner: Type[object]
+        ) -> _HybridClassLevelAccessor[_T]: ...
 
-    @overload
-    def __get__(self, instance: object, owner: Type[object]) -> _T: ...
+        @overload
+        def __get__(self, instance: object, owner: Type[object]) -> _T: ...
 
     def __get__(
         self, instance: Optional[object], owner: Optional[Type[object]]

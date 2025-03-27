@@ -70,23 +70,24 @@ class OperatorType(Protocol):
 
     __name__: str
 
-    @overload
-    def __call__(
-        self,
-        left: ColumnExpressionArgument[Any],
-        right: Optional[Any] = None,
-        *other: Any,
-        **kwargs: Any,
-    ) -> ColumnElement[Any]: ...
+    if TYPE_CHECKING:
+        @overload
+        def __call__(
+            self,
+            left: ColumnExpressionArgument[Any],
+            right: Optional[Any] = None,
+            *other: Any,
+            **kwargs: Any,
+        ) -> ColumnElement[Any]: ...
 
-    @overload
-    def __call__(
-        self,
-        left: Operators,
-        right: Optional[Any] = None,
-        *other: Any,
-        **kwargs: Any,
-    ) -> Operators: ...
+        @overload
+        def __call__(
+            self,
+            left: Operators,
+            right: Optional[Any] = None,
+            *other: Any,
+            **kwargs: Any,
+        ) -> Operators: ...
 
     def __call__(
         self,
@@ -458,23 +459,24 @@ class custom_op(OperatorType, Generic[_T]):
             self.return_type._static_cache_key if self.return_type else None,
         )
 
-    @overload
-    def __call__(
-        self,
-        left: ColumnExpressionArgument[Any],
-        right: Optional[Any] = None,
-        *other: Any,
-        **kwargs: Any,
-    ) -> ColumnElement[Any]: ...
+    if TYPE_CHECKING:
+        @overload
+        def __call__(
+            self,
+            left: ColumnExpressionArgument[Any],
+            right: Optional[Any] = None,
+            *other: Any,
+            **kwargs: Any,
+        ) -> ColumnElement[Any]: ...
 
-    @overload
-    def __call__(
-        self,
-        left: Operators,
-        right: Optional[Any] = None,
-        *other: Any,
-        **kwargs: Any,
-    ) -> Operators: ...
+        @overload
+        def __call__(
+            self,
+            left: Operators,
+            right: Optional[Any] = None,
+            *other: Any,
+            **kwargs: Any,
+        ) -> Operators: ...
 
     def __call__(
         self,

@@ -561,47 +561,48 @@ class DBAPIError(StatementError):
 
     code = "dbapi"
 
-    @overload
-    @classmethod
-    def instance(
-        cls,
-        statement: Optional[str],
-        params: Optional[_AnyExecuteParams],
-        orig: Exception,
-        dbapi_base_err: Type[Exception],
-        hide_parameters: bool = False,
-        connection_invalidated: bool = False,
-        dialect: Optional[Dialect] = None,
-        ismulti: Optional[bool] = None,
-    ) -> StatementError: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        @classmethod
+        def instance(
+            cls,
+            statement: Optional[str],
+            params: Optional[_AnyExecuteParams],
+            orig: Exception,
+            dbapi_base_err: Type[Exception],
+            hide_parameters: bool = False,
+            connection_invalidated: bool = False,
+            dialect: Optional[Dialect] = None,
+            ismulti: Optional[bool] = None,
+        ) -> StatementError: ...
 
-    @overload
-    @classmethod
-    def instance(
-        cls,
-        statement: Optional[str],
-        params: Optional[_AnyExecuteParams],
-        orig: DontWrapMixin,
-        dbapi_base_err: Type[Exception],
-        hide_parameters: bool = False,
-        connection_invalidated: bool = False,
-        dialect: Optional[Dialect] = None,
-        ismulti: Optional[bool] = None,
-    ) -> DontWrapMixin: ...
+        @overload
+        @classmethod
+        def instance(
+            cls,
+            statement: Optional[str],
+            params: Optional[_AnyExecuteParams],
+            orig: DontWrapMixin,
+            dbapi_base_err: Type[Exception],
+            hide_parameters: bool = False,
+            connection_invalidated: bool = False,
+            dialect: Optional[Dialect] = None,
+            ismulti: Optional[bool] = None,
+        ) -> DontWrapMixin: ...
 
-    @overload
-    @classmethod
-    def instance(
-        cls,
-        statement: Optional[str],
-        params: Optional[_AnyExecuteParams],
-        orig: BaseException,
-        dbapi_base_err: Type[Exception],
-        hide_parameters: bool = False,
-        connection_invalidated: bool = False,
-        dialect: Optional[Dialect] = None,
-        ismulti: Optional[bool] = None,
-    ) -> BaseException: ...
+        @overload
+        @classmethod
+        def instance(
+            cls,
+            statement: Optional[str],
+            params: Optional[_AnyExecuteParams],
+            orig: BaseException,
+            dbapi_base_err: Type[Exception],
+            hide_parameters: bool = False,
+            connection_invalidated: bool = False,
+            dialect: Optional[Dialect] = None,
+            ismulti: Optional[bool] = None,
+        ) -> BaseException: ...
 
     @classmethod
     def instance(

@@ -25,6 +25,7 @@ from typing import Tuple
 from typing import Type
 from typing import TypeVar
 from typing import Union
+from typing import TYPE_CHECKING
 
 from . import util as orm_util
 from ._typing import insp_is_aliased_class
@@ -777,11 +778,12 @@ class _AbstractLoad(traversals.GenerativeOnTraversal, LoaderOption):
         )
         return self
 
-    @overload
-    def _coerce_strat(self, strategy: _StrategySpec) -> _StrategyKey: ...
+    if TYPE_CHECKING:
+        @overload
+        def _coerce_strat(self, strategy: _StrategySpec) -> _StrategyKey: ...
 
-    @overload
-    def _coerce_strat(self, strategy: Literal[None]) -> None: ...
+        @overload
+        def _coerce_strat(self, strategy: Literal[None]) -> None: ...
 
     def _coerce_strat(
         self, strategy: Optional[_StrategySpec]

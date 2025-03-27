@@ -189,34 +189,35 @@ class WriteOnlyAttributeImpl(
         else:
             return self.query_class(self, state)
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: Literal[None] = ...,
-        passive: Literal[PassiveFlag.PASSIVE_OFF] = ...,
-    ) -> CollectionAdapter: ...
+    if TYPE_CHECKING:
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: Literal[None] = ...,
+            passive: Literal[PassiveFlag.PASSIVE_OFF] = ...,
+        ) -> CollectionAdapter: ...
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: _AdaptedCollectionProtocol = ...,
-        passive: PassiveFlag = ...,
-    ) -> CollectionAdapter: ...
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: _AdaptedCollectionProtocol = ...,
+            passive: PassiveFlag = ...,
+        ) -> CollectionAdapter: ...
 
-    @overload
-    def get_collection(
-        self,
-        state: InstanceState[Any],
-        dict_: _InstanceDict,
-        user_data: Optional[_AdaptedCollectionProtocol] = ...,
-        passive: PassiveFlag = ...,
-    ) -> Union[
-        Literal[LoaderCallableStatus.PASSIVE_NO_RESULT], CollectionAdapter
-    ]: ...
+        @overload
+        def get_collection(
+            self,
+            state: InstanceState[Any],
+            dict_: _InstanceDict,
+            user_data: Optional[_AdaptedCollectionProtocol] = ...,
+            passive: PassiveFlag = ...,
+        ) -> Union[
+            Literal[LoaderCallableStatus.PASSIVE_NO_RESULT], CollectionAdapter
+        ]: ...
 
     def get_collection(
         self,

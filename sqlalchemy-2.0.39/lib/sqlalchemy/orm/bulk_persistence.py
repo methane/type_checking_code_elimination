@@ -71,32 +71,33 @@ if TYPE_CHECKING:
 _O = TypeVar("_O", bound=object)
 
 
-@overload
-def _bulk_insert(
-    mapper: Mapper[_O],
-    mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
-    session_transaction: SessionTransaction,
-    *,
-    isstates: bool,
-    return_defaults: bool,
-    render_nulls: bool,
-    use_orm_insert_stmt: Literal[None] = ...,
-    execution_options: Optional[OrmExecuteOptionsParameter] = ...,
-) -> None: ...
+if TYPE_CHECKING:
+    @overload
+    def _bulk_insert(
+        mapper: Mapper[_O],
+        mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
+        session_transaction: SessionTransaction,
+        *,
+        isstates: bool,
+        return_defaults: bool,
+        render_nulls: bool,
+        use_orm_insert_stmt: Literal[None] = ...,
+        execution_options: Optional[OrmExecuteOptionsParameter] = ...,
+    ) -> None: ...
 
 
-@overload
-def _bulk_insert(
-    mapper: Mapper[_O],
-    mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
-    session_transaction: SessionTransaction,
-    *,
-    isstates: bool,
-    return_defaults: bool,
-    render_nulls: bool,
-    use_orm_insert_stmt: Optional[dml.Insert] = ...,
-    execution_options: Optional[OrmExecuteOptionsParameter] = ...,
-) -> cursor.CursorResult[Any]: ...
+    @overload
+    def _bulk_insert(
+        mapper: Mapper[_O],
+        mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
+        session_transaction: SessionTransaction,
+        *,
+        isstates: bool,
+        return_defaults: bool,
+        render_nulls: bool,
+        use_orm_insert_stmt: Optional[dml.Insert] = ...,
+        execution_options: Optional[OrmExecuteOptionsParameter] = ...,
+    ) -> cursor.CursorResult[Any]: ...
 
 
 def _bulk_insert(
@@ -251,30 +252,31 @@ def _bulk_insert(
         return return_result
 
 
-@overload
-def _bulk_update(
-    mapper: Mapper[Any],
-    mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
-    session_transaction: SessionTransaction,
-    *,
-    isstates: bool,
-    update_changed_only: bool,
-    use_orm_update_stmt: Literal[None] = ...,
-    enable_check_rowcount: bool = True,
-) -> None: ...
+if TYPE_CHECKING:
+    @overload
+    def _bulk_update(
+        mapper: Mapper[Any],
+        mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
+        session_transaction: SessionTransaction,
+        *,
+        isstates: bool,
+        update_changed_only: bool,
+        use_orm_update_stmt: Literal[None] = ...,
+        enable_check_rowcount: bool = True,
+    ) -> None: ...
 
 
-@overload
-def _bulk_update(
-    mapper: Mapper[Any],
-    mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
-    session_transaction: SessionTransaction,
-    *,
-    isstates: bool,
-    update_changed_only: bool,
-    use_orm_update_stmt: Optional[dml.Update] = ...,
-    enable_check_rowcount: bool = True,
-) -> _result.Result[Any]: ...
+    @overload
+    def _bulk_update(
+        mapper: Mapper[Any],
+        mappings: Union[Iterable[InstanceState[_O]], Iterable[Dict[str, Any]]],
+        session_transaction: SessionTransaction,
+        *,
+        isstates: bool,
+        update_changed_only: bool,
+        use_orm_update_stmt: Optional[dml.Update] = ...,
+        enable_check_rowcount: bool = True,
+    ) -> _result.Result[Any]: ...
 
 
 def _bulk_update(

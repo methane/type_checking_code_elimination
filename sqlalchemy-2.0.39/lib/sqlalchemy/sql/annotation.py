@@ -62,19 +62,20 @@ class SupportsAnnotations(ExternallyTraversible):
     def _annotate(self, values: _AnnotationDict) -> Self:
         raise NotImplementedError()
 
-    @overload
-    def _deannotate(
-        self,
-        values: Literal[None] = ...,
-        clone: bool = ...,
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def _deannotate(
+            self,
+            values: Literal[None] = ...,
+            clone: bool = ...,
+        ) -> Self: ...
 
-    @overload
-    def _deannotate(
-        self,
-        values: Sequence[str] = ...,
-        clone: bool = ...,
-    ) -> SupportsAnnotations: ...
+        @overload
+        def _deannotate(
+            self,
+            values: Sequence[str] = ...,
+            clone: bool = ...,
+        ) -> SupportsAnnotations: ...
 
     def _deannotate(
         self,
@@ -135,19 +136,20 @@ class SupportsWrappingAnnotations(SupportsAnnotations):
         """
         return Annotated._as_annotated_instance(self, values)  # type: ignore
 
-    @overload
-    def _deannotate(
-        self,
-        values: Literal[None] = ...,
-        clone: bool = ...,
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def _deannotate(
+            self,
+            values: Literal[None] = ...,
+            clone: bool = ...,
+        ) -> Self: ...
 
-    @overload
-    def _deannotate(
-        self,
-        values: Sequence[str] = ...,
-        clone: bool = ...,
-    ) -> SupportsAnnotations: ...
+        @overload
+        def _deannotate(
+            self,
+            values: Sequence[str] = ...,
+            clone: bool = ...,
+        ) -> SupportsAnnotations: ...
 
     def _deannotate(
         self,
@@ -206,19 +208,20 @@ class SupportsCloneAnnotations(SupportsWrappingAnnotations):
         new.__dict__.pop("_generate_cache_key", None)
         return new
 
-    @overload
-    def _deannotate(
-        self,
-        values: Literal[None] = ...,
-        clone: bool = ...,
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def _deannotate(
+            self,
+            values: Literal[None] = ...,
+            clone: bool = ...,
+        ) -> Self: ...
 
-    @overload
-    def _deannotate(
-        self,
-        values: Sequence[str] = ...,
-        clone: bool = ...,
-    ) -> SupportsAnnotations: ...
+        @overload
+        def _deannotate(
+            self,
+            values: Sequence[str] = ...,
+            clone: bool = ...,
+        ) -> SupportsAnnotations: ...
 
     def _deannotate(
         self,
@@ -306,19 +309,20 @@ class Annotated(SupportsAnnotations):
         clone._annotations = util.immutabledict(values)
         return clone
 
-    @overload
-    def _deannotate(
-        self,
-        values: Literal[None] = ...,
-        clone: bool = ...,
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def _deannotate(
+            self,
+            values: Literal[None] = ...,
+            clone: bool = ...,
+        ) -> Self: ...
 
-    @overload
-    def _deannotate(
-        self,
-        values: Sequence[str] = ...,
-        clone: bool = ...,
-    ) -> Annotated: ...
+        @overload
+        def _deannotate(
+            self,
+            values: Sequence[str] = ...,
+            clone: bool = ...,
+        ) -> Annotated: ...
 
     def _deannotate(
         self,
@@ -477,16 +481,17 @@ def _deep_annotate(
     return element
 
 
-@overload
-def _deep_deannotate(
-    element: Literal[None], values: Optional[Sequence[str]] = None
-) -> Literal[None]: ...
+if TYPE_CHECKING:
+    @overload
+    def _deep_deannotate(
+        element: Literal[None], values: Optional[Sequence[str]] = None
+    ) -> Literal[None]: ...
 
 
-@overload
-def _deep_deannotate(
-    element: _SA, values: Optional[Sequence[str]] = None
-) -> _SA: ...
+    @overload
+    def _deep_deannotate(
+        element: _SA, values: Optional[Sequence[str]] = None
+    ) -> _SA: ...
 
 
 def _deep_deannotate(

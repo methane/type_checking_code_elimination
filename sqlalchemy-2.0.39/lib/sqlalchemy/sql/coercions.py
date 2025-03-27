@@ -159,155 +159,156 @@ def _expression_collection_was_a_list(
     return cast("Sequence[_T]", args)
 
 
-@overload
-def expect(
-    role: Type[roles.TruncatedLabelRole],
-    element: Any,
-    **kw: Any,
-) -> str: ...
+if TYPE_CHECKING:
+    @overload
+    def expect(
+        role: Type[roles.TruncatedLabelRole],
+        element: Any,
+        **kw: Any,
+    ) -> str: ...
 
 
-@overload
-def expect(
-    role: Type[roles.DMLColumnRole],
-    element: Any,
-    *,
-    as_key: Literal[True] = ...,
-    **kw: Any,
-) -> str: ...
+    @overload
+    def expect(
+        role: Type[roles.DMLColumnRole],
+        element: Any,
+        *,
+        as_key: Literal[True] = ...,
+        **kw: Any,
+    ) -> str: ...
 
 
-@overload
-def expect(
-    role: Type[roles.LiteralValueRole],
-    element: Any,
-    **kw: Any,
-) -> BindParameter[Any]: ...
+    @overload
+    def expect(
+        role: Type[roles.LiteralValueRole],
+        element: Any,
+        **kw: Any,
+    ) -> BindParameter[Any]: ...
 
 
-@overload
-def expect(
-    role: Type[roles.DDLReferredColumnRole],
-    element: Any,
-    **kw: Any,
-) -> Union[Column[Any], str]: ...
+    @overload
+    def expect(
+        role: Type[roles.DDLReferredColumnRole],
+        element: Any,
+        **kw: Any,
+    ) -> Union[Column[Any], str]: ...
 
 
-@overload
-def expect(
-    role: Type[roles.DDLConstraintColumnRole],
-    element: Any,
-    **kw: Any,
-) -> Union[Column[Any], str]: ...
+    @overload
+    def expect(
+        role: Type[roles.DDLConstraintColumnRole],
+        element: Any,
+        **kw: Any,
+    ) -> Union[Column[Any], str]: ...
 
 
-@overload
-def expect(
-    role: Type[roles.StatementOptionRole],
-    element: Any,
-    **kw: Any,
-) -> Union[ColumnElement[Any], TextClause]: ...
+    @overload
+    def expect(
+        role: Type[roles.StatementOptionRole],
+        element: Any,
+        **kw: Any,
+    ) -> Union[ColumnElement[Any], TextClause]: ...
 
 
-@overload
-def expect(
-    role: Type[roles.LabeledColumnExprRole[Any]],
-    element: _ColumnExpressionArgument[_T],
-    **kw: Any,
-) -> NamedColumn[_T]: ...
+    @overload
+    def expect(
+        role: Type[roles.LabeledColumnExprRole[Any]],
+        element: _ColumnExpressionArgument[_T],
+        **kw: Any,
+    ) -> NamedColumn[_T]: ...
 
 
-@overload
-def expect(
-    role: Union[
-        Type[roles.ExpressionElementRole[Any]],
-        Type[roles.LimitOffsetRole],
-        Type[roles.WhereHavingRole],
-    ],
-    element: _ColumnExpressionArgument[_T],
-    **kw: Any,
-) -> ColumnElement[_T]: ...
+    @overload
+    def expect(
+        role: Union[
+            Type[roles.ExpressionElementRole[Any]],
+            Type[roles.LimitOffsetRole],
+            Type[roles.WhereHavingRole],
+        ],
+        element: _ColumnExpressionArgument[_T],
+        **kw: Any,
+    ) -> ColumnElement[_T]: ...
 
 
-@overload
-def expect(
-    role: Union[
-        Type[roles.ExpressionElementRole[Any]],
-        Type[roles.LimitOffsetRole],
-        Type[roles.WhereHavingRole],
-        Type[roles.OnClauseRole],
-        Type[roles.ColumnArgumentRole],
-    ],
-    element: Any,
-    **kw: Any,
-) -> ColumnElement[Any]: ...
+    @overload
+    def expect(
+        role: Union[
+            Type[roles.ExpressionElementRole[Any]],
+            Type[roles.LimitOffsetRole],
+            Type[roles.WhereHavingRole],
+            Type[roles.OnClauseRole],
+            Type[roles.ColumnArgumentRole],
+        ],
+        element: Any,
+        **kw: Any,
+    ) -> ColumnElement[Any]: ...
 
 
-@overload
-def expect(
-    role: Type[roles.DMLTableRole],
-    element: _DMLTableArgument,
-    **kw: Any,
-) -> _DMLTableElement: ...
+    @overload
+    def expect(
+        role: Type[roles.DMLTableRole],
+        element: _DMLTableArgument,
+        **kw: Any,
+    ) -> _DMLTableElement: ...
 
 
-@overload
-def expect(
-    role: Type[roles.HasCTERole],
-    element: HasCTE,
-    **kw: Any,
-) -> HasCTE: ...
+    @overload
+    def expect(
+        role: Type[roles.HasCTERole],
+        element: HasCTE,
+        **kw: Any,
+    ) -> HasCTE: ...
 
 
-@overload
-def expect(
-    role: Type[roles.SelectStatementRole],
-    element: SelectBase,
-    **kw: Any,
-) -> SelectBase: ...
+    @overload
+    def expect(
+        role: Type[roles.SelectStatementRole],
+        element: SelectBase,
+        **kw: Any,
+    ) -> SelectBase: ...
 
 
-@overload
-def expect(
-    role: Type[roles.FromClauseRole],
-    element: _FromClauseArgument,
-    **kw: Any,
-) -> FromClause: ...
+    @overload
+    def expect(
+        role: Type[roles.FromClauseRole],
+        element: _FromClauseArgument,
+        **kw: Any,
+    ) -> FromClause: ...
 
 
-@overload
-def expect(
-    role: Type[roles.FromClauseRole],
-    element: SelectBase,
-    *,
-    explicit_subquery: Literal[True] = ...,
-    **kw: Any,
-) -> Subquery: ...
+    @overload
+    def expect(
+        role: Type[roles.FromClauseRole],
+        element: SelectBase,
+        *,
+        explicit_subquery: Literal[True] = ...,
+        **kw: Any,
+    ) -> Subquery: ...
 
 
-@overload
-def expect(
-    role: Type[roles.ColumnsClauseRole],
-    element: _ColumnsClauseArgument[Any],
-    **kw: Any,
-) -> _ColumnsClauseElement: ...
+    @overload
+    def expect(
+        role: Type[roles.ColumnsClauseRole],
+        element: _ColumnsClauseArgument[Any],
+        **kw: Any,
+    ) -> _ColumnsClauseElement: ...
 
 
-@overload
-def expect(
-    role: Type[roles.JoinTargetRole],
-    element: _JoinTargetProtocol,
-    **kw: Any,
-) -> _JoinTargetProtocol: ...
+    @overload
+    def expect(
+        role: Type[roles.JoinTargetRole],
+        element: _JoinTargetProtocol,
+        **kw: Any,
+    ) -> _JoinTargetProtocol: ...
 
 
-# catchall for not-yet-implemented overloads
-@overload
-def expect(
-    role: Type[_SR],
-    element: Any,
-    **kw: Any,
-) -> Any: ...
+    # catchall for not-yet-implemented overloads
+    @overload
+    def expect(
+        role: Type[_SR],
+        element: Any,
+        **kw: Any,
+    ) -> Any: ...
 
 
 def expect(

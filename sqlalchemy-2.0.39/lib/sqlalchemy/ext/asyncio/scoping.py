@@ -526,41 +526,42 @@ class async_scoped_session(Generic[_AS]):
 
         return await self._proxied.delete(instance)
 
-    @overload
-    async def execute(
-        self,
-        statement: TypedReturnsRows[_T],
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-    ) -> Result[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def execute(
+            self,
+            statement: TypedReturnsRows[_T],
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+        ) -> Result[_T]: ...
 
-    @overload
-    async def execute(
-        self,
-        statement: UpdateBase,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-    ) -> CursorResult[Any]: ...
+        @overload
+        async def execute(
+            self,
+            statement: UpdateBase,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+        ) -> CursorResult[Any]: ...
 
-    @overload
-    async def execute(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        _parent_execute_state: Optional[Any] = None,
-        _add_event: Optional[Any] = None,
-    ) -> Result[Any]: ...
+        @overload
+        async def execute(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            _parent_execute_state: Optional[Any] = None,
+            _add_event: Optional[Any] = None,
+        ) -> Result[Any]: ...
 
     async def execute(
         self,
@@ -1003,27 +1004,28 @@ class async_scoped_session(Generic[_AS]):
 
         return await self._proxied.rollback()
 
-    @overload
-    async def scalar(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> Optional[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def scalar(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> Optional[_T]: ...
 
-    @overload
-    async def scalar(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> Any: ...
+        @overload
+        async def scalar(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> Any: ...
 
     async def scalar(
         self,
@@ -1056,27 +1058,28 @@ class async_scoped_session(Generic[_AS]):
             **kw,
         )
 
-    @overload
-    async def scalars(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> ScalarResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def scalars(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> ScalarResult[_T]: ...
 
-    @overload
-    async def scalars(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> ScalarResult[Any]: ...
+        @overload
+        async def scalars(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> ScalarResult[Any]: ...
 
     async def scalars(
         self,
@@ -1197,27 +1200,28 @@ class async_scoped_session(Generic[_AS]):
             execution_options=execution_options,
         )
 
-    @overload
-    async def stream(
-        self,
-        statement: TypedReturnsRows[_T],
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> AsyncResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def stream(
+            self,
+            statement: TypedReturnsRows[_T],
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> AsyncResult[_T]: ...
 
-    @overload
-    async def stream(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> AsyncResult[Any]: ...
+        @overload
+        async def stream(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> AsyncResult[Any]: ...
 
     async def stream(
         self,
@@ -1247,27 +1251,28 @@ class async_scoped_session(Generic[_AS]):
             **kw,
         )
 
-    @overload
-    async def stream_scalars(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> AsyncScalarResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        async def stream_scalars(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> AsyncScalarResult[_T]: ...
 
-    @overload
-    async def stream_scalars(
-        self,
-        statement: Executable,
-        params: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
-        bind_arguments: Optional[_BindArguments] = None,
-        **kw: Any,
-    ) -> AsyncScalarResult[Any]: ...
+        @overload
+        async def stream_scalars(
+            self,
+            statement: Executable,
+            params: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: OrmExecuteOptionsParameter = util.EMPTY_DICT,
+            bind_arguments: Optional[_BindArguments] = None,
+            **kw: Any,
+        ) -> AsyncScalarResult[Any]: ...
 
     async def stream_scalars(
         self,

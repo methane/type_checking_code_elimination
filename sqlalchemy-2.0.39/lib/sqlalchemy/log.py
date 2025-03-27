@@ -254,6 +254,7 @@ def instance_logger(
 
     instance.logger = logger  # type: ignore
 
+import typing
 
 class echo_property:
     __doc__ = """\
@@ -266,15 +267,16 @@ class echo_property:
     ``logging.DEBUG``.
     """
 
-    @overload
-    def __get__(
-        self, instance: Literal[None], owner: Type[Identified]
-    ) -> echo_property: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def __get__(
+            self, instance: Literal[None], owner: Type[Identified]
+        ) -> echo_property: ...
 
-    @overload
-    def __get__(
-        self, instance: Identified, owner: Type[Identified]
-    ) -> _EchoFlagType: ...
+        @overload
+        def __get__(
+            self, instance: Identified, owner: Type[Identified]
+        ) -> _EchoFlagType: ...
 
     def __get__(
         self, instance: Optional[Identified], owner: Type[Identified]

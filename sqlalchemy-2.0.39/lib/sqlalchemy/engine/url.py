@@ -31,6 +31,7 @@ from typing import Sequence
 from typing import Tuple
 from typing import Type
 from typing import Union
+from typing import TYPE_CHECKING
 from urllib.parse import parse_qsl
 from urllib.parse import quote
 from urllib.parse import quote_plus
@@ -252,15 +253,16 @@ class URL(NamedTuple):
         if dict_ is None:
             return util.EMPTY_DICT
 
-        @overload
-        def _assert_value(
-            val: str,
-        ) -> str: ...
+        if TYPE_CHECKING:
+            @overload
+            def _assert_value(
+                val: str,
+            ) -> str: ...
 
-        @overload
-        def _assert_value(
-            val: Sequence[str],
-        ) -> Union[str, Tuple[str, ...]]: ...
+            @overload
+            def _assert_value(
+                val: Sequence[str],
+            ) -> Union[str, Tuple[str, ...]]: ...
 
         def _assert_value(
             val: Union[str, Sequence[str]],

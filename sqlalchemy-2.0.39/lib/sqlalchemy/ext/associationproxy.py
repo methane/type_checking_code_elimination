@@ -42,6 +42,7 @@ from typing import Type
 from typing import TypeVar
 from typing import Union
 from typing import ValuesView
+from typing import TYPE_CHECKING
 
 from .. import ColumnElement
 from .. import exc
@@ -414,18 +415,19 @@ class AssociationProxy(
             self._has_dataclass_arguments = False
             self._attribute_options = _DEFAULT_ATTRIBUTE_OPTIONS
 
-    @overload
-    def __get__(
-        self, instance: Literal[None], owner: Literal[None]
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def __get__(
+            self, instance: Literal[None], owner: Literal[None]
+        ) -> Self: ...
 
-    @overload
-    def __get__(
-        self, instance: Literal[None], owner: Any
-    ) -> AssociationProxyInstance[_T]: ...
+        @overload
+        def __get__(
+            self, instance: Literal[None], owner: Any
+        ) -> AssociationProxyInstance[_T]: ...
 
-    @overload
-    def __get__(self, instance: object, owner: Any) -> _T: ...
+        @overload
+        def __get__(self, instance: object, owner: Any) -> _T: ...
 
     def __get__(
         self, instance: object, owner: Any
@@ -855,11 +857,12 @@ class AssociationProxyInstance(SQLORMOperations[_T]):
     def info(self) -> _InfoType:
         return self.parent.info
 
-    @overload
-    def get(self: _Self, obj: Literal[None]) -> _Self: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def get(self: _Self, obj: Literal[None]) -> _Self: ...
 
-    @overload
-    def get(self, obj: Any) -> _T: ...
+        @overload
+        def get(self, obj: Any) -> _T: ...
 
     def get(
         self, obj: Any
@@ -1424,11 +1427,12 @@ class _AssociationList(_AssociationSingleItem[_T], MutableSequence[_T]):
     def _set(self, object_: Any, value: _T) -> None:
         self.setter(object_, value)
 
-    @overload
-    def __getitem__(self, index: int) -> _T: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def __getitem__(self, index: int) -> _T: ...
 
-    @overload
-    def __getitem__(self, index: slice) -> MutableSequence[_T]: ...
+        @overload
+        def __getitem__(self, index: slice) -> MutableSequence[_T]: ...
 
     def __getitem__(
         self, index: Union[int, slice]
@@ -1438,11 +1442,12 @@ class _AssociationList(_AssociationSingleItem[_T], MutableSequence[_T]):
         else:
             return [self._get(member) for member in self.col[index]]
 
-    @overload
-    def __setitem__(self, index: int, value: _T) -> None: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def __setitem__(self, index: int, value: _T) -> None: ...
 
-    @overload
-    def __setitem__(self, index: slice, value: Iterable[_T]) -> None: ...
+        @overload
+        def __setitem__(self, index: slice, value: Iterable[_T]) -> None: ...
 
     def __setitem__(
         self, index: Union[int, slice], value: Union[_T, Iterable[_T]]
@@ -1480,11 +1485,12 @@ class _AssociationList(_AssociationSingleItem[_T], MutableSequence[_T]):
                 for i, item in zip(rng, value):
                     self._set(self.col[i], item)
 
-    @overload
-    def __delitem__(self, index: int) -> None: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def __delitem__(self, index: int) -> None: ...
 
-    @overload
-    def __delitem__(self, index: slice) -> None: ...
+        @overload
+        def __delitem__(self, index: slice) -> None: ...
 
     def __delitem__(self, index: Union[slice, int]) -> None:
         del self.col[index]
@@ -1688,11 +1694,12 @@ class _AssociationDict(_AssociationCollection[_VT], MutableMapping[_KT, _VT]):
     def __repr__(self) -> str:
         return repr(dict(self))
 
-    @overload
-    def get(self, __key: _KT) -> Optional[_VT]: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def get(self, __key: _KT) -> Optional[_VT]: ...
 
-    @overload
-    def get(self, __key: _KT, default: Union[_VT, _T]) -> Union[_VT, _T]: ...
+        @overload
+        def get(self, __key: _KT, default: Union[_VT, _T]) -> Union[_VT, _T]: ...
 
     def get(
         self, key: _KT, default: Optional[Union[_VT, _T]] = None
@@ -1723,13 +1730,14 @@ class _AssociationDict(_AssociationCollection[_VT], MutableMapping[_KT, _VT]):
     def values(self) -> ValuesView[_VT]:
         return ValuesView(self)
 
-    @overload
-    def pop(self, __key: _KT) -> _VT: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def pop(self, __key: _KT) -> _VT: ...
 
-    @overload
-    def pop(
-        self, __key: _KT, default: Union[_VT, _T] = ...
-    ) -> Union[_VT, _T]: ...
+        @overload
+        def pop(
+            self, __key: _KT, default: Union[_VT, _T] = ...
+        ) -> Union[_VT, _T]: ...
 
     def pop(self, __key: _KT, *arg: Any, **kw: Any) -> Union[_VT, _T]:
         member = self.col.pop(__key, *arg, **kw)
@@ -1739,18 +1747,19 @@ class _AssociationDict(_AssociationCollection[_VT], MutableMapping[_KT, _VT]):
         item = self.col.popitem()
         return (item[0], self._get(item[1]))
 
-    @overload
-    def update(
-        self, __m: SupportsKeysAndGetItem[_KT, _VT], **kwargs: _VT
-    ) -> None: ...
+    if typing.TYPE_CHECKING:
+        @overload
+        def update(
+            self, __m: SupportsKeysAndGetItem[_KT, _VT], **kwargs: _VT
+        ) -> None: ...
 
-    @overload
-    def update(
-        self, __m: Iterable[tuple[_KT, _VT]], **kwargs: _VT
-    ) -> None: ...
+        @overload
+        def update(
+            self, __m: Iterable[tuple[_KT, _VT]], **kwargs: _VT
+        ) -> None: ...
 
-    @overload
-    def update(self, **kwargs: _VT) -> None: ...
+        @overload
+        def update(self, **kwargs: _VT) -> None: ...
 
     def update(self, *a: Any, **kw: Any) -> None:
         up: Dict[_KT, _VT] = {}

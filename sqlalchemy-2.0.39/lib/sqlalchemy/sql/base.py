@@ -1146,32 +1146,33 @@ class Executable(roles.StatementRole):
         self._with_context_options += ((callable_, cache_args),)
         return self
 
-    @overload
-    def execution_options(
-        self,
-        *,
-        compiled_cache: Optional[CompiledCacheType] = ...,
-        logging_token: str = ...,
-        isolation_level: IsolationLevel = ...,
-        no_parameters: bool = False,
-        stream_results: bool = False,
-        max_row_buffer: int = ...,
-        yield_per: int = ...,
-        insertmanyvalues_page_size: int = ...,
-        schema_translate_map: Optional[SchemaTranslateMapType] = ...,
-        populate_existing: bool = False,
-        autoflush: bool = False,
-        synchronize_session: SynchronizeSessionArgument = ...,
-        dml_strategy: DMLStrategyArgument = ...,
-        render_nulls: bool = ...,
-        is_delete_using: bool = ...,
-        is_update_from: bool = ...,
-        preserve_rowcount: bool = False,
-        **opt: Any,
-    ) -> Self: ...
+    if TYPE_CHECKING:
+        @overload
+        def execution_options(
+            self,
+            *,
+            compiled_cache: Optional[CompiledCacheType] = ...,
+            logging_token: str = ...,
+            isolation_level: IsolationLevel = ...,
+            no_parameters: bool = False,
+            stream_results: bool = False,
+            max_row_buffer: int = ...,
+            yield_per: int = ...,
+            insertmanyvalues_page_size: int = ...,
+            schema_translate_map: Optional[SchemaTranslateMapType] = ...,
+            populate_existing: bool = False,
+            autoflush: bool = False,
+            synchronize_session: SynchronizeSessionArgument = ...,
+            dml_strategy: DMLStrategyArgument = ...,
+            render_nulls: bool = ...,
+            is_delete_using: bool = ...,
+            is_update_from: bool = ...,
+            preserve_rowcount: bool = False,
+            **opt: Any,
+        ) -> Self: ...
 
-    @overload
-    def execution_options(self, **opt: Any) -> Self: ...
+        @overload
+        def execution_options(self, **opt: Any) -> Self: ...
 
     @_generative
     def execution_options(self, **kw: Any) -> Self:
@@ -1577,18 +1578,19 @@ class ColumnCollection(Generic[_COLKEY, _COL_co]):
         # turn to a list first to maintain over a course of changes
         return iter([col for _, col, _ in self._collection])
 
-    @overload
-    def __getitem__(self, key: Union[str, int]) -> _COL_co: ...
+    if TYPE_CHECKING:
+        @overload
+        def __getitem__(self, key: Union[str, int]) -> _COL_co: ...
 
-    @overload
-    def __getitem__(
-        self, key: Tuple[Union[str, int], ...]
-    ) -> ReadOnlyColumnCollection[_COLKEY, _COL_co]: ...
+        @overload
+        def __getitem__(
+            self, key: Tuple[Union[str, int], ...]
+        ) -> ReadOnlyColumnCollection[_COLKEY, _COL_co]: ...
 
-    @overload
-    def __getitem__(
-        self, key: slice
-    ) -> ReadOnlyColumnCollection[_COLKEY, _COL_co]: ...
+        @overload
+        def __getitem__(
+            self, key: slice
+        ) -> ReadOnlyColumnCollection[_COLKEY, _COL_co]: ...
 
     def __getitem__(
         self, key: Union[str, int, slice, Tuple[Union[str, int], ...]]
@@ -1641,11 +1643,12 @@ class ColumnCollection(Generic[_COLKEY, _COL_co]):
     def __eq__(self, other: Any) -> bool:
         return self.compare(other)
 
-    @overload
-    def get(self, key: str, default: None = None) -> Optional[_COL_co]: ...
+    if TYPE_CHECKING:
+        @overload
+        def get(self, key: str, default: None = None) -> Optional[_COL_co]: ...
 
-    @overload
-    def get(self, key: str, default: _COL) -> Union[_COL_co, _COL]: ...
+        @overload
+        def get(self, key: str, default: _COL) -> Union[_COL_co, _COL]: ...
 
     def get(
         self, key: str, default: Optional[_COL] = None

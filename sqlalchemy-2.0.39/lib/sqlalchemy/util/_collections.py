@@ -33,6 +33,7 @@ from typing import Tuple
 from typing import TypeVar
 from typing import Union
 from typing import ValuesView
+from typing import TYPE_CHECKING
 import weakref
 
 from ._has_cy import HAS_CYEXTENSION
@@ -227,11 +228,12 @@ class Properties(Generic[_T]):
     def update(self, value: Dict[str, _T]) -> None:
         self._data.update(value)
 
-    @overload
-    def get(self, key: str) -> Optional[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def get(self, key: str) -> Optional[_T]: ...
 
-    @overload
-    def get(self, key: str, default: Union[_DT, _T]) -> Union[_DT, _T]: ...
+        @overload
+        def get(self, key: str, default: Union[_DT, _T]) -> Union[_DT, _T]: ...
 
     def get(
         self, key: str, default: Optional[Union[_DT, _T]] = None
@@ -517,11 +519,12 @@ class LRUCache(typing.MutableMapping[_KT, _VT]):
         self._counter += 1
         return self._counter
 
-    @overload
-    def get(self, key: _KT) -> Optional[_VT]: ...
+    if TYPE_CHECKING:
+        @overload
+        def get(self, key: _KT) -> Optional[_VT]: ...
 
-    @overload
-    def get(self, key: _KT, default: Union[_VT, _T]) -> Union[_VT, _T]: ...
+        @overload
+        def get(self, key: _KT, default: Union[_VT, _T]) -> Union[_VT, _T]: ...
 
     def get(
         self, key: _KT, default: Optional[Union[_VT, _T]] = None

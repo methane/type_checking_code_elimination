@@ -26,6 +26,7 @@ from typing import Tuple
 from typing import Type
 from typing import TypeVar
 from typing import Union
+from typing import TYPE_CHECKING
 
 from .interfaces import BindTyping
 from .interfaces import ConnectionEventsTarget
@@ -234,25 +235,26 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
     def __exit__(self, type_: Any, value: Any, traceback: Any) -> None:
         self.close()
 
-    @overload
-    def execution_options(
-        self,
-        *,
-        compiled_cache: Optional[CompiledCacheType] = ...,
-        logging_token: str = ...,
-        isolation_level: IsolationLevel = ...,
-        no_parameters: bool = False,
-        stream_results: bool = False,
-        max_row_buffer: int = ...,
-        yield_per: int = ...,
-        insertmanyvalues_page_size: int = ...,
-        schema_translate_map: Optional[SchemaTranslateMapType] = ...,
-        preserve_rowcount: bool = False,
-        **opt: Any,
-    ) -> Connection: ...
+    if TYPE_CHECKING:
+        @overload
+        def execution_options(
+            self,
+            *,
+            compiled_cache: Optional[CompiledCacheType] = ...,
+            logging_token: str = ...,
+            isolation_level: IsolationLevel = ...,
+            no_parameters: bool = False,
+            stream_results: bool = False,
+            max_row_buffer: int = ...,
+            yield_per: int = ...,
+            insertmanyvalues_page_size: int = ...,
+            schema_translate_map: Optional[SchemaTranslateMapType] = ...,
+            preserve_rowcount: bool = False,
+            **opt: Any,
+        ) -> Connection: ...
 
-    @overload
-    def execution_options(self, **opt: Any) -> Connection: ...
+        @overload
+        def execution_options(self, **opt: Any) -> Connection: ...
 
     def execution_options(self, **opt: Any) -> Connection:
         r"""Set non-SQL options for the connection which take effect
@@ -1261,23 +1263,24 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
             self._dbapi_connection = None
         self.__can_reconnect = False
 
-    @overload
-    def scalar(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        parameters: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> Optional[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalar(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            parameters: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> Optional[_T]: ...
 
-    @overload
-    def scalar(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreSingleExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> Any: ...
+        @overload
+        def scalar(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreSingleExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> Any: ...
 
     def scalar(
         self,
@@ -1308,23 +1311,24 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
                 execution_options or NO_OPTIONS,
             )
 
-    @overload
-    def scalars(
-        self,
-        statement: TypedReturnsRows[Tuple[_T]],
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> ScalarResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def scalars(
+            self,
+            statement: TypedReturnsRows[Tuple[_T]],
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> ScalarResult[_T]: ...
 
-    @overload
-    def scalars(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> ScalarResult[Any]: ...
+        @overload
+        def scalars(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> ScalarResult[Any]: ...
 
     def scalars(
         self,
@@ -1351,23 +1355,24 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
             statement, parameters, execution_options=execution_options
         ).scalars()
 
-    @overload
-    def execute(
-        self,
-        statement: TypedReturnsRows[_T],
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> CursorResult[_T]: ...
+    if TYPE_CHECKING:
+        @overload
+        def execute(
+            self,
+            statement: TypedReturnsRows[_T],
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> CursorResult[_T]: ...
 
-    @overload
-    def execute(
-        self,
-        statement: Executable,
-        parameters: Optional[_CoreAnyExecuteParams] = None,
-        *,
-        execution_options: Optional[CoreExecuteOptionsParameter] = None,
-    ) -> CursorResult[Any]: ...
+        @overload
+        def execute(
+            self,
+            statement: Executable,
+            parameters: Optional[_CoreAnyExecuteParams] = None,
+            *,
+            execution_options: Optional[CoreExecuteOptionsParameter] = None,
+        ) -> CursorResult[Any]: ...
 
     def execute(
         self,
@@ -3029,20 +3034,21 @@ class Engine(
         self._execution_options = self._execution_options.union(opt)
         self.dialect.set_engine_execution_options(self, opt)
 
-    @overload
-    def execution_options(
-        self,
-        *,
-        compiled_cache: Optional[CompiledCacheType] = ...,
-        logging_token: str = ...,
-        isolation_level: IsolationLevel = ...,
-        insertmanyvalues_page_size: int = ...,
-        schema_translate_map: Optional[SchemaTranslateMapType] = ...,
-        **opt: Any,
-    ) -> OptionEngine: ...
+    if TYPE_CHECKING:
+        @overload
+        def execution_options(
+            self,
+            *,
+            compiled_cache: Optional[CompiledCacheType] = ...,
+            logging_token: str = ...,
+            isolation_level: IsolationLevel = ...,
+            insertmanyvalues_page_size: int = ...,
+            schema_translate_map: Optional[SchemaTranslateMapType] = ...,
+            **opt: Any,
+        ) -> OptionEngine: ...
 
-    @overload
-    def execution_options(self, **opt: Any) -> OptionEngine: ...
+        @overload
+        def execution_options(self, **opt: Any) -> OptionEngine: ...
 
     def execution_options(self, **opt: Any) -> OptionEngine:
         """Return a new :class:`_engine.Engine` that will provide
