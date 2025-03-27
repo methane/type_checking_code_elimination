@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    SQLAlchemy ORM
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="next" title="ORM Quick Start" href="quickstart.html" />
+        <link rel="prev" title="Further Reading" href="../tutorial/further_reading.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="../index.html" title="SQLAlchemy 2.0 Documentation">SQLAlchemy 2.0 Documentation</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="../intro.html">Overview</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../tutorial/index.html">SQLAlchemy Unified Tutorial</a></span></li>
+<li class="selected"><span class="link-container"><strong>SQLAlchemy ORM</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="queryguide/index.html">ORM Querying Guide</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="examples.html">ORM Examples</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="../core/index.html">SQLAlchemy Core</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../dialects/index.html">Dialects</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../faq/index.html">Frequently Asked Questions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../errors.html">Error Messages</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../changelog/index.html">Changes and Migration</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="../tutorial/further_reading.html" title="previous chapter">Further Reading</a></li>
+                <li><b>Next:</b>
+                <a href="quickstart.html" title="next chapter">ORM Quick Start</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#sqlalchemy-orm">SQLAlchemy ORM</a></li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-index" >
+        
+<section id="sqlalchemy-orm">
+<span id="orm-toplevel"></span><h1>SQLAlchemy ORM<a class="headerlink" href="#sqlalchemy-orm" title="Link to this heading">¶</a></h1>
+<p>Here, the Object Relational Mapper is introduced and fully described. If you
+want to work with higher-level SQL which is constructed automatically for you,
+as well as automated persistence of Python objects, proceed first to the
+tutorial.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">ORM Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#declare-models">Declare Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#create-an-engine">Create an Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#emit-create-table-ddl">Emit CREATE TABLE DDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#create-objects-and-persist">Create Objects and Persist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#simple-select">Simple SELECT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#select-with-join">SELECT with JOIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#make-changes">Make Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#some-deletes">Some Deletes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#learn-the-above-concepts-in-depth">Learn the above concepts in depth</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mapper_config.html">ORM Mapped Class Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mapping_styles.html">ORM Mapped Class Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="declarative_mapping.html">Mapping Classes with Declarative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataclasses.html">Integration with dataclasses and attrs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapped_sql_expr.html">SQL Expressions as Mapped Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapped_attributes.html">Changing Attribute Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="composites.html">Composite Column Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inheritance.html">Mapping Class Inheritance Hierarchies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nonstandard_mappings.html">Non-Traditional Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="versioning.html">Configuring a Version Counter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapping_api.html">Class Mapping API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="relationships.html">Relationship Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_relationships.html">Basic Relationship Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="self_referential.html">Adjacency List Relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join_conditions.html">Configuring how Relationship Joins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large_collections.html">Working with Large Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collection_api.html">Collection Customization and API Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationship_persistence.html">Special Relationship Persistence Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backref.html">Using the legacy ‘backref’ relationship parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationship_api.html">Relationships API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="queryguide/index.html">ORM Querying Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="queryguide/select.html">Writing SELECT statements for ORM Mapped Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queryguide/inheritance.html">Writing SELECT statements for Inheritance Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queryguide/dml.html">ORM-Enabled INSERT, UPDATE, and DELETE statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queryguide/columns.html">Column Loading Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queryguide/relationships.html">Relationship Loading Techniques</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queryguide/api.html">ORM API Features for Querying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queryguide/query.html">Legacy Query API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="session.html">Using the Session</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="session_basics.html">Session Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="session_state_management.html">State Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascades.html">Cascades</a></li>
+<li class="toctree-l2"><a class="reference internal" href="session_transaction.html">Transactions and Connection Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistence_techniques.html">Additional Persistence Techniques</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contextual.html">Contextual/Thread-local Sessions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="session_events.html">Tracking queries, object and Session Changes with Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="session_api.html">Session API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Events and Internals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="events.html">ORM Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html">ORM Internals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">ORM Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extensions/index.html">ORM Extensions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extensions/asyncio.html">Asynchronous I/O (asyncio)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/associationproxy.html">Association Proxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/automap.html">Automap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/baked.html">Baked Queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/declarative/index.html">Declarative Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/mypy.html">Mypy  / Pep-484 Support for ORM Mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/mutable.html">Mutation Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/orderinglist.html">Ordering List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/horizontal_shard.html">Horizontal Sharding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/hybrid.html">Hybrid Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/indexable.html">Indexable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensions/instrumentation.html">Alternate Class Instrumentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">ORM Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#mapping-recipes">Mapping Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#inheritance-mapping-recipes">Inheritance Mapping Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#special-apis">Special APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#extending-the-orm">Extending the ORM</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="../tutorial/further_reading.html" title="previous chapter">Further Reading</a>
+        Next:
+        <a href="quickstart.html" title="next chapter">ORM Quick Start</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

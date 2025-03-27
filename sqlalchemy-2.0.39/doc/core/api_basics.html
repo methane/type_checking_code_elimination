@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Core API Basics
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="SQLAlchemy Core" href="index.html" />
+        <link rel="next" title="Events" href="event.html" />
+        <link rel="prev" title="Core Events" href="events.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="expression_api.html">SQL Statements and Expressions API</a></span></li>
+<li><span class="link-container"><a class="reference external" href="schema.html">Schema Definition Language</a></span></li>
+<li><span class="link-container"><a class="reference external" href="types.html">SQL Datatype Objects</a></span></li>
+<li><span class="link-container"><a class="reference external" href="engines_connections.html">Engine and Connection Use</a></span></li>
+<li class="selected"><span class="link-container"><strong>Core API Basics</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="event.html">Events</a></span></li>
+<li><span class="link-container"><a class="reference external" href="inspection.html">Runtime Inspection API</a></span></li>
+<li><span class="link-container"><a class="reference external" href="exceptions.html">Core Exceptions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="internals.html">Core Internals</a></span></li>
+</ul>
+</li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="events.html" title="previous chapter">Core Events</a></li>
+                <li><b>Next:</b>
+                <a href="event.html" title="next chapter">Events</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a></li>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#core-api-basics">Core API Basics</a></li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar core-api_basics" >
+        
+<section id="core-api-basics">
+<h1>Core API Basics<a class="headerlink" href="#core-api-basics" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event.html#event-registration">Event Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html#named-argument-styles">Named Argument Styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html#targets">Targets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html#modifiers">Modifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html#events-and-multiprocessing">Events and Multiprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html#event-reference">Event Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="inspection.html">Runtime Inspection API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="inspection.html#sqlalchemy.inspect"><code class="docutils literal notranslate"><span class="pre">inspect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspection.html#available-inspection-targets">Available Inspection Targets</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Core Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.AmbiguousForeignKeysError"><code class="docutils literal notranslate"><span class="pre">AmbiguousForeignKeysError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.ArgumentError"><code class="docutils literal notranslate"><span class="pre">ArgumentError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.AwaitRequired"><code class="docutils literal notranslate"><span class="pre">AwaitRequired</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.Base20DeprecationWarning"><code class="docutils literal notranslate"><span class="pre">Base20DeprecationWarning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.CircularDependencyError"><code class="docutils literal notranslate"><span class="pre">CircularDependencyError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.CompileError"><code class="docutils literal notranslate"><span class="pre">CompileError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.ConstraintColumnNotFoundError"><code class="docutils literal notranslate"><span class="pre">ConstraintColumnNotFoundError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.DBAPIError"><code class="docutils literal notranslate"><span class="pre">DBAPIError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.DataError"><code class="docutils literal notranslate"><span class="pre">DataError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.DatabaseError"><code class="docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.DisconnectionError"><code class="docutils literal notranslate"><span class="pre">DisconnectionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.DontWrapMixin"><code class="docutils literal notranslate"><span class="pre">DontWrapMixin</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.DuplicateColumnError"><code class="docutils literal notranslate"><span class="pre">DuplicateColumnError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.HasDescriptionCode"><code class="docutils literal notranslate"><span class="pre">HasDescriptionCode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.IdentifierError"><code class="docutils literal notranslate"><span class="pre">IdentifierError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.IllegalStateChangeError"><code class="docutils literal notranslate"><span class="pre">IllegalStateChangeError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.IntegrityError"><code class="docutils literal notranslate"><span class="pre">IntegrityError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.InterfaceError"><code class="docutils literal notranslate"><span class="pre">InterfaceError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.InternalError"><code class="docutils literal notranslate"><span class="pre">InternalError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.InvalidRequestError"><code class="docutils literal notranslate"><span class="pre">InvalidRequestError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.InvalidatePoolError"><code class="docutils literal notranslate"><span class="pre">InvalidatePoolError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.LegacyAPIWarning"><code class="docutils literal notranslate"><span class="pre">LegacyAPIWarning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.MissingGreenlet"><code class="docutils literal notranslate"><span class="pre">MissingGreenlet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.MovedIn20Warning"><code class="docutils literal notranslate"><span class="pre">MovedIn20Warning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.MultipleResultsFound"><code class="docutils literal notranslate"><span class="pre">MultipleResultsFound</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoForeignKeysError"><code class="docutils literal notranslate"><span class="pre">NoForeignKeysError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoInspectionAvailable"><code class="docutils literal notranslate"><span class="pre">NoInspectionAvailable</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoReferenceError"><code class="docutils literal notranslate"><span class="pre">NoReferenceError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoReferencedColumnError"><code class="docutils literal notranslate"><span class="pre">NoReferencedColumnError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoReferencedTableError"><code class="docutils literal notranslate"><span class="pre">NoReferencedTableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoResultFound"><code class="docutils literal notranslate"><span class="pre">NoResultFound</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoSuchColumnError"><code class="docutils literal notranslate"><span class="pre">NoSuchColumnError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoSuchModuleError"><code class="docutils literal notranslate"><span class="pre">NoSuchModuleError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NoSuchTableError"><code class="docutils literal notranslate"><span class="pre">NoSuchTableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.NotSupportedError"><code class="docutils literal notranslate"><span class="pre">NotSupportedError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.ObjectNotExecutableError"><code class="docutils literal notranslate"><span class="pre">ObjectNotExecutableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.OperationalError"><code class="docutils literal notranslate"><span class="pre">OperationalError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.PendingRollbackError"><code class="docutils literal notranslate"><span class="pre">PendingRollbackError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.ProgrammingError"><code class="docutils literal notranslate"><span class="pre">ProgrammingError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.ResourceClosedError"><code class="docutils literal notranslate"><span class="pre">ResourceClosedError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.SADeprecationWarning"><code class="docutils literal notranslate"><span class="pre">SADeprecationWarning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.SAPendingDeprecationWarning"><code class="docutils literal notranslate"><span class="pre">SAPendingDeprecationWarning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.SATestSuiteWarning"><code class="docutils literal notranslate"><span class="pre">SATestSuiteWarning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.SAWarning"><code class="docutils literal notranslate"><span class="pre">SAWarning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.SQLAlchemyError"><code class="docutils literal notranslate"><span class="pre">SQLAlchemyError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.StatementError"><code class="docutils literal notranslate"><span class="pre">StatementError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.TimeoutError"><code class="docutils literal notranslate"><span class="pre">TimeoutError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.UnboundExecutionError"><code class="docutils literal notranslate"><span class="pre">UnboundExecutionError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.UnreflectableTableError"><code class="docutils literal notranslate"><span class="pre">UnreflectableTableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.exc.UnsupportedCompilationError"><code class="docutils literal notranslate"><span class="pre">UnsupportedCompilationError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Core Internals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.BindTyping"><code class="docutils literal notranslate"><span class="pre">BindTyping</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.Compiled"><code class="docutils literal notranslate"><span class="pre">Compiled</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.interfaces.DBAPIConnection"><code class="docutils literal notranslate"><span class="pre">DBAPIConnection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.interfaces.DBAPICursor"><code class="docutils literal notranslate"><span class="pre">DBAPICursor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.interfaces.DBAPIType"><code class="docutils literal notranslate"><span class="pre">DBAPIType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.sql.compiler.DDLCompiler"><code class="docutils literal notranslate"><span class="pre">DDLCompiler</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.default.DefaultDialect"><code class="docutils literal notranslate"><span class="pre">DefaultDialect</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.Dialect"><code class="docutils literal notranslate"><span class="pre">Dialect</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.default.DefaultExecutionContext"><code class="docutils literal notranslate"><span class="pre">DefaultExecutionContext</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.ExecutionContext"><code class="docutils literal notranslate"><span class="pre">ExecutionContext</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.sql.compiler.ExpandedState"><code class="docutils literal notranslate"><span class="pre">ExpandedState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.sql.compiler.GenericTypeCompiler"><code class="docutils literal notranslate"><span class="pre">GenericTypeCompiler</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.log.Identified"><code class="docutils literal notranslate"><span class="pre">Identified</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.sql.compiler.IdentifierPreparer"><code class="docutils literal notranslate"><span class="pre">IdentifierPreparer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.sql.compiler.SQLCompiler"><code class="docutils literal notranslate"><span class="pre">SQLCompiler</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.sql.compiler.StrSQLCompiler"><code class="docutils literal notranslate"><span class="pre">StrSQLCompiler</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.engine.AdaptedConnection"><code class="docutils literal notranslate"><span class="pre">AdaptedConnection</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="events.html" title="previous chapter">Core Events</a>
+        Next:
+        <a href="event.html" title="next chapter">Events</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

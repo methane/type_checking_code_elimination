@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    SQL Datatype Objects
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="SQLAlchemy Core" href="index.html" />
+        <link rel="next" title="The Type Hierarchy" href="type_basics.html" />
+        <link rel="prev" title="Customizing DDL" href="ddl.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="expression_api.html">SQL Statements and Expressions API</a></span></li>
+<li><span class="link-container"><a class="reference external" href="schema.html">Schema Definition Language</a></span></li>
+<li class="selected"><span class="link-container"><strong>SQL Datatype Objects</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="type_basics.html">The Type Hierarchy</a></span></li>
+<li><span class="link-container"><a class="reference external" href="custom_types.html">Custom Types</a></span></li>
+<li><span class="link-container"><a class="reference external" href="type_api.html">Base Type API</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="engines_connections.html">Engine and Connection Use</a></span></li>
+<li><span class="link-container"><a class="reference external" href="api_basics.html">Core API Basics</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="ddl.html" title="previous chapter">Customizing DDL</a></li>
+                <li><b>Next:</b>
+                <a href="type_basics.html" title="next chapter">The Type Hierarchy</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a></li>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#sql-datatype-objects">SQL Datatype Objects</a></li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar core-types" >
+        
+<section id="sql-datatype-objects">
+<span id="types-toplevel"></span><h1>SQL Datatype Objects<a class="headerlink" href="#sql-datatype-objects" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="type_basics.html">The Type Hierarchy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="type_basics.html#the-camelcase-datatypes">The “CamelCase” datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_basics.html#the-uppercase-datatypes">The “UPPERCASE” datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_basics.html#backend-specific-uppercase-datatypes">Backend-specific “UPPERCASE” datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_basics.html#using-uppercase-and-backend-specific-types-for-multiple-backends">Using “UPPERCASE” and Backend-specific types for multiple backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_basics.html#generic-camelcase-types">Generic “CamelCase” Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.BigInteger"><code class="docutils literal notranslate"><span class="pre">BigInteger</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Boolean"><code class="docutils literal notranslate"><span class="pre">Boolean</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Date"><code class="docutils literal notranslate"><span class="pre">Date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.DateTime"><code class="docutils literal notranslate"><span class="pre">DateTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Enum"><code class="docutils literal notranslate"><span class="pre">Enum</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Double"><code class="docutils literal notranslate"><span class="pre">Double</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Float"><code class="docutils literal notranslate"><span class="pre">Float</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Integer"><code class="docutils literal notranslate"><span class="pre">Integer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Interval"><code class="docutils literal notranslate"><span class="pre">Interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.LargeBinary"><code class="docutils literal notranslate"><span class="pre">LargeBinary</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.MatchType"><code class="docutils literal notranslate"><span class="pre">MatchType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Numeric"><code class="docutils literal notranslate"><span class="pre">Numeric</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.PickleType"><code class="docutils literal notranslate"><span class="pre">PickleType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.SchemaType"><code class="docutils literal notranslate"><span class="pre">SchemaType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.SmallInteger"><code class="docutils literal notranslate"><span class="pre">SmallInteger</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.String"><code class="docutils literal notranslate"><span class="pre">String</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Text"><code class="docutils literal notranslate"><span class="pre">Text</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Unicode"><code class="docutils literal notranslate"><span class="pre">Unicode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.UnicodeText"><code class="docutils literal notranslate"><span class="pre">UnicodeText</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.Uuid"><code class="docutils literal notranslate"><span class="pre">Uuid</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="type_basics.html#sql-standard-and-multiple-vendor-uppercase-types">SQL Standard and Multiple Vendor “UPPERCASE” Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.ARRAY"><code class="docutils literal notranslate"><span class="pre">ARRAY</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.BIGINT"><code class="docutils literal notranslate"><span class="pre">BIGINT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.BINARY"><code class="docutils literal notranslate"><span class="pre">BINARY</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.BLOB"><code class="docutils literal notranslate"><span class="pre">BLOB</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.BOOLEAN"><code class="docutils literal notranslate"><span class="pre">BOOLEAN</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.CHAR"><code class="docutils literal notranslate"><span class="pre">CHAR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.CLOB"><code class="docutils literal notranslate"><span class="pre">CLOB</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.DATE"><code class="docutils literal notranslate"><span class="pre">DATE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.DATETIME"><code class="docutils literal notranslate"><span class="pre">DATETIME</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.DECIMAL"><code class="docutils literal notranslate"><span class="pre">DECIMAL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.DOUBLE"><code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.DOUBLE_PRECISION"><code class="docutils literal notranslate"><span class="pre">DOUBLE_PRECISION</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.FLOAT"><code class="docutils literal notranslate"><span class="pre">FLOAT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.INT"><code class="docutils literal notranslate"><span class="pre">INT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.JSON"><code class="docutils literal notranslate"><span class="pre">JSON</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.INTEGER"><code class="docutils literal notranslate"><span class="pre">INTEGER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.NCHAR"><code class="docutils literal notranslate"><span class="pre">NCHAR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.NVARCHAR"><code class="docutils literal notranslate"><span class="pre">NVARCHAR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.NUMERIC"><code class="docutils literal notranslate"><span class="pre">NUMERIC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.REAL"><code class="docutils literal notranslate"><span class="pre">REAL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.SMALLINT"><code class="docutils literal notranslate"><span class="pre">SMALLINT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.TEXT"><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.TIME"><code class="docutils literal notranslate"><span class="pre">TIME</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.TIMESTAMP"><code class="docutils literal notranslate"><span class="pre">TIMESTAMP</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.UUID"><code class="docutils literal notranslate"><span class="pre">UUID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.VARBINARY"><code class="docutils literal notranslate"><span class="pre">VARBINARY</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_basics.html#sqlalchemy.types.VARCHAR"><code class="docutils literal notranslate"><span class="pre">VARCHAR</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_types.html">Custom Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom_types.html#overriding-type-compilation">Overriding Type Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_types.html#augmenting-existing-types">Augmenting Existing Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html#sqlalchemy.types.TypeDecorator"><code class="docutils literal notranslate"><span class="pre">TypeDecorator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="custom_types.html#typedecorator-recipes">TypeDecorator Recipes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html#coercing-encoded-strings-to-unicode">Coercing Encoded Strings to Unicode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html#rounding-numerics">Rounding Numerics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html#store-timezone-aware-timestamps-as-timezone-naive-utc">Store Timezone Aware Timestamps as Timezone Naive UTC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html#backend-agnostic-guid-type">Backend-agnostic GUID Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html#marshal-json-strings">Marshal JSON Strings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="custom_types.html#applying-sql-level-bind-result-processing">Applying SQL-level Bind/Result Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_types.html#redefining-and-creating-new-operators">Redefining and Creating New Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_types.html#creating-new-types">Creating New Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="custom_types.html#sqlalchemy.types.UserDefinedType"><code class="docutils literal notranslate"><span class="pre">UserDefinedType</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="custom_types.html#working-with-custom-types-and-reflection">Working with Custom Types and Reflection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="type_api.html">Base Type API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine"><code class="docutils literal notranslate"><span class="pre">TypeEngine</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.Comparator"><code class="docutils literal notranslate"><span class="pre">TypeEngine.Comparator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.adapt"><code class="docutils literal notranslate"><span class="pre">TypeEngine.adapt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.as_generic"><code class="docutils literal notranslate"><span class="pre">TypeEngine.as_generic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.bind_expression"><code class="docutils literal notranslate"><span class="pre">TypeEngine.bind_expression()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.bind_processor"><code class="docutils literal notranslate"><span class="pre">TypeEngine.bind_processor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.coerce_compared_value"><code class="docutils literal notranslate"><span class="pre">TypeEngine.coerce_compared_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.column_expression"><code class="docutils literal notranslate"><span class="pre">TypeEngine.column_expression()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.comparator_factory"><code class="docutils literal notranslate"><span class="pre">TypeEngine.comparator_factory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.compare_values"><code class="docutils literal notranslate"><span class="pre">TypeEngine.compare_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.compile"><code class="docutils literal notranslate"><span class="pre">TypeEngine.compile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.dialect_impl"><code class="docutils literal notranslate"><span class="pre">TypeEngine.dialect_impl()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.evaluates_none"><code class="docutils literal notranslate"><span class="pre">TypeEngine.evaluates_none()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.get_dbapi_type"><code class="docutils literal notranslate"><span class="pre">TypeEngine.get_dbapi_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.hashable"><code class="docutils literal notranslate"><span class="pre">TypeEngine.hashable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.literal_processor"><code class="docutils literal notranslate"><span class="pre">TypeEngine.literal_processor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.python_type"><code class="docutils literal notranslate"><span class="pre">TypeEngine.python_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.render_bind_cast"><code class="docutils literal notranslate"><span class="pre">TypeEngine.render_bind_cast</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.render_literal_cast"><code class="docutils literal notranslate"><span class="pre">TypeEngine.render_literal_cast</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.result_processor"><code class="docutils literal notranslate"><span class="pre">TypeEngine.result_processor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.should_evaluate_none"><code class="docutils literal notranslate"><span class="pre">TypeEngine.should_evaluate_none</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.sort_key_function"><code class="docutils literal notranslate"><span class="pre">TypeEngine.sort_key_function</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.TypeEngine.with_variant"><code class="docutils literal notranslate"><span class="pre">TypeEngine.with_variant()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="type_api.html#sqlalchemy.types.Concatenable"><code class="docutils literal notranslate"><span class="pre">Concatenable</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.Concatenable.Comparator"><code class="docutils literal notranslate"><span class="pre">Concatenable.Comparator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.Concatenable.comparator_factory"><code class="docutils literal notranslate"><span class="pre">Concatenable.comparator_factory</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="type_api.html#sqlalchemy.types.Indexable"><code class="docutils literal notranslate"><span class="pre">Indexable</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.Indexable.Comparator"><code class="docutils literal notranslate"><span class="pre">Indexable.Comparator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.Indexable.comparator_factory"><code class="docutils literal notranslate"><span class="pre">Indexable.comparator_factory</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="type_api.html#sqlalchemy.types.NullType"><code class="docutils literal notranslate"><span class="pre">NullType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_api.html#sqlalchemy.types.ExternalType"><code class="docutils literal notranslate"><span class="pre">ExternalType</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.ExternalType.cache_ok"><code class="docutils literal notranslate"><span class="pre">ExternalType.cache_ok</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="type_api.html#sqlalchemy.types.Variant"><code class="docutils literal notranslate"><span class="pre">Variant</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="type_api.html#sqlalchemy.types.Variant.with_variant"><code class="docutils literal notranslate"><span class="pre">Variant.with_variant()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="ddl.html" title="previous chapter">Customizing DDL</a>
+        Next:
+        <a href="type_basics.html" title="next chapter">The Type Hierarchy</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    ORM Quick Start
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="SQLAlchemy ORM" href="index.html" />
+        <link rel="next" title="ORM Mapped Class Configuration" href="mapper_config.html" />
+        <link rel="prev" title="SQLAlchemy ORM" href="index.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li class="selected"><span class="link-container"><strong>ORM Quick Start</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#declare-models">Declare Models</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#create-an-engine">Create an Engine</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#emit-create-table-ddl">Emit CREATE TABLE DDL</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#create-objects-and-persist">Create Objects and Persist</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#simple-select">Simple SELECT</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#select-with-join">SELECT with JOIN</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#make-changes">Make Changes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#some-deletes">Some Deletes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#learn-the-above-concepts-in-depth">Learn the above concepts in depth</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="queryguide/index.html">ORM Querying Guide</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="index.html" title="previous chapter">SQLAlchemy ORM</a></li>
+                <li><b>Next:</b>
+                <a href="mapper_config.html" title="next chapter">ORM Mapped Class Configuration</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#orm-quick-start">ORM Quick Start</a><ul>
+<li><a class="reference internal" href="#declare-models">Declare Models</a></li>
+<li><a class="reference internal" href="#create-an-engine">Create an Engine</a></li>
+<li><a class="reference internal" href="#emit-create-table-ddl">Emit CREATE TABLE DDL</a></li>
+<li><a class="reference internal" href="#create-objects-and-persist">Create Objects and Persist</a></li>
+<li><a class="reference internal" href="#simple-select">Simple SELECT</a></li>
+<li><a class="reference internal" href="#select-with-join">SELECT with JOIN</a></li>
+<li><a class="reference internal" href="#make-changes">Make Changes</a></li>
+<li><a class="reference internal" href="#some-deletes">Some Deletes</a></li>
+<li><a class="reference internal" href="#learn-the-above-concepts-in-depth">Learn the above concepts in depth</a></li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-quickstart" >
+        
+<section id="orm-quick-start">
+<span id="orm-quickstart"></span><h1>ORM Quick Start<a class="headerlink" href="#orm-quick-start" title="Link to this heading">¶</a></h1>
+<p>For new users who want to quickly see what basic ORM use looks like, here’s an
+abbreviated form of the mappings and examples used in the
+<a class="reference internal" href="../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a>. The code here is fully runnable from a clean command
+line.</p>
+<p>As the descriptions in this section are intentionally <strong>very short</strong>, please
+proceed to the full <a class="reference internal" href="../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a> for a much more in-depth
+description of each of the concepts being illustrated here.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0: </span>The ORM Quickstart is updated for the latest
+<span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/"><strong>PEP 484</strong></a>-aware features using new constructs including
+<a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a>.   See the section
+<a class="reference internal" href="../changelog/whatsnew_20.html#whatsnew-20-orm-declarative-typing"><span class="std std-ref">ORM Declarative Models</span></a> for migration information.</p>
+</div>
+<section id="declare-models">
+<h2>Declare Models<a class="headerlink" href="#declare-models" title="Link to this heading">¶</a></h2>
+<p>Here, we define module-level constructs that will form the structures
+which we will be querying from the database.  This structure, known as a
+<a class="reference internal" href="mapping_styles.html#orm-declarative-mapping"><span class="std std-ref">Declarative Mapping</span></a>, defines at once both a
+Python object model, as well as <a class="reference internal" href="../glossary.html#term-database-metadata"><span class="xref std std-term">database metadata</span></a> that describes
+real SQL tables that exist, or will exist, in a particular database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">String</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;user_account&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">fullname</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">str</span><span class="p">]]</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">addresses</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Address&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">cascade</span><span class="o">=</span><span class="s2">&quot;all, delete-orphan&quot;</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;User(id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">!r}</span><span class="s2">, name=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">, fullname=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Address</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;address&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">email_address</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">user_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;user_account.id&quot;</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">user</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;User&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;addresses&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Address(id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">!r}</span><span class="s2">, email_address=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">email_address</span><span class="si">!r}</span><span class="s2">)&quot;</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The mapping starts with a base class, which above is called <code class="docutils literal notranslate"><span class="pre">Base</span></code>, and is
+created by making a simple subclass against the <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.DeclarativeBase" title="sqlalchemy.orm.DeclarativeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeclarativeBase</span></code></a>
+class.</p>
+<p>Individual mapped classes are then created by making subclasses of <code class="docutils literal notranslate"><span class="pre">Base</span></code>.
+A mapped class typically refers to a single particular database table,
+the name of which is indicated by using the <code class="docutils literal notranslate"><span class="pre">__tablename__</span></code> class-level
+attribute.</p>
+<p>Next, columns that are part of the table are declared, by adding attributes
+that include a special typing annotation called <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>. The name
+of each attribute corresponds to the column that is to be part of the database
+table. The datatype of each column is taken first from the Python datatype
+that’s associated with each <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation; <code class="docutils literal notranslate"><span class="pre">int</span></code> for
+<code class="docutils literal notranslate"><span class="pre">INTEGER</span></code>, <code class="docutils literal notranslate"><span class="pre">str</span></code> for <code class="docutils literal notranslate"><span class="pre">VARCHAR</span></code>, etc. Nullability derives from whether or
+not the <code class="docutils literal notranslate"><span class="pre">Optional[]</span></code> type modifier is used. More specific typing information
+may be indicated using SQLAlchemy type objects in the right side
+<a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> directive, such as the <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.String" title="sqlalchemy.types.String"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a> datatype
+used above in the <code class="docutils literal notranslate"><span class="pre">User.name</span></code> column. The association between Python types
+and SQL types can be customized using the
+<a class="reference internal" href="declarative_tables.html#orm-declarative-mapped-column-type-map"><span class="std std-ref">type annotation map</span></a>.</p>
+<p>The <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> directive is used for all column-based
+attributes that require more specific customization. Besides typing
+information, this directive accepts a wide variety of arguments that indicate
+specific details about a database column, including server defaults and
+constraint information, such as membership within the primary key and foreign
+keys. The <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> directive accepts a superset of arguments
+that are accepted by the SQLAlchemy <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> class, which is
+used by SQLAlchemy Core to represent database columns.</p>
+<p>All ORM mapped classes require at least one column be declared as part of the
+primary key, typically by using the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.primary_key" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.primary_key</span></code></a>
+parameter on those <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> objects that should be part
+of the key.  In the above example, the <code class="docutils literal notranslate"><span class="pre">User.id</span></code> and <code class="docutils literal notranslate"><span class="pre">Address.id</span></code>
+columns are marked as primary key.</p>
+<p>Taken together, the combination of a string table name as well as a list
+of column declarations is known in SQLAlchemy as <a class="reference internal" href="../glossary.html#term-table-metadata"><span class="xref std std-term">table metadata</span></a>.
+Setting up table metadata using both Core and ORM approaches is introduced
+in the <a class="reference internal" href="../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a> at <a class="reference internal" href="../tutorial/metadata.html#tutorial-working-with-metadata"><span class="std std-ref">Working with Database Metadata</span></a>.
+The above mapping is an example of what’s known as
+<a class="reference internal" href="declarative_tables.html#orm-declarative-mapped-column"><span class="std std-ref">Annotated Declarative Table</span></a>
+configuration.</p>
+<p>Other variants of <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> are available, most commonly
+the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct indicated above.  In contrast
+to the column-based attributes, <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> denotes a linkage
+between two ORM classes.  In the above example, <code class="docutils literal notranslate"><span class="pre">User.addresses</span></code> links
+<code class="docutils literal notranslate"><span class="pre">User</span></code> to <code class="docutils literal notranslate"><span class="pre">Address</span></code>, and <code class="docutils literal notranslate"><span class="pre">Address.user</span></code> links <code class="docutils literal notranslate"><span class="pre">Address</span></code> to <code class="docutils literal notranslate"><span class="pre">User</span></code>.
+The <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct is introduced in the
+<a class="reference internal" href="../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a> at <a class="reference internal" href="../tutorial/orm_related_objects.html#tutorial-orm-related-objects"><span class="std std-ref">Working with ORM Related Objects</span></a>.</p>
+<p>Finally, the above example classes include a <code class="docutils literal notranslate"><span class="pre">__repr__()</span></code> method, which is
+not required but is useful for debugging. Mapped classes can be created with
+methods such as <code class="docutils literal notranslate"><span class="pre">__repr__()</span></code> generated automatically, using dataclasses. More
+on dataclass mapping at <a class="reference internal" href="dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a>.</p>
+</section>
+<section id="create-an-engine">
+<h2>Create an Engine<a class="headerlink" href="#create-an-engine" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a> is a <strong>factory</strong> that can create new
+database connections for us, which also holds onto connections inside
+of a <a class="reference internal" href="../core/pooling.html"><span class="std std-ref">Connection Pool</span></a> for fast reuse.  For learning
+purposes, we normally use a <a class="reference internal" href="../dialects/sqlite.html"><span class="std std-ref">SQLite</span></a> memory-only database
+for convenience:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_engine</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;sqlite://&quot;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">echo=True</span></code> parameter indicates that SQL emitted by connections will
+be logged to standard out.</p>
+</div>
+<p>A full intro to the <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a> starts at <a class="reference internal" href="../tutorial/engine.html#tutorial-engine"><span class="std std-ref">Establishing Connectivity - the Engine</span></a>.</p>
+</section>
+<section id="emit-create-table-ddl">
+<h2>Emit CREATE TABLE DDL<a class="headerlink" href="#emit-create-table-ddl" title="Link to this heading">¶</a></h2>
+<p>Using our table metadata and our engine, we can generate our schema at once
+in our target SQLite database, using a method called <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData.create_all" title="sqlalchemy.schema.MetaData.create_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">MetaData.create_all()</span></code></a>:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">table_</span><span class="p">...</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;user_account&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">table_</span><span class="p">...</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;address&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">fullname</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">...</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">email_address</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">...</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>A lot just happened from that bit of Python code we wrote.  For a complete
+overview of what’s going on on with Table metadata, proceed in the
+Tutorial at <a class="reference internal" href="../tutorial/metadata.html#tutorial-working-with-metadata"><span class="std std-ref">Working with Database Metadata</span></a>.</p>
+</section>
+<section id="create-objects-and-persist">
+<h2>Create Objects and Persist<a class="headerlink" href="#create-objects-and-persist" title="Link to this heading">¶</a></h2>
+<p>We are now ready to insert data in the database.  We accomplish this by
+creating instances of <code class="docutils literal notranslate"><span class="pre">User</span></code> and <code class="docutils literal notranslate"><span class="pre">Address</span></code> classes, which have
+an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> method already as established automatically by the
+declarative mapping process.  We then pass them
+to the database using an object called a <a class="reference internal" href="../tutorial/dbapi_transactions.html#tutorial-executing-orm-session"><span class="std std-ref">Session</span></a>,
+which makes use of the <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a> to interact with the
+database.  The <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.add_all" title="sqlalchemy.orm.Session.add_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.add_all()</span></code></a> method is used here to add
+multiple objects at once, and the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.commit" title="sqlalchemy.orm.Session.commit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.commit()</span></code></a> method
+will be used to <a class="reference internal" href="session_basics.html#session-flushing"><span class="std std-ref">flush</span></a> any pending changes to the
+database and then <a class="reference internal" href="session_basics.html#session-committing"><span class="std std-ref">commit</span></a> the current database
+transaction, which is always in progress whenever the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>
+is used:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<span class="go">...     spongebob = User(</span>
+<span class="go">...         name=&quot;spongebob&quot;,</span>
+<span class="go">...         fullname=&quot;Spongebob Squarepants&quot;,</span>
+<span class="go">...         addresses=[Address(email_address=&quot;spongebob@sqlalchemy.org&quot;)],</span>
+<span class="go">...     )</span>
+<span class="go">...     sandy = User(</span>
+<span class="go">...         name=&quot;sandy&quot;,</span>
+<span class="go">...         fullname=&quot;Sandy Cheeks&quot;,</span>
+<span class="go">...         addresses=[</span>
+<span class="go">...             Address(email_address=&quot;sandy@sqlalchemy.org&quot;),</span>
+<span class="go">...             Address(email_address=&quot;sandy@squirrelpower.org&quot;),</span>
+<span class="go">...         ],</span>
+<span class="go">...     )</span>
+<span class="go">...     patrick = User(name=&quot;patrick&quot;, fullname=&quot;Patrick Star&quot;)</span>
+<span class="go">...</span>
+<span class="go">...     session.add_all([spongebob, sandy, patrick])</span>
+<span class="go">...</span>
+<span class="go">...     session.commit()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sandy Cheeks&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;patrick&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Patrick Star&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="p">(</span><span class="n">email_address</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;spongebob@sqlalchemy.org&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="p">(</span><span class="n">email_address</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy@sqlalchemy.org&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="p">(</span><span class="n">email_address</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy@squirrelpower.org&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It’s recommended that the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> be used in context
+manager style as above, that is, using the Python <code class="docutils literal notranslate"><span class="pre">with:</span></code> statement.
+The <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> object represents active database resources
+so it’s good to make sure it’s closed out when a series of operations
+are completed.  In the next section, we’ll keep a <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>
+opened just for illustration purposes.</p>
+</div>
+<p>Basics on creating a <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> are at
+<a class="reference internal" href="../tutorial/dbapi_transactions.html#tutorial-executing-orm-session"><span class="std std-ref">Executing with an ORM Session</span></a> and more at <a class="reference internal" href="session_basics.html#id1"><span class="std std-ref">Basics of Using a Session</span></a>.</p>
+<p>Then, some varieties of basic persistence operations are introduced
+at <a class="reference internal" href="../tutorial/orm_data_manipulation.html#tutorial-inserting-orm"><span class="std std-ref">Inserting Rows using the ORM Unit of Work pattern</span></a>.</p>
+</section>
+<section id="simple-select">
+<h2>Simple SELECT<a class="headerlink" href="#simple-select" title="Link to this heading">¶</a></h2>
+<p>With some rows in the database, here’s the simplest form of emitting a SELECT
+statement to load some objects. To create SELECT statements, we use the
+<a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.select" title="sqlalchemy.sql.expression.select"><code class="xref py py-func docutils literal notranslate"><span class="pre">select()</span></code></a> function to create a new <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a> object, which
+we then invoke using a <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>. The method that is often useful
+when querying for ORM objects is the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.scalars" title="sqlalchemy.orm.Session.scalars"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.scalars()</span></code></a> method, which
+will return a <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.ScalarResult" title="sqlalchemy.engine.ScalarResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScalarResult</span></code></a> object that will iterate through
+the ORM objects we’ve selected:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">in_</span><span class="p">([</span><span class="s2">&quot;spongebob&quot;</span><span class="p">,</span> <span class="s2">&quot;sandy&quot;</span><span class="p">]))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(user)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">fullname</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">)</span>
+</div><span class="go">User(id=1, name=&#39;spongebob&#39;, fullname=&#39;Spongebob Squarepants&#39;)</span>
+<span class="go">User(id=2, name=&#39;sandy&#39;, fullname=&#39;Sandy Cheeks&#39;)</span></pre></div>
+</div>
+<p>The above query also made use of the <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select.where" title="sqlalchemy.sql.expression.Select.where"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Select.where()</span></code></a> method
+to add WHERE criteria, and also used the <a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.ColumnOperators.in_" title="sqlalchemy.sql.expression.ColumnOperators.in_"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ColumnOperators.in_()</span></code></a>
+method that’s part of all SQLAlchemy column-like constructs to use the
+SQL IN operator.</p>
+<p>More detail on how to select objects and individual columns is at
+<a class="reference internal" href="../tutorial/data_select.html#tutorial-selecting-orm-entities"><span class="std std-ref">Selecting ORM Entities and Columns</span></a>.</p>
+</section>
+<section id="select-with-join">
+<h2>SELECT with JOIN<a class="headerlink" href="#select-with-join" title="Link to this heading">¶</a></h2>
+<p>It’s very common to query amongst multiple tables at once, and in SQL
+the JOIN keyword is the primary way this happens.   The <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a>
+construct creates joins using the <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select.join" title="sqlalchemy.sql.expression.Select.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Select.join()</span></code></a> method:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     select(Address)</span>
+<span class="go">...     .join(Address.user)</span>
+<span class="go">...     .where(User.name == &quot;sandy&quot;)</span>
+<span class="go">...     .where(Address.email_address == &quot;sandy@sqlalchemy.org&quot;)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sandy_address</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">email_address</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">email_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy@sqlalchemy.org&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">sandy_address</span>
+<span class="go">Address(id=2, email_address=&#39;sandy@sqlalchemy.org&#39;)</span></pre></div>
+</div>
+<p>The above query illustrates multiple WHERE criteria which are automatically
+chained together using AND, as well as how to use SQLAlchemy column-like
+objects to create “equality” comparisons, which uses the overridden Python
+method <a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.ColumnOperators.__eq__" title="sqlalchemy.sql.expression.ColumnOperators.__eq__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ColumnOperators.__eq__()</span></code></a> to produce a SQL criteria object.</p>
+<p>Some more background on the concepts above are at
+<a class="reference internal" href="../tutorial/data_select.html#tutorial-select-where-clause"><span class="std std-ref">The WHERE clause</span></a> and <a class="reference internal" href="../tutorial/data_select.html#tutorial-select-join"><span class="std std-ref">Explicit FROM clauses and JOINs</span></a>.</p>
+</section>
+<section id="make-changes">
+<h2>Make Changes<a class="headerlink" href="#make-changes" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> object, in conjunction with our ORM-mapped classes
+<code class="docutils literal notranslate"><span class="pre">User</span></code> and <code class="docutils literal notranslate"><span class="pre">Address</span></code>, automatically track changes to the objects as they
+are made, which result in SQL statements that will be emitted the next
+time the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> flushes.   Below, we change one email
+address associated with “sandy”, and also add a new email address to
+“patrick”, after emitting a SELECT to retrieve the row for “patrick”:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;patrick&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">patrick</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">fullname</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;patrick&#39;</span><span class="p">,)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">patrick</span><span class="o">.</span><span class="n">addresses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Address</span><span class="p">(</span><span class="n">email_address</span><span class="o">=</span><span class="s2">&quot;patrickstar@sqlalchemy.org&quot;</span><span class="p">))</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_id</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">email_address</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_email_address</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_user_id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">address</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">sandy_address</span><span class="o">.</span><span class="n">email_address</span> <span class="o">=</span> <span class="s2">&quot;sandy_cheeks@sqlalchemy.org&quot;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">email_address</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy_cheeks@sqlalchemy.org&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="p">(</span><span class="n">email_address</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;patrickstar@sqlalchemy.org&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>Notice when we accessed <code class="docutils literal notranslate"><span class="pre">patrick.addresses</span></code>, a SELECT was emitted.  This is
+called a <a class="reference internal" href="../glossary.html#term-lazy-load"><span class="xref std std-term">lazy load</span></a>.   Background on different ways to access related
+items using more or less SQL is introduced at <a class="reference internal" href="../tutorial/orm_related_objects.html#tutorial-orm-loader-strategies"><span class="std std-ref">Loader Strategies</span></a>.</p>
+<p>A detailed walkthrough on ORM data manipulation starts at
+<a class="reference internal" href="../tutorial/orm_data_manipulation.html#tutorial-orm-data-manipulation"><span class="std std-ref">Data Manipulation with the ORM</span></a>.</p>
+</section>
+<section id="some-deletes">
+<h2>Some Deletes<a class="headerlink" href="#some-deletes" title="Link to this heading">¶</a></h2>
+<p>All things must come to an end, as is the case for some of our database
+rows - here’s a quick demonstration of two different forms of deletion, both
+of which are important based on the specific use case.</p>
+<p>First we will remove one of the <code class="docutils literal notranslate"><span class="pre">Address</span></code> objects from the “sandy” user.
+When the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> next flushes, this will result in the
+row being deleted.   This behavior is something that we configured in our
+mapping called the <a class="reference internal" href="cascades.html#cascade-delete"><span class="std std-ref">delete cascade</span></a>.  We can get a handle to the <code class="docutils literal notranslate"><span class="pre">sandy</span></code>
+object by primary key using <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.get" title="sqlalchemy.orm.Session.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.get()</span></code></a>, then work with the object:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sandy</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_account_id</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_account_name</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">fullname</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_account_fullname</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">sandy</span><span class="o">.</span><span class="n">addresses</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">sandy_address</span><span class="p">)</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_id</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">email_address</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_email_address</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_user_id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">address</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
+</div></pre></div>
+</div>
+<p>The last SELECT above was the <a class="reference internal" href="../glossary.html#term-lazy-load"><span class="xref std std-term">lazy load</span></a> operation proceeding so that
+the <code class="docutils literal notranslate"><span class="pre">sandy.addresses</span></code> collection could be loaded, so that we could remove the
+<code class="docutils literal notranslate"><span class="pre">sandy_address</span></code> member.  There are other ways to go about this series
+of operations that won’t emit as much SQL.</p>
+<p>We can choose to emit the DELETE SQL for what’s set to be changed so far, without
+committing the transaction, using the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.flush" title="sqlalchemy.orm.Session.flush"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.flush()</span></code></a> method:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<div class='show_sql'><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
+</div></pre></div>
+</div>
+<p>Next, we will delete the “patrick” user entirely.  For a top-level delete of
+an object by itself, we use the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.delete" title="sqlalchemy.orm.Session.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.delete()</span></code></a> method; this
+method doesn’t actually perform the deletion, but sets up the object
+to be deleted on the next flush.  The
+operation will also <a class="reference internal" href="../glossary.html#term-cascade"><span class="xref std std-term">cascade</span></a> to related objects based on the cascade
+options that we configured, in this case, onto the related <code class="docutils literal notranslate"><span class="pre">Address</span></code> objects:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">patrick</span><span class="p">)</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_account_id</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_account_name</span><span class="p">,</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">fullname</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_account_fullname</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_id</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">email_address</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_email_address</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">address_user_id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">address</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">user_id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+</div></pre></div>
+</div>
+<p>The <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.delete" title="sqlalchemy.orm.Session.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.delete()</span></code></a> method in this particular case emitted two
+SELECT statements, even though it didn’t emit a DELETE, which might seem surprising.
+This is because when the method went to inspect the object, it turns out the
+<code class="docutils literal notranslate"><span class="pre">patrick</span></code> object was <a class="reference internal" href="../glossary.html#term-expired"><span class="xref std std-term">expired</span></a>, which happened when we last called upon
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.commit" title="sqlalchemy.orm.Session.commit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.commit()</span></code></a>, and the SQL emitted was to re-load the rows
+from the new transaction.   This expiration is optional, and in normal
+use we will often be turning it off for situations where it doesn’t apply well.</p>
+<p>To illustrate the rows being deleted, here’s the commit:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<div class='show_sql'><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
+<span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>The Tutorial discusses ORM deletion at <a class="reference internal" href="../tutorial/orm_data_manipulation.html#tutorial-orm-deleting"><span class="std std-ref">Deleting ORM Objects using the Unit of Work pattern</span></a>.
+Background on object expiration is at <a class="reference internal" href="session_basics.html#session-expiring"><span class="std std-ref">Expiring / Refreshing</span></a>; cascades
+are discussed in depth at <a class="reference internal" href="cascades.html#unitofwork-cascades"><span class="std std-ref">Cascades</span></a>.</p>
+</section>
+<section id="learn-the-above-concepts-in-depth">
+<h2>Learn the above concepts in depth<a class="headerlink" href="#learn-the-above-concepts-in-depth" title="Link to this heading">¶</a></h2>
+<p>For a new user, the above sections were likely a whirlwind tour.   There’s a
+lot of important concepts in each step above that weren’t covered.   With a
+quick overview of what things look like, it’s recommended to work through
+the <a class="reference internal" href="../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a> to gain a solid working knowledge of what’s
+really going on above.  Good luck!</p>
+</section>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="index.html" title="previous chapter">SQLAlchemy ORM</a>
+        Next:
+        <a href="mapper_config.html" title="next chapter">ORM Mapped Class Configuration</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

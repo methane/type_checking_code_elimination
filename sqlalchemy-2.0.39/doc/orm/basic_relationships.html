@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Basic Relationship Patterns
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="Relationship Configuration" href="relationships.html" />
+        <link rel="next" title="Adjacency List Relationships" href="self_referential.html" />
+        <link rel="prev" title="Relationship Configuration" href="relationships.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Configuration</a></span><ul>
+<li class="selected"><span class="link-container"><strong>Basic Relationship Patterns</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#declarative-vs-imperative-forms">Declarative vs. Imperative Forms</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#one-to-many">One To Many</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#using-sets-lists-or-other-collection-types-for-one-to-many">Using Sets, Lists, or other Collection Types for One To Many</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#configuring-delete-behavior-for-one-to-many">Configuring Delete Behavior for One to Many</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#many-to-one">Many To One</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#nullable-many-to-one">Nullable Many-to-One</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#one-to-one">One To One</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#setting-uselist-false-for-non-annotated-configurations">Setting uselist=False for non-annotated configurations</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#many-to-many">Many To Many</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#setting-bi-directional-many-to-many">Setting Bi-Directional Many-to-many</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-a-late-evaluated-form-for-the-secondary-argument">Using a late-evaluated form for the “secondary” argument</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-sets-lists-or-other-collection-types-for-many-to-many">Using Sets, Lists, or other Collection Types for Many To Many</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#deleting-rows-from-the-many-to-many-table">Deleting Rows from the Many to Many Table</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#association-object">Association Object</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#combining-association-object-with-many-to-many-access-patterns">Combining Association Object with Many-to-Many Access Patterns</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#late-evaluation-of-relationship-arguments">Late-Evaluation of Relationship Arguments</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#adding-relationships-to-mapped-classes-after-declaration">Adding Relationships to Mapped Classes After Declaration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-a-late-evaluated-form-for-the-secondary-argument-of-many-to-many">Using a late-evaluated form for the “secondary” argument of many-to-many</a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="self_referential.html">Adjacency List Relationships</a></span></li>
+<li><span class="link-container"><a class="reference external" href="join_conditions.html">Configuring how Relationship Joins</a></span></li>
+<li><span class="link-container"><a class="reference external" href="large_collections.html">Working with Large Collections</a></span></li>
+<li><span class="link-container"><a class="reference external" href="collection_api.html">Collection Customization and API Details</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationship_persistence.html">Special Relationship Persistence Patterns</a></span></li>
+<li><span class="link-container"><a class="reference external" href="backref.html">Using the legacy ‘backref’ relationship parameter</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationship_api.html">Relationships API</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="queryguide/index.html">ORM Querying Guide</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="relationships.html" title="previous chapter">Relationship Configuration</a></li>
+                <li><b>Next:</b>
+                <a href="self_referential.html" title="next chapter">Adjacency List Relationships</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                    <ul><li><a href="relationships.html" title="Relationship Configuration">Relationship Configuration</a></li>
+                </ul>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#basic-relationship-patterns">Basic Relationship Patterns</a><ul>
+<li><a class="reference internal" href="#declarative-vs-imperative-forms">Declarative vs. Imperative Forms</a></li>
+<li><a class="reference internal" href="#one-to-many">One To Many</a><ul>
+<li><a class="reference internal" href="#using-sets-lists-or-other-collection-types-for-one-to-many">Using Sets, Lists, or other Collection Types for One To Many</a></li>
+<li><a class="reference internal" href="#configuring-delete-behavior-for-one-to-many">Configuring Delete Behavior for One to Many</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#many-to-one">Many To One</a><ul>
+<li><a class="reference internal" href="#nullable-many-to-one">Nullable Many-to-One</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#one-to-one">One To One</a><ul>
+<li><a class="reference internal" href="#setting-uselist-false-for-non-annotated-configurations">Setting uselist=False for non-annotated configurations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#many-to-many">Many To Many</a><ul>
+<li><a class="reference internal" href="#setting-bi-directional-many-to-many">Setting Bi-Directional Many-to-many</a></li>
+<li><a class="reference internal" href="#using-a-late-evaluated-form-for-the-secondary-argument">Using a late-evaluated form for the “secondary” argument</a></li>
+<li><a class="reference internal" href="#using-sets-lists-or-other-collection-types-for-many-to-many">Using Sets, Lists, or other Collection Types for Many To Many</a></li>
+<li><a class="reference internal" href="#deleting-rows-from-the-many-to-many-table">Deleting Rows from the Many to Many Table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#association-object">Association Object</a><ul>
+<li><a class="reference internal" href="#combining-association-object-with-many-to-many-access-patterns">Combining Association Object with Many-to-Many Access Patterns</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#late-evaluation-of-relationship-arguments">Late-Evaluation of Relationship Arguments</a><ul>
+<li><a class="reference internal" href="#adding-relationships-to-mapped-classes-after-declaration">Adding Relationships to Mapped Classes After Declaration</a></li>
+<li><a class="reference internal" href="#using-a-late-evaluated-form-for-the-secondary-argument-of-many-to-many">Using a late-evaluated form for the “secondary” argument of many-to-many</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-basic_relationships" >
+        
+<section id="basic-relationship-patterns">
+<span id="relationship-patterns"></span><h1>Basic Relationship Patterns<a class="headerlink" href="#basic-relationship-patterns" title="Link to this heading">¶</a></h1>
+<p>A quick walkthrough of the basic relational patterns, which in this section are illustrated
+using <a class="reference internal" href="declarative_styles.html#orm-explicit-declarative-base"><span class="std std-ref">Declarative</span></a> style mappings
+based on the use of the <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation type.</p>
+<p>The setup for each of the following sections is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<section id="declarative-vs-imperative-forms">
+<h2>Declarative vs. Imperative Forms<a class="headerlink" href="#declarative-vs-imperative-forms" title="Link to this heading">¶</a></h2>
+<p>As SQLAlchemy has evolved, different ORM configurational styles have emerged.
+For examples in this section and others that use annotated
+<a class="reference internal" href="declarative_styles.html#orm-explicit-declarative-base"><span class="std std-ref">Declarative</span></a> mappings with
+<a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>, the corresponding non-annotated form should use the
+desired class, or string class name, as the first argument passed to
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>.  The example below illustrates the form used in
+this document, which is a fully Declarative example using <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/"><strong>PEP 484</strong></a> annotations,
+where the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct is also deriving the target
+class and collection type from the <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation,
+which is the most modern form of SQLAlchemy Declarative mapping:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>In contrast, using a Declarative mapping <strong>without</strong> annotations is
+the more “classic” form of mapping, where <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+requires all parameters passed to it directly, as in the example below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Child&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Parent&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Finally, using <a class="reference internal" href="mapping_styles.html#orm-imperative-mapping"><span class="std std-ref">Imperative Mapping</span></a>, which
+is SQLAlchemy’s original mapping form before Declarative was made (which
+nonetheless remains preferred by a vocal minority of users), the above
+configuration looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">registry</span><span class="o">.</span><span class="n">map_imperatively</span><span class="p">(</span>
+    <span class="n">Parent</span><span class="p">,</span>
+    <span class="n">parent_table</span><span class="p">,</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Child&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)},</span>
+<span class="p">)</span>
+
+<span class="n">registry</span><span class="o">.</span><span class="n">map_imperatively</span><span class="p">(</span>
+    <span class="n">Child</span><span class="p">,</span>
+    <span class="n">child_table</span><span class="p">,</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Parent&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">)},</span>
+<span class="p">)</span></pre></div>
+</div>
+<p>Additionally, the default collection style for non-annotated mappings is
+<code class="docutils literal notranslate"><span class="pre">list</span></code>.  To use a <code class="docutils literal notranslate"><span class="pre">set</span></code> or other collection without annotations, indicate
+it using the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.collection_class" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.collection_class</span></code></a> parameter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Child&quot;</span><span class="p">,</span> <span class="n">collection_class</span><span class="o">=</span><span class="n">set</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Detail on collection configuration for <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> is at
+<a class="reference internal" href="collection_api.html#custom-collections"><span class="std std-ref">Customizing Collection Access</span></a>.</p>
+<p>Additional differences between annotated and non-annotated / imperative
+styles will be noted as needed.</p>
+</section>
+<section id="one-to-many">
+<span id="relationship-patterns-o2m"></span><h2>One To Many<a class="headerlink" href="#one-to-many" title="Link to this heading">¶</a></h2>
+<p>A one to many relationship places a foreign key on the child table referencing
+the parent.  <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> is then specified on the parent, as referencing
+a collection of items represented by the child:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">()</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>To establish a bidirectional relationship in one-to-many, where the “reverse”
+side is a many to one, specify an additional <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> and connect
+the two using the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.back_populates</span></code></a> parameter,
+using the attribute name of each <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+as the value for <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.back_populates</span></code></a> on the other:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child</span></code> will get a <code class="docutils literal notranslate"><span class="pre">parent</span></code> attribute with many-to-one semantics.</p>
+<section id="using-sets-lists-or-other-collection-types-for-one-to-many">
+<span id="relationship-patterns-o2m-collection"></span><h3>Using Sets, Lists, or other Collection Types for One To Many<a class="headerlink" href="#using-sets-lists-or-other-collection-types-for-one-to-many" title="Link to this heading">¶</a></h3>
+<p>Using annotated Declarative mappings, the type of collection used for the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> is derived from the collection type passed to the
+<a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> container type.  The example from the previous section
+may be written to use a <code class="docutils literal notranslate"><span class="pre">set</span></code> rather than a <code class="docutils literal notranslate"><span class="pre">list</span></code> for the
+<code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> collection using <code class="docutils literal notranslate"><span class="pre">Mapped[Set[&quot;Child&quot;]]</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>When using non-annotated forms including imperative mappings, the Python
+class to use as a collection may be passed using the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.collection_class" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.collection_class</span></code></a> parameter.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="collection_api.html#custom-collections"><span class="std std-ref">Customizing Collection Access</span></a> - contains further detail on collection
+configuration including some techniques to map <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+to dictionaries.</p>
+</div>
+</section>
+<section id="configuring-delete-behavior-for-one-to-many">
+<h3>Configuring Delete Behavior for One to Many<a class="headerlink" href="#configuring-delete-behavior-for-one-to-many" title="Link to this heading">¶</a></h3>
+<p>It is often the case that all <code class="docutils literal notranslate"><span class="pre">Child</span></code> objects should be deleted
+when their owning <code class="docutils literal notranslate"><span class="pre">Parent</span></code> is deleted.  To configure this behavior,
+the <code class="docutils literal notranslate"><span class="pre">delete</span></code> cascade option described at <a class="reference internal" href="cascades.html#cascade-delete"><span class="std std-ref">delete</span></a> is used.
+An additional option is that a <code class="docutils literal notranslate"><span class="pre">Child</span></code> object can itself be deleted when
+it is deassociated from its parent.  This behavior is described at
+<a class="reference internal" href="cascades.html#cascade-delete-orphan"><span class="std std-ref">delete-orphan</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="cascades.html#cascade-delete"><span class="std std-ref">delete</span></a></p>
+<p><a class="reference internal" href="cascades.html#passive-deletes"><span class="std std-ref">Using foreign key ON DELETE cascade with ORM relationships</span></a></p>
+<p><a class="reference internal" href="cascades.html#cascade-delete-orphan"><span class="std std-ref">delete-orphan</span></a></p>
+</div>
+</section>
+</section>
+<section id="many-to-one">
+<span id="relationship-patterns-m2o"></span><h2>Many To One<a class="headerlink" href="#many-to-one" title="Link to this heading">¶</a></h2>
+<p>Many to one places a foreign key in the parent table referencing the child.
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> is declared on the parent, where a new scalar-holding
+attribute will be created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">child_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;child_table.id&quot;</span><span class="p">))</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">()</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The above example shows a many-to-one relationship that assumes non-nullable
+behavior; the next section, <a class="reference internal" href="#relationship-patterns-nullable-m2o"><span class="std std-ref">Nullable Many-to-One</span></a>,
+illustrates a nullable version.</p>
+<p>Bidirectional behavior is achieved by adding a second <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+and applying the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.back_populates</span></code></a> parameter
+in both directions, using the attribute name of each <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+as the value for <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.back_populates</span></code></a> on the other:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">child_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;child_table.id&quot;</span><span class="p">))</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parents&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<section id="nullable-many-to-one">
+<span id="relationship-patterns-nullable-m2o"></span><h3>Nullable Many-to-One<a class="headerlink" href="#nullable-many-to-one" title="Link to this heading">¶</a></h3>
+<p>In the preceding example, the <code class="docutils literal notranslate"><span class="pre">Parent.child</span></code> relationship is not typed as
+allowing <code class="docutils literal notranslate"><span class="pre">None</span></code>; this follows from the <code class="docutils literal notranslate"><span class="pre">Parent.child_id</span></code> column itself
+not being nullable, as it is typed with <code class="docutils literal notranslate"><span class="pre">Mapped[int]</span></code>.    If we wanted
+<code class="docutils literal notranslate"><span class="pre">Parent.child</span></code> to be a <strong>nullable</strong> many-to-one, we can set both
+<code class="docutils literal notranslate"><span class="pre">Parent.child_id</span></code> and <code class="docutils literal notranslate"><span class="pre">Parent.child</span></code> to be <code class="docutils literal notranslate"><span class="pre">Optional[]</span></code>, in which
+case the configuration would look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">child_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;child_table.id&quot;</span><span class="p">))</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parents&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Above, the column for <code class="docutils literal notranslate"><span class="pre">Parent.child_id</span></code> will be created in DDL to allow
+<code class="docutils literal notranslate"><span class="pre">NULL</span></code> values. When using <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> with explicit typing
+declarations, the specification of <code class="docutils literal notranslate"><span class="pre">child_id:</span> <span class="pre">Mapped[Optional[int]]</span></code> is
+equivalent to setting <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.nullable" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.nullable</span></code></a> to <code class="docutils literal notranslate"><span class="pre">True</span></code> on the
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>, whereas <code class="docutils literal notranslate"><span class="pre">child_id:</span> <span class="pre">Mapped[int]</span></code> is equivalent to
+setting it to <code class="docutils literal notranslate"><span class="pre">False</span></code>. See <a class="reference internal" href="declarative_tables.html#orm-declarative-mapped-column-nullability"><span class="std std-ref">mapped_column() derives the datatype and nullability from the Mapped annotation</span></a>
+for background on this behavior.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If using Python 3.10 or greater, <span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0604/"><strong>PEP 604</strong></a> syntax is more convenient
+to indicate optional types using <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">None</span></code>, which when combined with
+<span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0563/"><strong>PEP 563</strong></a> postponed annotation evaluation so that string-quoted types aren’t
+required, would look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">child_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;child_table.id&quot;</span><span class="p">))</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Child</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parents&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Parent</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+</div>
+</section>
+</section>
+<section id="one-to-one">
+<span id="relationships-one-to-one"></span><h2>One To One<a class="headerlink" href="#one-to-one" title="Link to this heading">¶</a></h2>
+<p>One To One is essentially a <a class="reference internal" href="#relationship-patterns-o2m"><span class="std std-ref">One To Many</span></a>
+relationship from a foreign key perspective, but indicates that there will
+only be one row at any time that refers to a particular parent row.</p>
+<p>When using annotated mappings with <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>, the “one-to-one”
+convention is achieved by applying a non-collection type to the
+<a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation on both sides of the relationship, which will
+imply to the ORM that a collection should not be used on either side, as in the
+example below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Above, when we load a <code class="docutils literal notranslate"><span class="pre">Parent</span></code> object, the <code class="docutils literal notranslate"><span class="pre">Parent.child</span></code> attribute
+will refer to a single <code class="docutils literal notranslate"><span class="pre">Child</span></code> object rather than a collection.  If we
+replace the value of <code class="docutils literal notranslate"><span class="pre">Parent.child</span></code> with a new <code class="docutils literal notranslate"><span class="pre">Child</span></code> object, the ORM’s
+unit of work process will replace the previous <code class="docutils literal notranslate"><span class="pre">Child</span></code> row with the new one,
+setting the previous <code class="docutils literal notranslate"><span class="pre">child.parent_id</span></code> column to NULL by default unless there
+are specific <a class="reference internal" href="cascades.html#unitofwork-cascades"><span class="std std-ref">cascade</span></a> behaviors set up.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>As mentioned previously, the ORM considers the “one-to-one” pattern as a
+convention, where it makes the assumption that when it loads the
+<code class="docutils literal notranslate"><span class="pre">Parent.child</span></code> attribute on a <code class="docutils literal notranslate"><span class="pre">Parent</span></code> object, it will get only one
+row back.  If more than one row is returned, the ORM will emit a warning.</p>
+<p>However, the <code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> side of the above relationship remains as a
+“many-to-one” relationship.  By itself, it will not detect assignment
+of more than one <code class="docutils literal notranslate"><span class="pre">Child</span></code>, unless the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.single_parent" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.single_parent</span></code></a>
+parameter is set, which may be useful:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">,</span> <span class="n">single_parent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Outside of setting this parameter, the “one-to-many” side (which here is
+one-to-one by convention) will also not reliably detect if more than one
+<code class="docutils literal notranslate"><span class="pre">Child</span></code> is associated with a single <code class="docutils literal notranslate"><span class="pre">Parent</span></code>, such as in the case where
+the multiple <code class="docutils literal notranslate"><span class="pre">Child</span></code> objects are pending and not database-persistent.</p>
+<p>Whether or not <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.single_parent" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.single_parent</span></code></a> is used, it is
+recommended that the database schema include a <a class="reference internal" href="../core/constraints.html#schema-unique-constraint"><span class="std std-ref">unique constraint</span></a> to indicate that the <code class="docutils literal notranslate"><span class="pre">Child.parent_id</span></code> column
+should be unique, to ensure at the database level that only one <code class="docutils literal notranslate"><span class="pre">Child</span></code> row may refer
+to a particular <code class="docutils literal notranslate"><span class="pre">Parent</span></code> row at a time (see <a class="reference internal" href="declarative_tables.html#orm-declarative-table-configuration"><span class="std std-ref">Declarative Table Configuration</span></a>
+for background on the <code class="docutils literal notranslate"><span class="pre">__table_args__</span></code> tuple syntax):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">UniqueConstraint</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">)</span>
+
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">(</span><span class="n">UniqueConstraint</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">),)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0: </span>The <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct can derive
+the effective value of the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.uselist" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.uselist</span></code></a>
+parameter from a given <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation.</p>
+</div>
+<section id="setting-uselist-false-for-non-annotated-configurations">
+<h3>Setting uselist=False for non-annotated configurations<a class="headerlink" href="#setting-uselist-false-for-non-annotated-configurations" title="Link to this heading">¶</a></h3>
+<p>When using <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> without the benefit of <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>
+annotations, the one-to-one pattern can be enabled using the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.uselist" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.uselist</span></code></a> parameter set to <code class="docutils literal notranslate"><span class="pre">False</span></code> on what
+would normally be the “many” side, illustrated in a non-annotated
+Declarative configuration below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;parent_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">child</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Child&quot;</span><span class="p">,</span> <span class="n">uselist</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;child_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;parent_table.id&quot;</span><span class="p">))</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Parent&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+</section>
+</section>
+<section id="many-to-many">
+<span id="relationships-many-to-many"></span><h2>Many To Many<a class="headerlink" href="#many-to-many" title="Link to this heading">¶</a></h2>
+<p>Many to Many adds an association table between two classes. The association
+table is nearly always given as a Core <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object or
+other Core selectable such as a <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Join" title="sqlalchemy.sql.expression.Join"><code class="xref py py-class docutils literal notranslate"><span class="pre">Join</span></code></a> object, and is
+indicated by the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> argument to
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>. Usually, the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> uses the
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> object associated with the declarative base class, so
+that the <a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.ForeignKey" title="sqlalchemy.schema.ForeignKey"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForeignKey</span></code></a> directives can locate the remote tables
+with which to link:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="c1"># note for a Core table, we use the sqlalchemy.Column construct,</span>
+<span class="c1"># not sqlalchemy.orm.mapped_column</span>
+<span class="n">association_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
+    <span class="s2">&quot;association_table&quot;</span><span class="p">,</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;left_id&quot;</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;left_table.id&quot;</span><span class="p">)),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;right_id&quot;</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;right_table.id&quot;</span><span class="p">)),</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Child</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">secondary</span><span class="o">=</span><span class="n">association_table</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;right_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The “association table” above has foreign key constraints established that
+refer to the two entity tables on either side of the relationship.  The data
+type of each of <code class="docutils literal notranslate"><span class="pre">association.left_id</span></code> and <code class="docutils literal notranslate"><span class="pre">association.right_id</span></code> is
+normally inferred from that of the referenced table and may be omitted.
+It is also <strong>recommended</strong>, though not in any way required by SQLAlchemy,
+that the columns which refer to the two entity tables are established within
+either a <strong>unique constraint</strong> or more commonly as the <strong>primary key constraint</strong>;
+this ensures that duplicate rows won’t be persisted within the table regardless
+of issues on the application side:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">association_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
+    <span class="s2">&quot;association_table&quot;</span><span class="p">,</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;left_id&quot;</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;left_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;right_id&quot;</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;right_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">)</span></pre></div>
+</div>
+</div>
+<section id="setting-bi-directional-many-to-many">
+<h3>Setting Bi-Directional Many-to-many<a class="headerlink" href="#setting-bi-directional-many-to-many" title="Link to this heading">¶</a></h3>
+<p>For a bidirectional relationship, both sides of the relationship contain a
+collection.  Specify using <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.back_populates</span></code></a>, and
+for each <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> specify the common association table:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">association_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
+    <span class="s2">&quot;association_table&quot;</span><span class="p">,</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;left_id&quot;</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;left_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;right_id&quot;</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;right_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Child</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="n">association_table</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parents&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;right_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Parent</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="n">association_table</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+</section>
+<section id="using-a-late-evaluated-form-for-the-secondary-argument">
+<h3>Using a late-evaluated form for the “secondary” argument<a class="headerlink" href="#using-a-late-evaluated-form-for-the-secondary-argument" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> parameter of
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> also accepts two different “late evaluated” forms,
+including string table name as well as lambda callable.   See the section
+<a class="reference internal" href="#orm-declarative-relationship-secondary-eval"><span class="std std-ref">Using a late-evaluated form for the “secondary” argument of many-to-many</span></a> for background and
+examples.</p>
+</section>
+<section id="using-sets-lists-or-other-collection-types-for-many-to-many">
+<h3>Using Sets, Lists, or other Collection Types for Many To Many<a class="headerlink" href="#using-sets-lists-or-other-collection-types-for-many-to-many" title="Link to this heading">¶</a></h3>
+<p>Configuration of collections for a Many to Many relationship is identical
+to that of <a class="reference internal" href="#relationship-patterns-o2m"><span class="std std-ref">One To Many</span></a>, as described at
+<a class="reference internal" href="#relationship-patterns-o2m-collection"><span class="std std-ref">Using Sets, Lists, or other Collection Types for One To Many</span></a>.    For an annotated mapping
+using <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>, the collection can be indicated by the
+type of collection used within the <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> generic class,
+such as <code class="docutils literal notranslate"><span class="pre">set</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">secondary</span><span class="o">=</span><span class="n">association_table</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>When using non-annotated forms including imperative mappings, as is
+the case with one-to-many, the Python
+class to use as a collection may be passed using the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.collection_class" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.collection_class</span></code></a> parameter.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="collection_api.html#custom-collections"><span class="std std-ref">Customizing Collection Access</span></a> - contains further detail on collection
+configuration including some techniques to map <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+to dictionaries.</p>
+</div>
+</section>
+<section id="deleting-rows-from-the-many-to-many-table">
+<span id="relationships-many-to-many-deletion"></span><h3>Deleting Rows from the Many to Many Table<a class="headerlink" href="#deleting-rows-from-the-many-to-many-table" title="Link to this heading">¶</a></h3>
+<p>A behavior which is unique to the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a>
+argument to <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> is that the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> which
+is specified here is automatically subject to INSERT and DELETE statements, as
+objects are added or removed from the collection. There is <strong>no need to delete
+from this table manually</strong>.   The act of removing a record from the collection
+will have the effect of the row being deleted on flush:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># row will be deleted from the &quot;secondary&quot; table</span>
+<span class="c1"># automatically</span>
+<span class="n">myparent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">somechild</span><span class="p">)</span></pre></div>
+</div>
+<p>A question which often arises is how the row in the “secondary” table can be deleted
+when the child object is handed directly to <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.delete" title="sqlalchemy.orm.Session.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.delete()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">somechild</span><span class="p">)</span></pre></div>
+</div>
+<p>There are several possibilities here:</p>
+<ul class="simple">
+<li><p>If there is a <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> from <code class="docutils literal notranslate"><span class="pre">Parent</span></code> to <code class="docutils literal notranslate"><span class="pre">Child</span></code>, but there is
+<strong>not</strong> a reverse-relationship that links a particular <code class="docutils literal notranslate"><span class="pre">Child</span></code> to each <code class="docutils literal notranslate"><span class="pre">Parent</span></code>,
+SQLAlchemy will not have any awareness that when deleting this particular
+<code class="docutils literal notranslate"><span class="pre">Child</span></code> object, it needs to maintain the “secondary” table that links it to
+the <code class="docutils literal notranslate"><span class="pre">Parent</span></code>.  No delete of the “secondary” table will occur.</p></li>
+<li><p>If there is a relationship that links a particular <code class="docutils literal notranslate"><span class="pre">Child</span></code> to each <code class="docutils literal notranslate"><span class="pre">Parent</span></code>,
+suppose it’s called <code class="docutils literal notranslate"><span class="pre">Child.parents</span></code>, SQLAlchemy by default will load in
+the <code class="docutils literal notranslate"><span class="pre">Child.parents</span></code> collection to locate all <code class="docutils literal notranslate"><span class="pre">Parent</span></code> objects, and remove
+each row from the “secondary” table which establishes this link.  Note that
+this relationship does not need to be bidirectional; SQLAlchemy is strictly
+looking at every <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> associated with the <code class="docutils literal notranslate"><span class="pre">Child</span></code> object
+being deleted.</p></li>
+<li><p>A higher performing option here is to use ON DELETE CASCADE directives
+with the foreign keys used by the database.   Assuming the database supports
+this feature, the database itself can be made to automatically delete rows in the
+“secondary” table as referencing rows in “child” are deleted.   SQLAlchemy
+can be instructed to forego actively loading in the <code class="docutils literal notranslate"><span class="pre">Child.parents</span></code>
+collection in this case using the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.passive_deletes" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.passive_deletes</span></code></a>
+directive on <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>; see <a class="reference internal" href="cascades.html#passive-deletes"><span class="std std-ref">Using foreign key ON DELETE cascade with ORM relationships</span></a> for more details
+on this.</p></li>
+</ul>
+<p>Note again, these behaviors are <em>only</em> relevant to the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> option used with
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>.   If dealing with association tables that are mapped
+explicitly and are <em>not</em> present in the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a>
+option of a relevant <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>, cascade rules can be used
+instead to automatically delete entities in reaction to a related entity being
+deleted - see <a class="reference internal" href="cascades.html#unitofwork-cascades"><span class="std std-ref">Cascades</span></a> for information on this feature.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="cascades.html#cascade-delete-many-to-many"><span class="std std-ref">Using delete cascade with many-to-many relationships</span></a></p>
+<p><a class="reference internal" href="cascades.html#passive-deletes-many-to-many"><span class="std std-ref">Using foreign key ON DELETE with many-to-many relationships</span></a></p>
+</div>
+</section>
+</section>
+<section id="association-object">
+<span id="association-pattern"></span><h2>Association Object<a class="headerlink" href="#association-object" title="Link to this heading">¶</a></h2>
+<p>The association object pattern is a variant on many-to-many: it’s used when an
+association table contains additional columns beyond those which are foreign
+keys to the parent and child (or left and right) tables, columns which are most
+ideally mapped to their own ORM mapped class. This mapped class is mapped
+against the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> that would otherwise be noted as
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> when using the many-to-many pattern.</p>
+<p>In the association object pattern, the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a>
+parameter is not used; instead, a class is mapped directly to the association
+table. Two individual <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> constructs then link first the
+parent side to the mapped association class via one to many, and then the
+mapped association class to the child side via many-to-one, to form a
+uni-directional association object relationship from parent, to association, to
+child. For a bi-directional relationship, four <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+constructs are used to link the mapped association class to both parent and
+child in both directions.</p>
+<p>The example below illustrates a new class <code class="docutils literal notranslate"><span class="pre">Association</span></code> which maps
+to the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> named <code class="docutils literal notranslate"><span class="pre">association</span></code>; this table now includes
+an additional column called <code class="docutils literal notranslate"><span class="pre">extra_data</span></code>, which is a string value that
+is stored along with each association between <code class="docutils literal notranslate"><span class="pre">Parent</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Child</span></code>.   By mapping the table to an explicit class, rudimental access
+from <code class="docutils literal notranslate"><span class="pre">Parent</span></code> to <code class="docutils literal notranslate"><span class="pre">Child</span></code> makes explicit use of <code class="docutils literal notranslate"><span class="pre">Association</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Association</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;association_table&quot;</span>
+    <span class="n">left_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;left_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">right_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;right_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">extra_data</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">str</span><span class="p">]]</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">()</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Association&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">()</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;right_table&quot;</span>
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>To illustrate the bi-directional version, we add two more <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+constructs, linked to the existing ones using <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.back_populates</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Association</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;association_table&quot;</span>
+    <span class="n">left_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;left_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">right_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;right_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">extra_data</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">str</span><span class="p">]]</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parents&quot;</span><span class="p">)</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Association&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;right_table&quot;</span>
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Association&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Working with the association pattern in its direct form requires that child
+objects are associated with an association instance before being appended to
+the parent; similarly, access from parent to child goes through the
+association object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create parent, append a child via association</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Association</span><span class="p">(</span><span class="n">extra_data</span><span class="o">=</span><span class="s2">&quot;some data&quot;</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">child</span> <span class="o">=</span> <span class="n">Child</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># iterate through child objects via association, including association</span>
+<span class="c1"># attributes</span>
+<span class="k">for</span> <span class="n">assoc</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+    <span class="n">print</span><span class="p">(</span><span class="n">assoc</span><span class="o">.</span><span class="n">extra_data</span><span class="p">)</span>
+    <span class="n">print</span><span class="p">(</span><span class="n">assoc</span><span class="o">.</span><span class="n">child</span><span class="p">)</span></pre></div>
+</div>
+<p>To enhance the association object pattern such that direct
+access to the <code class="docutils literal notranslate"><span class="pre">Association</span></code> object is optional, SQLAlchemy
+provides the <a class="reference internal" href="extensions/associationproxy.html"><span class="std std-ref">Association Proxy</span></a> extension. This
+extension allows the configuration of attributes which will
+access two “hops” with a single access, one “hop” to the
+associated object, and a second to a target attribute.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="extensions/associationproxy.html"><span class="std std-ref">Association Proxy</span></a> - allows direct “many to many” style
+access between parent and child for a three-class association object mapping.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Avoid mixing the association object pattern with the <a class="reference internal" href="#relationships-many-to-many"><span class="std std-ref">many-to-many</span></a>
+pattern directly, as this produces conditions where data may be read
+and written in an inconsistent fashion without special steps;
+the <a class="reference internal" href="extensions/associationproxy.html"><span class="std std-ref">association proxy</span></a> is typically
+used to provide more succinct access.  For more detailed background
+on the caveats introduced by this combination, see the next section
+<a class="reference internal" href="#association-pattern-w-m2m"><span class="std std-ref">Combining Association Object with Many-to-Many Access Patterns</span></a>.</p>
+</div>
+<section id="combining-association-object-with-many-to-many-access-patterns">
+<span id="association-pattern-w-m2m"></span><h3>Combining Association Object with Many-to-Many Access Patterns<a class="headerlink" href="#combining-association-object-with-many-to-many-access-patterns" title="Link to this heading">¶</a></h3>
+<p>As mentioned in the previous section, the association object pattern does not
+automatically integrate with usage of the many-to-many pattern against the same
+tables/columns at the same time.  From this it follows that read operations
+may return conflicting data and write operations may also attempt to flush
+conflicting changes, causing either integrity errors or unexpected
+inserts or deletes.</p>
+<p>To illustrate, the example below configures a bidirectional many-to-many relationship
+between <code class="docutils literal notranslate"><span class="pre">Parent</span></code> and <code class="docutils literal notranslate"><span class="pre">Child</span></code> via <code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> and <code class="docutils literal notranslate"><span class="pre">Child.parents</span></code>.
+At the same time, an association object relationship is also configured,
+between <code class="docutils literal notranslate"><span class="pre">Parent.child_associations</span> <span class="pre">-&gt;</span> <span class="pre">Association.child</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Child.parent_associations</span> <span class="pre">-&gt;</span> <span class="pre">Association.parent</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Association</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;association_table&quot;</span>
+
+    <span class="n">left_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;left_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">right_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;right_table.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">extra_data</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">str</span><span class="p">]]</span>
+
+    <span class="c1"># association between Assocation -&gt; Child</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent_associations&quot;</span><span class="p">)</span>
+
+    <span class="c1"># association between Assocation -&gt; Parent</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child_associations&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># many-to-many relationship to Child, bypassing the `Association` class</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="s2">&quot;association_table&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parents&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># association between Parent -&gt; Association -&gt; Child</span>
+    <span class="n">child_associations</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Association&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;right_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># many-to-many relationship to Parent, bypassing the `Association` class</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="s2">&quot;association_table&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># association between Child -&gt; Association -&gt; Parent</span>
+    <span class="n">parent_associations</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Association&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>When using this ORM model to make changes, changes made to
+<code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> will not be coordinated with changes made to
+<code class="docutils literal notranslate"><span class="pre">Parent.child_associations</span></code> or <code class="docutils literal notranslate"><span class="pre">Child.parent_associations</span></code> in Python;
+while all of these relationships will continue to function normally by
+themselves, changes on one will not show up in another until the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is expired, which normally occurs automatically after
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.commit" title="sqlalchemy.orm.Session.commit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.commit()</span></code></a>.</p>
+<p>Additionally, if conflicting changes are made,
+such as adding a new <code class="docutils literal notranslate"><span class="pre">Association</span></code> object while also appending the same
+related <code class="docutils literal notranslate"><span class="pre">Child</span></code> to <code class="docutils literal notranslate"><span class="pre">Parent.children</span></code>, this will raise integrity
+errors when the unit of work flush process proceeds, as in the
+example below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p1</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<span class="n">c1</span> <span class="o">=</span> <span class="n">Child</span><span class="p">()</span>
+<span class="n">p1</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>
+
+<span class="c1"># redundant, will cause a duplicate INSERT on Association</span>
+<span class="n">p1</span><span class="o">.</span><span class="n">child_associations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Association</span><span class="p">(</span><span class="n">child</span><span class="o">=</span><span class="n">c1</span><span class="p">))</span></pre></div>
+</div>
+<p>Appending <code class="docutils literal notranslate"><span class="pre">Child</span></code> to <code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> directly also implies the
+creation of rows in the <code class="docutils literal notranslate"><span class="pre">association</span></code> table without indicating any
+value for the <code class="docutils literal notranslate"><span class="pre">association.extra_data</span></code> column, which will receive
+<code class="docutils literal notranslate"><span class="pre">NULL</span></code> for its value.</p>
+<p>It’s fine to use a mapping like the above if you know what you’re doing; there
+may be good reason to use many-to-many relationships in the case where use
+of the “association object” pattern is infrequent, which is that it’s easier to
+load relationships along a single many-to-many relationship, which can also
+optimize slightly better how the “secondary” table is used in SQL statements,
+compared to how two separate relationships to an explicit association class is
+used.   It’s at least a good idea to apply the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.viewonly" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.viewonly</span></code></a> parameter
+to the “secondary” relationship to avoid the issue of conflicting
+changes occurring, as well as preventing <code class="docutils literal notranslate"><span class="pre">NULL</span></code> being written to the
+additional association columns, as below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># many-to-many relationship to Child, bypassing the `Association` class</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="s2">&quot;association_table&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parents&quot;</span><span class="p">,</span> <span class="n">viewonly</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># association between Parent -&gt; Association -&gt; Child</span>
+    <span class="n">child_associations</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Association&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;right_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># many-to-many relationship to Parent, bypassing the `Association` class</span>
+    <span class="n">parents</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">secondary</span><span class="o">=</span><span class="s2">&quot;association_table&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">,</span> <span class="n">viewonly</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># association between Child -&gt; Association -&gt; Parent</span>
+    <span class="n">parent_associations</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Association&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;child&quot;</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The above mapping will not write any changes to <code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> or
+<code class="docutils literal notranslate"><span class="pre">Child.parents</span></code> to the database, preventing conflicting writes.  However, reads
+of <code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> or <code class="docutils literal notranslate"><span class="pre">Child.parents</span></code> will not necessarily match the data
+that’s read from <code class="docutils literal notranslate"><span class="pre">Parent.child_associations</span></code> or <code class="docutils literal notranslate"><span class="pre">Child.parent_associations</span></code>,
+if changes are being made to these collections within the same transaction
+or <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> as where the viewonly collections are being read.  If
+use of the association object relationships is infrequent and is carefully
+organized against code that accesses the many-to-many collections to avoid
+stale reads (in extreme cases, making direct use of <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.expire" title="sqlalchemy.orm.Session.expire"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.expire()</span></code></a>
+to cause collections to be refreshed within the current transaction), the pattern may be feasible.</p>
+<p>A popular alternative to the above pattern is one where the direct many-to-many
+<code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> and <code class="docutils literal notranslate"><span class="pre">Child.parents</span></code> relationships are replaced with
+an extension that will transparently proxy through the <code class="docutils literal notranslate"><span class="pre">Association</span></code>
+class, while keeping everything consistent from the ORM’s point of
+view.  This extension is known as the <a class="reference internal" href="extensions/associationproxy.html"><span class="std std-ref">Association Proxy</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="extensions/associationproxy.html"><span class="std std-ref">Association Proxy</span></a> - allows direct “many to many” style
+access between parent and child for a three-class association object mapping.</p>
+</div>
+</section>
+</section>
+<section id="late-evaluation-of-relationship-arguments">
+<span id="orm-declarative-relationship-eval"></span><h2>Late-Evaluation of Relationship Arguments<a class="headerlink" href="#late-evaluation-of-relationship-arguments" title="Link to this heading">¶</a></h2>
+<p>Most of the examples in the preceding sections illustrate mappings
+where the various <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> constructs refer to their target
+classes using a string name, rather than the class itself, such as when
+using <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>, a forward reference is generated that exists
+at runtime only as a string:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">parent</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Similarly, when using non-annotated forms such as non-annotated Declarative
+or Imperative mappings, a string name is also supported directly by
+the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">registry</span><span class="o">.</span><span class="n">map_imperatively</span><span class="p">(</span>
+    <span class="n">Parent</span><span class="p">,</span>
+    <span class="n">parent_table</span><span class="p">,</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Child&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">)},</span>
+<span class="p">)</span>
+
+<span class="n">registry</span><span class="o">.</span><span class="n">map_imperatively</span><span class="p">(</span>
+    <span class="n">Child</span><span class="p">,</span>
+    <span class="n">child_table</span><span class="p">,</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Parent&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;children&quot;</span><span class="p">)},</span>
+<span class="p">)</span></pre></div>
+</div>
+<p>These string names are resolved into classes in the mapper resolution stage,
+which is an internal process that occurs typically after all mappings have been
+defined and is normally triggered by the first usage of the mappings
+themselves.  The <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a> object is the container where these
+names are stored and resolved to the mapped classes to which they refer.</p>
+<p>In addition to the main class argument for <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>,
+other arguments which depend upon the columns present on an as-yet
+undefined class may also be specified either as Python functions, or more
+commonly as strings.   For most of these
+arguments except that of the main argument, string inputs are
+<strong>evaluated as Python expressions using Python’s built-in eval() function</strong>,
+as they are intended to receive complete SQL expressions.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As the Python <code class="docutils literal notranslate"><span class="pre">eval()</span></code> function is used to interpret the
+late-evaluated string arguments passed to <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> mapper
+configuration construct, these arguments should <strong>not</strong> be repurposed
+such that they would receive untrusted user input; <code class="docutils literal notranslate"><span class="pre">eval()</span></code> is
+<strong>not secure</strong> against untrusted user input.</p>
+</div>
+<p>The full namespace available within this evaluation includes all classes mapped
+for this declarative base, as well as the contents of the <code class="docutils literal notranslate"><span class="pre">sqlalchemy</span></code>
+package, including expression functions like <a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.desc" title="sqlalchemy.sql.expression.desc"><code class="xref py py-func docutils literal notranslate"><span class="pre">desc()</span></code></a> and
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">sqlalchemy.sql.functions.func</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;desc(Child.email_address)&quot;</span><span class="p">,</span>
+        <span class="n">primaryjoin</span><span class="o">=</span><span class="s2">&quot;Parent.id == Child.parent_id&quot;</span><span class="p">,</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>For the case where more than one module contains a class of the same name,
+string class names can also be specified as module-qualified paths
+within any of these string expressions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;myapp.mymodel.Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;desc(myapp.mymodel.Child.email_address)&quot;</span><span class="p">,</span>
+        <span class="n">primaryjoin</span><span class="o">=</span><span class="s2">&quot;myapp.mymodel.Parent.id == myapp.mymodel.Child.parent_id&quot;</span><span class="p">,</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>In an example like the above, the string passed to <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>
+can be disambiguated from a specific class argument by passing the class
+location string directly to <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.argument" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.argument</span></code></a> as well.
+Below illustrates a typing-only import for <code class="docutils literal notranslate"><span class="pre">Child</span></code>, combined with a
+runtime specifier for the target class that will search for the correct
+name within the <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+
+<span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">myapp.mymodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Child</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">&quot;myapp.mymodel.Child&quot;</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;desc(myapp.mymodel.Child.email_address)&quot;</span><span class="p">,</span>
+        <span class="n">primaryjoin</span><span class="o">=</span><span class="s2">&quot;myapp.mymodel.Parent.id == myapp.mymodel.Child.parent_id&quot;</span><span class="p">,</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The qualified path can be any partial path that removes ambiguity between
+the names.  For example, to disambiguate between
+<code class="docutils literal notranslate"><span class="pre">myapp.model1.Child</span></code> and <code class="docutils literal notranslate"><span class="pre">myapp.model2.Child</span></code>,
+we can specify <code class="docutils literal notranslate"><span class="pre">model1.Child</span></code> or <code class="docutils literal notranslate"><span class="pre">model2.Child</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">&quot;model1.Child&quot;</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;desc(mymodel1.Child.email_address)&quot;</span><span class="p">,</span>
+        <span class="n">primaryjoin</span><span class="o">=</span><span class="s2">&quot;Parent.id == model1.Child.parent_id&quot;</span><span class="p">,</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct also accepts Python functions or
+lambdas as input for these arguments.  A Python functional approach might look
+like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">desc</span>
+
+<span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">myapplication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Child</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_child_model</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">myapplication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Child</span>
+
+    <span class="k">return</span> <span class="n">Child</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">_resolve_child_model</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">desc</span><span class="p">(</span><span class="n">_resolve_child_model</span><span class="p">()</span><span class="o">.</span><span class="n">email_address</span><span class="p">),</span>
+        <span class="n">primaryjoin</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">Parent</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">_resolve_child_model</span><span class="p">()</span><span class="o">.</span><span class="n">parent_id</span><span class="p">,</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The full list of parameters which accept Python functions/lambdas or strings
+that will be passed to <code class="docutils literal notranslate"><span class="pre">eval()</span></code> are:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.order_by" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.order_by</span></code></a></p></li>
+<li><p><a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.primaryjoin" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.primaryjoin</span></code></a></p></li>
+<li><p><a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondaryjoin" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondaryjoin</span></code></a></p></li>
+<li><p><a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a></p></li>
+<li><p><a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.remote_side" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.remote_side</span></code></a></p></li>
+<li><p><a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.foreign_keys" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.foreign_keys</span></code></a></p></li>
+<li><p><a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params._user_defined_foreign_keys" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship._user_defined_foreign_keys</span></code></a></p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As stated previously, the above parameters to <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+are <strong>evaluated as Python code expressions using eval().  DO NOT PASS
+UNTRUSTED INPUT TO THESE ARGUMENTS.</strong></p>
+</div>
+<section id="adding-relationships-to-mapped-classes-after-declaration">
+<span id="orm-declarative-table-adding-relationship"></span><h3>Adding Relationships to Mapped Classes After Declaration<a class="headerlink" href="#adding-relationships-to-mapped-classes-after-declaration" title="Link to this heading">¶</a></h3>
+<p>It should also be noted that in a similar way as described at
+<a class="reference internal" href="declarative_tables.html#orm-declarative-table-adding-columns"><span class="std std-ref">Appending additional columns to an existing Declarative mapped class</span></a>, any <a class="reference internal" href="internals.html#sqlalchemy.orm.MapperProperty" title="sqlalchemy.orm.MapperProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapperProperty</span></code></a>
+construct can be added to a declarative base mapping at any time
+(noting that annotated forms are not supported in this context).  If
+we wanted to implement this <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> after the <code class="docutils literal notranslate"><span class="pre">Address</span></code>
+class were available, we could also apply it afterwards:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># first, module A, where Child has not been created yet,</span>
+<span class="c1"># we create a Parent class which knows nothing about Child</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="c1"># ... later, in Module B, which is imported after module A:</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">module_a</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parent</span>
+
+<span class="c1"># assign the User.addresses relationship as a class variable.  The</span>
+<span class="c1"># declarative base class will intercept this and map the relationship.</span>
+<span class="n">Parent</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">Child</span><span class="p">,</span> <span class="n">primaryjoin</span><span class="o">=</span><span class="n">Child</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">==</span> <span class="n">Parent</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>As is the case for ORM mapped columns, there’s no capability for
+the <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation type to take part in this operation;
+therefore, the related class must be specified directly within the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct, either as the class itself, the string
+name of the class, or a callable function that returns a reference to
+the target class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As is the case for ORM mapped columns, assignment of mapped
+properties to an already mapped class will only
+function correctly if the “declarative base” class is used, meaning
+the user-defined subclass of <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.DeclarativeBase" title="sqlalchemy.orm.DeclarativeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeclarativeBase</span></code></a> or the
+dynamically generated class returned by <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.declarative_base" title="sqlalchemy.orm.declarative_base"><code class="xref py py-func docutils literal notranslate"><span class="pre">declarative_base()</span></code></a>
+or <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.registry.generate_base" title="sqlalchemy.orm.registry.generate_base"><code class="xref py py-meth docutils literal notranslate"><span class="pre">registry.generate_base()</span></code></a>.   This “base” class includes
+a Python metaclass which implements a special <code class="docutils literal notranslate"><span class="pre">__setattr__()</span></code> method
+that intercepts these operations.</p>
+<p>Runtime assignment of class-mapped attributes to a mapped class will <strong>not</strong> work
+if the class is mapped using decorators like <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.registry.mapped" title="sqlalchemy.orm.registry.mapped"><code class="xref py py-meth docutils literal notranslate"><span class="pre">registry.mapped()</span></code></a>
+or imperative functions like <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.registry.map_imperatively" title="sqlalchemy.orm.registry.map_imperatively"><code class="xref py py-meth docutils literal notranslate"><span class="pre">registry.map_imperatively()</span></code></a>.</p>
+</div>
+</section>
+<section id="using-a-late-evaluated-form-for-the-secondary-argument-of-many-to-many">
+<span id="orm-declarative-relationship-secondary-eval"></span><h3>Using a late-evaluated form for the “secondary” argument of many-to-many<a class="headerlink" href="#using-a-late-evaluated-form-for-the-secondary-argument-of-many-to-many" title="Link to this heading">¶</a></h3>
+<p>Many-to-many relationships make use of the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> parameter, which ordinarily
+indicates a reference to a typically non-mapped <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>
+object or other Core selectable object.  Late evaluation
+using a lambda callable is typical.</p>
+<p>For the example given at <a class="reference internal" href="#relationships-many-to-many"><span class="std std-ref">Many To Many</span></a>, if we assumed
+that the <code class="docutils literal notranslate"><span class="pre">association_table</span></code> <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object would be defined at a point later on in the
+module than the mapped class itself, we may write the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+using a lambda as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">&quot;Child&quot;</span><span class="p">,</span> <span class="n">secondary</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">association_table</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>As a shortcut for table names that are also <strong>valid Python identifiers</strong>, the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> parameter may also be passed as a
+string, where resolution works by evaluation of the string as a Python
+expression, with simple identifier names linked to same-named
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects that are present in the same
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection referenced by the current
+<a class="reference internal" href="mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a>.</p>
+<p>In the example below, the expression
+<code class="docutils literal notranslate"><span class="pre">&quot;association_table&quot;</span></code> is evaluated as a variable
+named “association_table” that is resolved against the table names within
+the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;left_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Child&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">secondary</span><span class="o">=</span><span class="s2">&quot;association_table&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When passed as a string, the name passed to
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> <strong>must be a valid Python identifier</strong>
+starting with a letter and containing only alphanumeric characters or
+underscores.   Other characters such as dashes etc. will be interpreted
+as Python operators which will not resolve to the name given.  Please consider
+using lambda expressions rather than strings for improved clarity.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When passed as a string,
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> argument is interpreted using Python’s
+<code class="docutils literal notranslate"><span class="pre">eval()</span></code> function, even though it’s typically the name of a table.
+<strong>DO NOT PASS UNTRUSTED INPUT TO THIS STRING</strong>.</p>
+</div>
+</section>
+</section>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="relationships.html" title="previous chapter">Relationship Configuration</a>
+        Next:
+        <a href="self_referential.html" title="next chapter">Adjacency List Relationships</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

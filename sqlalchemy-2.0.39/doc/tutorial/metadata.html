@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Working with Database Metadata
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="SQLAlchemy Unified Tutorial" href="index.html" />
+        <link rel="next" title="Working with Data" href="data.html" />
+        <link rel="prev" title="Working with Transactions and the DBAPI" href="dbapi_transactions.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy Unified Tutorial">SQLAlchemy Unified Tutorial</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="engine.html">Establishing Connectivity - the Engine</a></span></li>
+<li><span class="link-container"><a class="reference external" href="dbapi_transactions.html">Working with Transactions and the DBAPI</a></span></li>
+<li class="selected"><span class="link-container"><strong>Working with Database Metadata</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#setting-up-metadata-with-table-objects">Setting up MetaData with Table objects</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#components-of-table">Components of <code class="docutils literal notranslate"><span class="pre">Table</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#declaring-simple-constraints">Declaring Simple Constraints</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#emitting-ddl-to-the-database">Emitting DDL to the Database</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#using-orm-declarative-forms-to-define-table-metadata">Using ORM Declarative Forms to Define Table Metadata</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#establishing-a-declarative-base">Establishing a Declarative Base</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#declaring-mapped-classes">Declaring Mapped Classes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#emitting-ddl-to-the-database-from-an-orm-mapping">Emitting DDL to the database from an ORM mapping</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#table-reflection">Table Reflection</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#next-steps">Next Steps</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="data.html">Working with Data</a></span></li>
+<li><span class="link-container"><a class="reference external" href="orm_data_manipulation.html">Data Manipulation with the ORM</a></span></li>
+<li><span class="link-container"><a class="reference external" href="orm_related_objects.html">Working with ORM Related Objects</a></span></li>
+<li><span class="link-container"><a class="reference external" href="further_reading.html">Further Reading</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="dbapi_transactions.html" title="previous chapter">Working with Transactions and the DBAPI</a></li>
+                <li><b>Next:</b>
+                <a href="data.html" title="next chapter">Working with Data</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy Unified Tutorial">SQLAlchemy Unified Tutorial</a></li>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#working-with-database-metadata">Working with Database Metadata</a><ul>
+<li><a class="reference internal" href="#setting-up-metadata-with-table-objects">Setting up MetaData with Table objects</a><ul>
+<li><a class="reference internal" href="#components-of-table">Components of <code class="docutils literal notranslate"><span class="pre">Table</span></code></a></li>
+<li><a class="reference internal" href="#declaring-simple-constraints">Declaring Simple Constraints</a></li>
+<li><a class="reference internal" href="#emitting-ddl-to-the-database">Emitting DDL to the Database</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-orm-declarative-forms-to-define-table-metadata">Using ORM Declarative Forms to Define Table Metadata</a><ul>
+<li><a class="reference internal" href="#establishing-a-declarative-base">Establishing a Declarative Base</a></li>
+<li><a class="reference internal" href="#declaring-mapped-classes">Declaring Mapped Classes</a></li>
+<li><a class="reference internal" href="#emitting-ddl-to-the-database-from-an-orm-mapping">Emitting DDL to the database from an ORM mapping</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#table-reflection">Table Reflection</a></li>
+<li><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar tutorial-metadata" >
+        
+<aside class="topic">
+<p class="topic-title">SQLAlchemy 1.4 / 2.0 Tutorial</p>
+<p>This page is part of the <a class="reference internal" href="index.html"><span class="doc">SQLAlchemy Unified Tutorial</span></a>.</p>
+<p>Previous: <a class="reference internal" href="dbapi_transactions.html"><span class="doc">Working with Transactions and the DBAPI</span></a>   |   Next: <a class="reference internal" href="data.html"><span class="doc">Working with Data</span></a></p>
+</aside>
+<section id="working-with-database-metadata">
+<span id="tutorial-working-with-metadata"></span><h1>Working with Database Metadata<a class="headerlink" href="#working-with-database-metadata" title="Link to this heading">¶</a></h1>
+<p>With engines and SQL execution down, we are ready to begin some Alchemy.
+The central element of both SQLAlchemy Core and ORM is the SQL Expression
+Language which allows for fluent, composable construction of SQL queries.
+The foundation for these queries are Python objects that represent database
+concepts like tables and columns.   These objects are known collectively
+as <a class="reference internal" href="../glossary.html#term-database-metadata"><span class="xref std std-term">database metadata</span></a>.</p>
+<p>The most common foundational objects for database metadata in SQLAlchemy are
+known as  <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a>, <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>, and <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>.
+The sections below will illustrate how these objects are used in both a
+Core-oriented style as well as an ORM-oriented style.</p>
+<div class="orm-header docutils container">
+<p><strong>ORM readers, stay with us!</strong></p>
+<p>As with other sections, Core users can skip the ORM sections, but ORM users
+would best be familiar with these objects from both perspectives.
+The <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object discussed here is declared in a more indirect
+(and also fully Python-typed) way when using the ORM, however there is still
+a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object within the ORM’s configuration.</p>
+</div>
+<section class="core-header orm-dependency" id="setting-up-metadata-with-table-objects">
+<span id="tutorial-core-metadata"></span><h2>Setting up MetaData with Table objects<a class="headerlink" href="#setting-up-metadata-with-table-objects" title="Link to this heading">¶</a></h2>
+<p>When we work with a relational database, the basic data-holding structure
+in the database which we query from is known as a <strong>table</strong>.
+In SQLAlchemy, the database “table” is ultimately represented
+by a Python object similarly named <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>.</p>
+<p>To start using the SQLAlchemy Expression Language, we will want to have
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects constructed that represent all of the database
+tables we are interested in working with. The <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> is
+constructed programmatically, either directly by using the
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> constructor, or indirectly by using ORM Mapped classes
+(described later at <a class="reference internal" href="#tutorial-orm-table-metadata"><span class="std std-ref">Using ORM Declarative Forms to Define Table Metadata</span></a>).  There is also the
+option to load some or all table information from an existing database,
+called <a class="reference internal" href="../glossary.html#term-reflection"><span class="xref std std-term">reflection</span></a>.</p>
+<p>Whichever kind of approach is used, we always start out with a collection
+that will be where we place our tables known as the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a>
+object.  This object is essentially a <a class="reference internal" href="../glossary.html#term-facade"><span class="xref std std-term">facade</span></a> around a Python dictionary
+that stores a series of <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects keyed to their string
+name.   While the ORM provides some options on where to get this collection,
+we always have the option to simply make one directly, which looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetaData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metadata_obj</span> <span class="o">=</span> <span class="n">MetaData</span><span class="p">()</span></pre></div>
+</div>
+<p>Once we have a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> object, we can declare some
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects. This tutorial will start with the classic
+SQLAlchemy tutorial model, which has a table called <code class="docutils literal notranslate"><span class="pre">user_account</span></code> that
+stores, for example, the users of a website, and a related table <code class="docutils literal notranslate"><span class="pre">address</span></code>,
+which stores email addresses associated with rows in the <code class="docutils literal notranslate"><span class="pre">user_account</span></code>
+table. When not using ORM Declarative models at all, we construct each
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object directly, typically assigning each to a variable
+that will be how we will refer to the table in application code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;user_account&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">metadata_obj</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;fullname&quot;</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span></pre></div>
+</div>
+<p>With the above example, when we wish to write code that refers to the
+<code class="docutils literal notranslate"><span class="pre">user_account</span></code> table in the database, we will use the <code class="docutils literal notranslate"><span class="pre">user_table</span></code>
+Python variable to refer to it.</p>
+<aside class="topic">
+<p class="topic-title">When do I make a <code class="docutils literal notranslate"><span class="pre">MetaData</span></code> object in my program?</p>
+<p>Having a single <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> object for an entire application is
+the most common case, represented as a module-level variable in a single place
+in an application, often in a “models” or “dbschema” type of package. It is
+also very common that the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> is accessed via an
+ORM-centric <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a> or
+<a class="reference internal" href="#tutorial-orm-declarative-base"><span class="std std-ref">Declarative Base</span></a> base class, so that
+this same <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> is shared among ORM- and Core-declared
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects.</p>
+<p>There can be multiple <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collections as well;
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects can refer to <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects
+in other collections without restrictions. However, for groups of
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects that are related to each other, it is in
+practice much more straightforward to have them set up within a single
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection, both from the perspective of declaring
+them, as well as from the perspective of DDL (i.e. CREATE and DROP) statements
+being emitted in the correct order.</p>
+</aside>
+<section id="components-of-table">
+<h3>Components of <code class="docutils literal notranslate"><span class="pre">Table</span></code><a class="headerlink" href="#components-of-table" title="Link to this heading">¶</a></h3>
+<p>We can observe that the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> construct as written in Python
+has a resemblance to a SQL CREATE TABLE statement; starting with the table
+name, then listing out each column, where each column has a name and a
+datatype. The objects we use above are:</p>
+<ul>
+<li><p><a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> - represents a database table and assigns itself
+to a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection.</p></li>
+<li><p><a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> - represents a column in a database table, and
+assigns itself to a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object.   The <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>
+usually includes a string name and a type object.   The collection of
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> objects in terms of the parent <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>
+are typically accessed via an associative array located at <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table.c" title="sqlalchemy.schema.Table.c"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Table.c</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span>
+<span class="go">Column(&#39;name&#39;, String(length=30), table=&lt;user_account&gt;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;id&#39;, &#39;name&#39;, &#39;fullname&#39;]</span></pre></div>
+</div>
+</li>
+<li><p><a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.Integer" title="sqlalchemy.types.Integer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>, <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.String" title="sqlalchemy.types.String"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a> - these classes represent
+SQL datatypes and can be passed to a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> with or without
+necessarily being instantiated.  Above, we want to give a length of “30” to
+the “name” column, so we instantiated <code class="docutils literal notranslate"><span class="pre">String(30)</span></code>.  But for “id” and
+“fullname” we did not specify these, so we can send the class itself.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The reference and API documentation for <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a>,
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> and <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> is at <a class="reference internal" href="../core/metadata.html"><span class="std std-ref">Describing Databases with MetaData</span></a>.
+The reference documentation for datatypes is at <a class="reference internal" href="../core/types.html"><span class="std std-ref">SQL Datatype Objects</span></a>.</p>
+</div>
+<p>In an upcoming section, we will illustrate one of the fundamental
+functions of <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> which
+is to generate <a class="reference internal" href="../glossary.html#term-DDL"><span class="xref std std-term">DDL</span></a> on a particular database connection.  But first
+we will declare a second <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>.</p>
+</section>
+<section id="declaring-simple-constraints">
+<h3>Declaring Simple Constraints<a class="headerlink" href="#declaring-simple-constraints" title="Link to this heading">¶</a></h3>
+<p>The first <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> in the example <code class="docutils literal notranslate"><span class="pre">user_table</span></code> includes the
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.primary_key" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.primary_key</span></code></a> parameter which is a shorthand technique
+of indicating that this <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> should be part of the primary
+key for this table.  The primary key itself is normally declared implicitly
+and is represented by the <a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.PrimaryKeyConstraint" title="sqlalchemy.schema.PrimaryKeyConstraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">PrimaryKeyConstraint</span></code></a> construct,
+which we can see on the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table.primary_key" title="sqlalchemy.schema.Table.primary_key"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Table.primary_key</span></code></a>
+attribute on the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user_table</span><span class="o">.</span><span class="n">primary_key</span>
+<span class="go">PrimaryKeyConstraint(Column(&#39;id&#39;, Integer(), table=&lt;user_account&gt;, primary_key=True, nullable=False))</span></pre></div>
+</div>
+<p>The constraint that is most typically declared explicitly is the
+<a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.ForeignKeyConstraint" title="sqlalchemy.schema.ForeignKeyConstraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForeignKeyConstraint</span></code></a> object that corresponds to a database
+<a class="reference internal" href="../glossary.html#term-foreign-key-constraint"><span class="xref std std-term">foreign key constraint</span></a>.  When we declare tables that are related to
+each other, SQLAlchemy uses the presence of these foreign key constraint
+declarations not only so that they are emitted within CREATE statements to
+the database, but also to assist in constructing SQL expressions.</p>
+<p>A <a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.ForeignKeyConstraint" title="sqlalchemy.schema.ForeignKeyConstraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForeignKeyConstraint</span></code></a> that involves only a single column
+on the target table is typically declared using a column-level shorthand notation
+via the <a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.ForeignKey" title="sqlalchemy.schema.ForeignKey"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForeignKey</span></code></a> object.  Below we declare a second table
+<code class="docutils literal notranslate"><span class="pre">address</span></code> that will have a foreign key constraint referring to the <code class="docutils literal notranslate"><span class="pre">user</span></code>
+table:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">address_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;address&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">metadata_obj</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;user_id&quot;</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;user_account.id&quot;</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;email_address&quot;</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span></pre></div>
+</div>
+<p>The table above also features a third kind of constraint, which in SQL is the
+“NOT NULL” constraint, indicated above using the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.nullable" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.nullable</span></code></a>
+parameter.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When using the <a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.ForeignKey" title="sqlalchemy.schema.ForeignKey"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForeignKey</span></code></a> object within a
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> definition, we can omit the datatype for that
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>; it is automatically inferred from that of the
+related column, in the above example the <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.Integer" title="sqlalchemy.types.Integer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a> datatype
+of the <code class="docutils literal notranslate"><span class="pre">user_account.id</span></code> column.</p>
+</div>
+<p>In the next section we will emit the completed DDL for the <code class="docutils literal notranslate"><span class="pre">user</span></code> and
+<code class="docutils literal notranslate"><span class="pre">address</span></code> table to see the completed result.</p>
+</section>
+<section id="emitting-ddl-to-the-database">
+<span id="tutorial-emitting-ddl"></span><h3>Emitting DDL to the Database<a class="headerlink" href="#emitting-ddl-to-the-database" title="Link to this heading">¶</a></h3>
+<p>We’ve constructed an object structure that represents
+two database tables in a database, starting at the root <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a>
+object, then into two <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects, each of which hold
+onto a collection of <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> and <a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.Constraint" title="sqlalchemy.schema.Constraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code></a>
+objects.   This object structure will be at the center of most operations
+we perform with both Core and ORM going forward.</p>
+<p>The first useful thing we can do with this structure will be to emit CREATE
+TABLE statements, or <a class="reference internal" href="../glossary.html#term-DDL"><span class="xref std std-term">DDL</span></a>, to our SQLite database so that we can insert
+and query data from them.   We have already all the tools needed to do so, by
+invoking the
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData.create_all" title="sqlalchemy.schema.MetaData.create_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">MetaData.create_all()</span></code></a> method on our <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a>,
+sending it the <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a> that refers to the target database:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">metadata_obj</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">table_</span><span class="p">...</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;user_account&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">table_</span><span class="p">...</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;address&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+<span class="w">    </span><span class="n">fullname</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">...</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">email_address</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">...</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>The DDL create process above includes some SQLite-specific PRAGMA statements
+that test for the existence of each table before emitting a CREATE.   The full
+series of steps are also included within a BEGIN/COMMIT pair to accommodate
+for transactional DDL.</p>
+<p>The create process also takes care of emitting CREATE statements in the correct
+order; above, the FOREIGN KEY constraint is dependent on the <code class="docutils literal notranslate"><span class="pre">user</span></code> table
+existing, so the <code class="docutils literal notranslate"><span class="pre">address</span></code> table is created second.   In more complicated
+dependency scenarios the FOREIGN KEY constraints may also be applied to tables
+after the fact using ALTER.</p>
+<p>The <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> object also features a
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData.drop_all" title="sqlalchemy.schema.MetaData.drop_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">MetaData.drop_all()</span></code></a> method that will emit DROP statements in the
+reverse order as it would emit CREATE in order to drop schema elements.</p>
+<aside class="topic">
+<p class="topic-title">Migration tools are usually appropriate</p>
+<p>Overall, the CREATE / DROP feature of <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> is useful
+for test suites, small and/or new applications, and applications that use
+short-lived databases.  For management of an application database schema
+over the long term however, a schema management tool such as <a class="reference external" href="https://alembic.sqlalchemy.org">Alembic</a>, which builds upon SQLAlchemy, is likely
+a better choice, as it can manage and orchestrate the process of
+incrementally altering a fixed database schema over time as the design of
+the application changes.</p>
+</aside>
+</section>
+</section>
+<section class="orm-header" id="using-orm-declarative-forms-to-define-table-metadata">
+<span id="tutorial-orm-table-metadata"></span><h2>Using ORM Declarative Forms to Define Table Metadata<a class="headerlink" href="#using-orm-declarative-forms-to-define-table-metadata" title="Link to this heading">¶</a></h2>
+<aside class="topic">
+<p class="topic-title">Another way to make Table objects?</p>
+<p>The preceding examples illustrated direct use of the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>
+object, which underlies how SQLAlchemy ultimately refers to database tables
+when constructing SQL expressions. As mentioned, the SQLAlchemy ORM provides
+for a facade around the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> declaration process referred
+towards as <strong>Declarative Table</strong>.   The Declarative Table process accomplishes
+the same goal as we had in the previous section, that of building
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects, but also within that process gives us
+something else called an <a class="reference internal" href="../glossary.html#term-ORM-mapped-class"><span class="xref std std-term">ORM mapped class</span></a>, or just “mapped class”.
+The mapped class is the
+most common foundational unit of SQL when using the ORM, and in modern
+SQLAlchemy can also be used quite effectively with Core-centric
+use as well.</p>
+<p>Some benefits of using Declarative Table include:</p>
+<ul class="simple">
+<li><p>A more succinct and Pythonic style of setting up column definitions, where
+Python types may be used to represent SQL types to be used in the
+database</p></li>
+<li><p>The resulting mapped class can be
+used to form SQL expressions that in many cases maintain <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/"><strong>PEP 484</strong></a> typing
+information that’s picked up by static analysis tools such as
+Mypy and IDE type checkers</p></li>
+<li><p>Allows declaration of table metadata and the ORM mapped class used in
+persistence / object loading operations all at once.</p></li>
+</ul>
+<p>This section will illustrate the same <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> metadata
+of the previous section(s) being constructed using Declarative Table.</p>
+</aside>
+<p>When using the ORM, the process by which we declare <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> metadata
+is usually combined with the process of declaring <a class="reference internal" href="../glossary.html#term-mapped"><span class="xref std std-term">mapped</span></a> classes.
+The mapped class is any Python class we’d like to create, which will then
+have attributes on it that will be linked to the columns in a database table.
+While there are a few varieties of how this is achieved, the most common
+style is known as
+<a class="reference internal" href="../orm/declarative_config.html"><span class="std std-ref">declarative</span></a>, and allows us
+to declare our user-defined classes and <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> metadata
+at once.</p>
+<section id="establishing-a-declarative-base">
+<span id="tutorial-orm-declarative-base"></span><h3>Establishing a Declarative Base<a class="headerlink" href="#establishing-a-declarative-base" title="Link to this heading">¶</a></h3>
+<p>When using the ORM, the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection remains present,
+however it itself is associated with an ORM-only construct commonly referred
+towards as the <strong>Declarative Base</strong>.   The most expedient way to acquire
+a new Declarative Base is to create a new class that subclasses the
+SQLAlchemy <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase" title="sqlalchemy.orm.DeclarativeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeclarativeBase</span></code></a> class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Above, the <code class="docutils literal notranslate"><span class="pre">Base</span></code> class is what we’ll call the Declarative Base.
+When we make new classes that are subclasses of <code class="docutils literal notranslate"><span class="pre">Base</span></code>, combined with
+appropriate class-level directives, they will each be established as a new
+<strong>ORM mapped class</strong> at class creation time, each one typically (but not
+exclusively) referring to a particular <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object.</p>
+<p>The Declarative Base refers to a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection that is
+created for us automatically, assuming we didn’t provide one from the outside.
+This <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection is accessible via the
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase.metadata" title="sqlalchemy.orm.DeclarativeBase.metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeclarativeBase.metadata</span></code></a> class-level attribute. As we create new
+mapped classes, they each will reference a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> within this
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span>
+<span class="go">MetaData()</span></pre></div>
+</div>
+<p>The Declarative Base also refers to a collection called <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a>, which
+is the central “mapper configuration” unit in the SQLAlchemy ORM.  While
+seldom accessed directly, this object is central to the mapper configuration
+process, as a set of ORM mapped classes will coordinate with each other via
+this registry.   As was the case with <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a>, our Declarative
+Base also created a <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a> for us (again with options to
+pass our own <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a>), which we can access
+via the <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase.registry" title="sqlalchemy.orm.DeclarativeBase.registry"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeclarativeBase.registry</span></code></a> class variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Base</span><span class="o">.</span><span class="n">registry</span>
+<span class="go">&lt;sqlalchemy.orm.decl_api.registry object at 0x...&gt;</span></pre></div>
+</div>
+<aside class="topic">
+<p class="topic-title">Other ways to map with the <code class="docutils literal notranslate"><span class="pre">registry</span></code></p>
+<p><a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase" title="sqlalchemy.orm.DeclarativeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeclarativeBase</span></code></a> is not the only way to map classes, only the
+most common.  <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.registry" title="sqlalchemy.orm.registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">registry</span></code></a> also provides other mapper
+configurational patterns, including decorator-oriented and imperative ways
+to map classes.  There’s also full support for creating Python dataclasses
+while mapping.  The reference documentation at <a class="reference internal" href="../orm/mapper_config.html"><span class="std std-ref">ORM Mapped Class Configuration</span></a>
+has it all.</p>
+</aside>
+</section>
+<section id="declaring-mapped-classes">
+<span id="tutorial-declaring-mapped-classes"></span><h3>Declaring Mapped Classes<a class="headerlink" href="#declaring-mapped-classes" title="Link to this heading">¶</a></h3>
+<p>With the <code class="docutils literal notranslate"><span class="pre">Base</span></code> class established, we can now define ORM mapped classes
+for the <code class="docutils literal notranslate"><span class="pre">user_account</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span></code> tables in terms of new classes <code class="docutils literal notranslate"><span class="pre">User</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Address</span></code>.  We illustrate below the most modern form of Declarative, which
+is driven from <span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/"><strong>PEP 484</strong></a> type annotations using a special type
+<a class="reference internal" href="../orm/internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a>, which indicates attributes to be mapped as particular
+types:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;user_account&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">fullname</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">str</span><span class="p">]]</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">addresses</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Address&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;User(id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">!r}</span><span class="s2">, name=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">, fullname=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Address</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;address&quot;</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">email_address</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">user_id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;user_account.id&quot;</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">user</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">User</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;addresses&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Address(id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">!r}</span><span class="s2">, email_address=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">email_address</span><span class="si">!r}</span><span class="s2">)&quot;</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The two classes above, <code class="docutils literal notranslate"><span class="pre">User</span></code> and <code class="docutils literal notranslate"><span class="pre">Address</span></code>, are now called
+as <strong>ORM Mapped Classes</strong>, and are available for use in
+ORM persistence and query operations, which will be described later.  Details
+about these classes include:</p>
+<ul>
+<li><p>Each class refers to a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object that was generated as
+part of the declarative mapping process, which is named by assigning
+a string to the <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase.__tablename__" title="sqlalchemy.orm.DeclarativeBase.__tablename__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeclarativeBase.__tablename__</span></code></a> attribute.
+Once the class is created, this generated <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> is available
+from the <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase.__table__" title="sqlalchemy.orm.DeclarativeBase.__table__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeclarativeBase.__table__</span></code></a> attribute.</p></li>
+<li><p>As mentioned previously, this form
+is known as <a class="reference internal" href="../orm/declarative_tables.html#orm-declarative-table-configuration"><span class="std std-ref">Declarative Table Configuration</span></a>.  One
+of several alternative declaration styles would instead have us
+build the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object directly, and <strong>assign</strong> it
+directly to <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase.__table__" title="sqlalchemy.orm.DeclarativeBase.__table__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeclarativeBase.__table__</span></code></a>.  This style
+is known as <a class="reference internal" href="../orm/declarative_tables.html#orm-imperative-table-configuration"><span class="std std-ref">Declarative with Imperative Table</span></a>.</p></li>
+<li><p>To indicate columns in the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>, we use the
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> construct, in combination with
+typing annotations based on the <a class="reference internal" href="../orm/internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> type.  This object
+will generate <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> objects that are applied to the
+construction of the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>.</p></li>
+<li><p>For columns with simple datatypes and no other options, we can indicate a
+<a class="reference internal" href="../orm/internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> type annotation alone, using simple Python types like
+<code class="docutils literal notranslate"><span class="pre">int</span></code> and <code class="docutils literal notranslate"><span class="pre">str</span></code> to mean <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.Integer" title="sqlalchemy.types.Integer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a> and <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.String" title="sqlalchemy.types.String"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a>.
+Customization of how Python types are interpreted within the Declarative
+mapping process is very open ended; see the sections
+<a class="reference internal" href="../orm/declarative_tables.html#orm-declarative-mapped-column"><span class="std std-ref">Using Annotated Declarative Table (Type Annotated Forms for mapped_column())</span></a> and
+<a class="reference internal" href="../orm/declarative_tables.html#orm-declarative-mapped-column-type-map"><span class="std std-ref">Customizing the Type Map</span></a> for background.</p></li>
+<li><p>A column can be declared as “nullable” or “not null” based on the
+presence of the <code class="docutils literal notranslate"><span class="pre">Optional[&lt;typ&gt;]</span></code> type annotation (or its equivalents,
+<code class="docutils literal notranslate"><span class="pre">&lt;typ&gt;</span> <span class="pre">|</span> <span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">Union[&lt;typ&gt;,</span> <span class="pre">None]</span></code>).  The
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column.params.nullable" title="sqlalchemy.orm.mapped_column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">mapped_column.nullable</span></code></a> parameter may also be used explicitly
+(and does not have to match the annotation’s optionality).</p></li>
+<li><p>Use of explicit typing annotations is <strong>completely
+optional</strong>.  We can also use <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> without annotations.
+When using this form, we would use more explicit type objects like
+<a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.Integer" title="sqlalchemy.types.Integer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a> and <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.String" title="sqlalchemy.types.String"><code class="xref py py-class docutils literal notranslate"><span class="pre">String</span></code></a> as well as <code class="docutils literal notranslate"><span class="pre">nullable=False</span></code>
+as needed within each <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> construct.</p></li>
+<li><p>Two additional attributes, <code class="docutils literal notranslate"><span class="pre">User.addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">Address.user</span></code>, define
+a different kind of attribute called <a class="reference internal" href="../orm/relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>, which
+features similar annotation-aware configuration styles as shown.  The
+<a class="reference internal" href="../orm/relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct is discussed more fully at
+<a class="reference internal" href="orm_related_objects.html#tutorial-orm-related-objects"><span class="std std-ref">Working with ORM Related Objects</span></a>.</p></li>
+<li><p>The classes are automatically given an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> method if we don’t
+declare one of our own.  The default form of this method accepts all
+attribute names as optional keyword arguments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sandy</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sandy&quot;</span><span class="p">,</span> <span class="n">fullname</span><span class="o">=</span><span class="s2">&quot;Sandy Cheeks&quot;</span><span class="p">)</span></pre></div>
+</div>
+<p>To automatically generate a full-featured <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> method which
+provides for positional arguments as well as arguments with default keyword
+values, the dataclasses feature introduced at
+<a class="reference internal" href="../orm/dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a> may be used.  It’s of course
+always an option to use an explicit <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> method as well.</p>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">__repr__()</span></code> methods are added so that we get a readable string output;
+there’s no requirement for these methods to be here.  As is the case
+with <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>, a <code class="docutils literal notranslate"><span class="pre">__repr__()</span></code> method
+can be generated automatically by using the
+<a class="reference internal" href="../orm/dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">dataclasses</span></a> feature.</p></li>
+</ul>
+<aside class="topic">
+<p class="topic-title">Where’d the old Declarative go?</p>
+<p>Users of SQLAlchemy 1.4 or previous will note that the above mapping
+uses a dramatically different form than before; not only does it use
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> instead of <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> in the Declarative
+mapping, it also uses Python type annotations to derive column information.</p>
+<p>To provide context for users of the “old” way, Declarative mappings can
+still be made using <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> objects (as well as using the
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.declarative_base" title="sqlalchemy.orm.declarative_base"><code class="xref py py-func docutils literal notranslate"><span class="pre">declarative_base()</span></code></a> function to create the base class) as before,
+and these forms will continue to be supported with no plans to
+remove support.  The reason these two facilities
+are superseded by new constructs is first and foremost to integrate
+smoothly with <span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0484/"><strong>PEP 484</strong></a> tools, including IDEs such as VSCode and type
+checkers such as Mypy and Pyright, without the need for plugins. Secondly,
+deriving the declarations from type annotations is part of SQLAlchemy’s
+integration with Python dataclasses, which can now be
+<a class="reference internal" href="../orm/dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">generated natively</span></a> from mappings.</p>
+<p>For users who like the “old” way, but still desire their IDEs to not
+mistakenly report typing errors for their declarative mappings, the
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> construct is a drop-in replacement for
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> in an ORM Declarative mapping (note that
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> is for ORM Declarative mappings only; it can’t
+be used within a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> construct), and the type annotations are
+optional. Our mapping above can be written without annotations as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;user_account&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fullname</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">)</span>
+
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Address&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ... definition continues</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>The above class has an advantage over one that uses <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>
+directly, in that the <code class="docutils literal notranslate"><span class="pre">User</span></code> class as well as instances of <code class="docutils literal notranslate"><span class="pre">User</span></code>
+will indicate the correct typing information to typing tools, without
+the use of plugins.  <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> also allows for additional
+ORM-specific parameters to configure behaviors such as deferred column loading,
+which previously needed a separate <a class="reference internal" href="../orm/queryguide/columns.html#sqlalchemy.orm.deferred" title="sqlalchemy.orm.deferred"><code class="xref py py-func docutils literal notranslate"><span class="pre">deferred()</span></code></a> function to be
+used with <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>.</p>
+<p>There’s also an example of converting an old-style Declarative class
+to the new style, which can be seen at <a class="reference internal" href="../changelog/whatsnew_20.html#whatsnew-20-orm-declarative-typing"><span class="std std-ref">ORM Declarative Models</span></a>
+in the <a class="reference internal" href="../changelog/whatsnew_20.html"><span class="std std-ref">What’s New in SQLAlchemy 2.0?</span></a> guide.</p>
+</aside>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../orm/mapping_styles.html#orm-mapping-styles"><span class="std std-ref">ORM Mapping Styles</span></a> - full background on different ORM configurational
+styles.</p>
+<p><a class="reference internal" href="../orm/mapping_styles.html#orm-declarative-mapping"><span class="std std-ref">Declarative Mapping</span></a> - overview of Declarative class mapping</p>
+<p><a class="reference internal" href="../orm/declarative_tables.html#orm-declarative-table"><span class="std std-ref">Declarative Table with mapped_column()</span></a> - detail on how to use
+<a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> and <a class="reference internal" href="../orm/internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> to define the columns
+within a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> to be mapped when using Declarative.</p>
+</div>
+</section>
+<section id="emitting-ddl-to-the-database-from-an-orm-mapping">
+<h3>Emitting DDL to the database from an ORM mapping<a class="headerlink" href="#emitting-ddl-to-the-database-from-an-orm-mapping" title="Link to this heading">¶</a></h3>
+<p>As our ORM mapped classes refer to <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects contained
+within a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection, emitting DDL given the
+Declarative Base uses the same process as that described previously at
+<a class="reference internal" href="#tutorial-emitting-ddl"><span class="std std-ref">Emitting DDL to the Database</span></a>. In our case, we have already generated the
+<code class="docutils literal notranslate"><span class="pre">user</span></code> and <code class="docutils literal notranslate"><span class="pre">address</span></code> tables in our SQLite database. If we had not done so
+already, we would be free to make use of the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a>
+associated with our ORM Declarative Base class in order to do so, by accessing
+the collection from the <a class="reference internal" href="../orm/mapping_api.html#sqlalchemy.orm.DeclarativeBase.metadata" title="sqlalchemy.orm.DeclarativeBase.metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeclarativeBase.metadata</span></code></a> attribute and
+then using <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData.create_all" title="sqlalchemy.schema.MetaData.create_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">MetaData.create_all()</span></code></a> as before.  In this case,
+PRAGMA statements are run, but no new tables are generated since they
+are found to be present already:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">table_</span><span class="p">...</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;user_account&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">table_</span><span class="p">...</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;address&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+</section>
+</section>
+<section class="core-header orm-addin" id="table-reflection">
+<span id="tutorial-table-reflection"></span><h2>Table Reflection<a class="headerlink" href="#table-reflection" title="Link to this heading">¶</a></h2>
+<aside class="topic">
+<p class="topic-title">Optional Section</p>
+<p>This section is just a brief introduction to the related subject of
+<strong>table reflection</strong>, or how to generate <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>
+objects automatically from an existing database.  Tutorial readers who
+want to get on with writing queries can feel free to skip this section.</p>
+</aside>
+<p>To round out the section on working with table metadata, we will illustrate
+another operation that was mentioned at the beginning of the section,
+that of <strong>table reflection</strong>.   Table reflection refers to the process of
+generating <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> and related objects by reading the current
+state of a database.   Whereas in the previous sections we’ve been declaring
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects in Python, where we then have the option
+to emit DDL to the database to generate such a schema, the reflection process
+does these two steps in reverse, starting from an existing database
+and generating in-Python data structures to represent the schemas within
+that database.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>There is no requirement that reflection must be used in order to
+use SQLAlchemy with a pre-existing database.  It is entirely typical that
+the SQLAlchemy application declares all metadata explicitly in Python,
+such that its structure corresponds to that the existing database.
+The metadata structure also need not include tables, columns, or other
+constraints and constructs in the pre-existing database that are not needed
+for the local application to function.</p>
+</div>
+<p>As an example of reflection, we will create a new <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>
+object which represents the <code class="docutils literal notranslate"><span class="pre">some_table</span></code> object we created manually in
+the earlier sections of this document.  There are again some varieties of
+how this is performed, however the most basic is to construct a
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> object, given the name of the table and a
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> collection to which it will belong, then
+instead of indicating individual <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> and
+<a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.Constraint" title="sqlalchemy.schema.Constraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code></a> objects, pass it the target <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a>
+using the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table.params.autoload_with" title="sqlalchemy.schema.Table"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Table.autoload_with</span></code></a> parameter:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s2">&quot;some_table&quot;</span><span class="p">,</span> <span class="n">metadata_obj</span><span class="p">,</span> <span class="n">autoload_with</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">table_</span><span class="p">...</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;some_table&quot;</span><span class="p">)</span>
+<span class="p">[</span><span class="n">raw</span><span class="w"> </span><span class="k">sql</span><span class="p">]</span><span class="w"> </span><span class="p">()</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">sql</span><span class="w"> </span><span class="k">FROM</span><span class="w">  </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sqlite_master</span><span class="w"> </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w">   </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sqlite_temp_master</span><span class="p">)</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;view&#39;</span><span class="p">)</span>
+<span class="p">[</span><span class="n">raw</span><span class="w"> </span><span class="k">sql</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;some_table&#39;</span><span class="p">,)</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">foreign_key_list</span><span class="p">(</span><span class="ss">&quot;some_table&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="n">PRAGMA</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">index_list</span><span class="p">(</span><span class="ss">&quot;some_table&quot;</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="k">ROLLBACK</span>
+</div></pre></div>
+</div>
+<p>At the end of the process, the <code class="docutils literal notranslate"><span class="pre">some_table</span></code> object now contains the
+information about the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> objects present in the table, and
+the object is usable in exactly the same way as a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> that
+we declared explicitly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">some_table</span>
+<span class="go">Table(&#39;some_table&#39;, MetaData(),</span>
+<span class="go">    Column(&#39;x&#39;, INTEGER(), table=&lt;some_table&gt;),</span>
+<span class="go">    Column(&#39;y&#39;, INTEGER(), table=&lt;some_table&gt;),</span>
+<span class="go">    schema=None)</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Read more about table and schema reflection at <a class="reference internal" href="../core/reflection.html"><span class="std std-ref">Reflecting Database Objects</span></a>.</p>
+<p>For ORM-related variants of table reflection, the section
+<a class="reference internal" href="../orm/declarative_tables.html#orm-declarative-reflected"><span class="std std-ref">Mapping Declaratively with Reflected Tables</span></a> includes an overview of the available
+options.</p>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">¶</a></h2>
+<p>We now have a SQLite database ready to go with two tables present, and
+Core and ORM table-oriented constructs that we can use to interact with
+these tables via a <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a> and/or ORM
+<a class="reference internal" href="../orm/session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>.  In the following sections, we will illustrate
+how to create, manipulate, and select data using these structures.</p>
+</section>
+</section>
+<aside class="topic">
+<p class="topic-title">SQLAlchemy 1.4 / 2.0 Tutorial</p>
+<p>Next Tutorial Section: <a class="reference internal" href="data.html"><span class="doc">Working with Data</span></a></p>
+</aside>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="dbapi_transactions.html" title="previous chapter">Working with Transactions and the DBAPI</a>
+        Next:
+        <a href="data.html" title="next chapter">Working with Data</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

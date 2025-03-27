@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Events and Internals
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="SQLAlchemy ORM" href="index.html" />
+        <link rel="next" title="ORM Events" href="events.html" />
+        <link rel="prev" title="Session API" href="session_api.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="queryguide/index.html">ORM Querying Guide</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session.html">Using the Session</a></span></li>
+<li class="selected"><span class="link-container"><strong>Events and Internals</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="events.html">ORM Events</a></span></li>
+<li><span class="link-container"><a class="reference external" href="internals.html">ORM Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="exceptions.html">ORM Exceptions</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="session_api.html" title="previous chapter">Session API</a></li>
+                <li><b>Next:</b>
+                <a href="events.html" title="next chapter">ORM Events</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#events-and-internals">Events and Internals</a></li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-extending" >
+        
+<section id="events-and-internals">
+<h1>Events and Internals<a class="headerlink" href="#events-and-internals" title="Link to this heading">¶</a></h1>
+<p>The SQLAlchemy ORM as well as Core are extended generally through the use
+of event hooks.  Be sure to review the use of the event system in general
+at <a class="reference internal" href="../core/event.html"><span class="std std-ref">Events</span></a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="events.html">ORM Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="events.html#session-events">Session Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#mapper-events">Mapper Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#instance-events">Instance Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#attribute-events">Attribute Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#query-events">Query Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#module-sqlalchemy.orm.instrumentation">Instrumentation Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">ORM Internals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.AttributeState"><code class="docutils literal notranslate"><span class="pre">AttributeState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.CascadeOptions"><code class="docutils literal notranslate"><span class="pre">CascadeOptions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.ClassManager"><code class="docutils literal notranslate"><span class="pre">ClassManager</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.ColumnProperty"><code class="docutils literal notranslate"><span class="pre">ColumnProperty</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.Composite"><code class="docutils literal notranslate"><span class="pre">Composite</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.CompositeProperty"><code class="docutils literal notranslate"><span class="pre">CompositeProperty</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.AttributeEventToken"><code class="docutils literal notranslate"><span class="pre">AttributeEventToken</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.IdentityMap"><code class="docutils literal notranslate"><span class="pre">IdentityMap</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.InspectionAttr"><code class="docutils literal notranslate"><span class="pre">InspectionAttr</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.InspectionAttrInfo"><code class="docutils literal notranslate"><span class="pre">InspectionAttrInfo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.InstanceState"><code class="docutils literal notranslate"><span class="pre">InstanceState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.InstrumentedAttribute"><code class="docutils literal notranslate"><span class="pre">InstrumentedAttribute</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.LoaderCallableStatus"><code class="docutils literal notranslate"><span class="pre">LoaderCallableStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped"><code class="docutils literal notranslate"><span class="pre">Mapped</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.MappedColumn"><code class="docutils literal notranslate"><span class="pre">MappedColumn</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.MapperProperty"><code class="docutils literal notranslate"><span class="pre">MapperProperty</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.MappedSQLExpression"><code class="docutils literal notranslate"><span class="pre">MappedSQLExpression</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.InspectionAttrExtensionType"><code class="docutils literal notranslate"><span class="pre">InspectionAttrExtensionType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.NotExtension"><code class="docutils literal notranslate"><span class="pre">NotExtension</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.merge_result"><code class="docutils literal notranslate"><span class="pre">merge_result()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.merge_frozen_result"><code class="docutils literal notranslate"><span class="pre">merge_frozen_result()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.PropComparator"><code class="docutils literal notranslate"><span class="pre">PropComparator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.Relationship"><code class="docutils literal notranslate"><span class="pre">Relationship</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.RelationshipDirection"><code class="docutils literal notranslate"><span class="pre">RelationshipDirection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.RelationshipProperty"><code class="docutils literal notranslate"><span class="pre">RelationshipProperty</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.SQLORMExpression"><code class="docutils literal notranslate"><span class="pre">SQLORMExpression</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.Synonym"><code class="docutils literal notranslate"><span class="pre">Synonym</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.SynonymProperty"><code class="docutils literal notranslate"><span class="pre">SynonymProperty</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.QueryContext"><code class="docutils literal notranslate"><span class="pre">QueryContext</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.QueryableAttribute"><code class="docutils literal notranslate"><span class="pre">QueryableAttribute</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#sqlalchemy.orm.UOWTransaction"><code class="docutils literal notranslate"><span class="pre">UOWTransaction</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">ORM Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.ConcurrentModificationError"><code class="docutils literal notranslate"><span class="pre">ConcurrentModificationError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.DetachedInstanceError"><code class="docutils literal notranslate"><span class="pre">DetachedInstanceError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.FlushError"><code class="docutils literal notranslate"><span class="pre">FlushError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.LoaderStrategyException"><code class="docutils literal notranslate"><span class="pre">LoaderStrategyException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.NO_STATE"><code class="docutils literal notranslate"><span class="pre">NO_STATE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.ObjectDeletedError"><code class="docutils literal notranslate"><span class="pre">ObjectDeletedError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.ObjectDereferencedError"><code class="docutils literal notranslate"><span class="pre">ObjectDereferencedError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.StaleDataError"><code class="docutils literal notranslate"><span class="pre">StaleDataError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.UnmappedClassError"><code class="docutils literal notranslate"><span class="pre">UnmappedClassError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.UnmappedColumnError"><code class="docutils literal notranslate"><span class="pre">UnmappedColumnError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.UnmappedError"><code class="docutils literal notranslate"><span class="pre">UnmappedError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#sqlalchemy.orm.exc.UnmappedInstanceError"><code class="docutils literal notranslate"><span class="pre">UnmappedInstanceError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="session_api.html" title="previous chapter">Session API</a>
+        Next:
+        <a href="events.html" title="next chapter">ORM Events</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

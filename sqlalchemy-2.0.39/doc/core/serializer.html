@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Expression Serializer Extension
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="SQL Statements and Expressions API" href="expression_api.html" />
+        <link rel="next" title="SQL Expression Language Foundational Constructs" href="foundation.html" />
+        <link rel="prev" title="Custom SQL Constructs and Compilation Extension" href="compiler.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="expression_api.html">SQL Statements and Expressions API</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="sqlelement.html">Column Elements and Expressions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="operators.html">Operator Reference</a></span></li>
+<li><span class="link-container"><a class="reference external" href="selectable.html">SELECT and Related Constructs</a></span></li>
+<li><span class="link-container"><a class="reference external" href="dml.html">Insert, Updates, Deletes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="functions.html">SQL and Generic Functions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="compiler.html">Custom SQL Constructs and Compilation Extension</a></span></li>
+<li class="selected"><span class="link-container"><strong>Expression Serializer Extension</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.ext.serializer.Deserializer"><code class="docutils literal notranslate"><span class="pre">Deserializer</span></code></a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.ext.serializer.Deserializer.get_engine"><code class="docutils literal notranslate"><span class="pre">Deserializer.get_engine()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.ext.serializer.Deserializer.persistent_load"><code class="docutils literal notranslate"><span class="pre">Deserializer.persistent_load()</span></code></a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.ext.serializer.Serializer"><code class="docutils literal notranslate"><span class="pre">Serializer</span></code></a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.ext.serializer.Serializer.persistent_id"><code class="docutils literal notranslate"><span class="pre">Serializer.persistent_id()</span></code></a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.ext.serializer.dumps"><code class="docutils literal notranslate"><span class="pre">dumps()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.ext.serializer.loads"><code class="docutils literal notranslate"><span class="pre">loads()</span></code></a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="foundation.html">SQL Expression Language Foundational Constructs</a></span></li>
+<li><span class="link-container"><a class="reference external" href="visitors.html">Visitor and Traversal Utilities</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="schema.html">Schema Definition Language</a></span></li>
+<li><span class="link-container"><a class="reference external" href="types.html">SQL Datatype Objects</a></span></li>
+<li><span class="link-container"><a class="reference external" href="engines_connections.html">Engine and Connection Use</a></span></li>
+<li><span class="link-container"><a class="reference external" href="api_basics.html">Core API Basics</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="compiler.html" title="previous chapter">Custom SQL Constructs and Compilation Extension</a></li>
+                <li><b>Next:</b>
+                <a href="foundation.html" title="next chapter">SQL Expression Language Foundational Constructs</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a></li>
+                    <ul><li><a href="expression_api.html" title="SQL Statements and Expressions API">SQL Statements and Expressions API</a></li>
+                </ul>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#module-sqlalchemy.ext.serializer">Expression Serializer Extension</a><ul>
+<li><a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer"><code class="docutils literal notranslate"><span class="pre">Deserializer</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer.get_engine"><code class="docutils literal notranslate"><span class="pre">Deserializer.get_engine()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer.persistent_load"><code class="docutils literal notranslate"><span class="pre">Deserializer.persistent_load()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy.ext.serializer.Serializer"><code class="docutils literal notranslate"><span class="pre">Serializer</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy.ext.serializer.Serializer.persistent_id"><code class="docutils literal notranslate"><span class="pre">Serializer.persistent_id()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy.ext.serializer.dumps"><code class="docutils literal notranslate"><span class="pre">dumps()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.ext.serializer.loads"><code class="docutils literal notranslate"><span class="pre">loads()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar core-serializer" >
+        
+<section id="module-sqlalchemy.ext.serializer">
+<span id="expression-serializer-extension"></span><h1>Expression Serializer Extension<a class="headerlink" href="#module-sqlalchemy.ext.serializer" title="Link to this heading">¶</a></h1>
+<p>Serializer/Deserializer objects for usage with SQLAlchemy query structures,
+allowing “contextual” deserialization.</p>
+<div class="admonition legacy">
+<p class="admonition-title">Legacy Feature</p>
+<p>The serializer extension is <strong>legacy</strong> and should not be used for
+new development.</p>
+</div>
+<p>Any SQLAlchemy query structure, either based on sqlalchemy.sql.*
+or sqlalchemy.orm.* can be used.  The mappers, Tables, Columns, Session
+etc. which are referenced by the structure are not persisted in serialized
+form, but are instead re-associated with the query structure
+when it is deserialized.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The serializer extension uses pickle to serialize and
+deserialize objects, so the same security consideration mentioned
+in the <a class="reference external" href="https://docs.python.org/3/library/pickle.html">python documentation</a> apply.</p>
+</div>
+<p>Usage is nearly the same as that of the standard Python pickle module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.ext.serializer</span><span class="w"> </span><span class="kn">import</span> <span class="n">loads</span><span class="p">,</span> <span class="n">dumps</span>
+
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">MetaData</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">some_engine</span><span class="p">)</span>
+<span class="n">Session</span> <span class="o">=</span> <span class="n">scoped_session</span><span class="p">(</span><span class="n">sessionmaker</span><span class="p">())</span>
+
+<span class="c1"># ... define mappers</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">MyClass</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">MyClass</span><span class="o">.</span><span class="n">somedata</span> <span class="o">==</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">MyClass</span><span class="o">.</span><span class="n">sortkey</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># pickle the query</span>
+<span class="n">serialized</span> <span class="o">=</span> <span class="n">dumps</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="c1"># unpickle.  Pass in metadata + scoped_session</span>
+<span class="n">query2</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">serialized</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">Session</span><span class="p">)</span>
+
+<span class="n">print</span><span class="p">(</span><span class="n">query2</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></pre></div>
+</div>
+<p>Similar restrictions as when using raw pickle apply; mapped classes must be
+themselves be pickleable, meaning they are importable from a module-level
+namespace.</p>
+<p>The serializer module is only appropriate for query structures.  It is not
+needed for:</p>
+<ul class="simple">
+<li><p>instances of user-defined classes.   These contain no references to engines,
+sessions or expression constructs in the typical case and can be serialized
+directly.</p></li>
+<li><p>Table metadata that is to be loaded entirely from the serialized structure
+(i.e. is not already declared in the application).   Regular
+pickle.loads()/dumps() can be used to fully dump any <code class="docutils literal notranslate"><span class="pre">MetaData</span></code> object,
+typically one which was reflected from an existing database at some previous
+point in time.  The serializer module is specifically for the opposite case,
+where the Table metadata is already present in memory.</p></li>
+</ul>
+<table class="longtable docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head">Object Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer"><span class="sig-name descname">Deserializer</span></a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.ext.serializer.dumps"><span class="sig-name descname">dumps</span></a>(obj[, protocol])</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.ext.serializer.loads"><span class="sig-name descname">loads</span></a>(data[, metadata, scoped_session, engine])</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.ext.serializer.Serializer"><span class="sig-name descname">Serializer</span></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy.ext.serializer.Deserializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.ext.serializer.</span></span><span class="sig-name descname"><span class="pre">Deserializer</span></span><a class="headerlink" href="#sqlalchemy.ext.serializer.Deserializer" title="Link to this definition">¶</a></dt>
+<dd><div class="class-members docutils container">
+<p><strong>Members</strong></p>
+<p><a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer.get_engine"><span class="sig-name descname">get_engine()</span></a>, <a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer.persistent_load"><span class="sig-name descname">persistent_load()</span></a></p>
+</div>
+<div class="class-bases docutils container">
+<p><strong>Class signature</strong></p>
+<p>class <a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer" title="sqlalchemy.ext.serializer.Deserializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.serializer.Deserializer</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">_pickle.Unpickler</span></code>)</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.ext.serializer.Deserializer.get_engine">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.ext.serializer.Deserializer.</span></code></a><span class="sig-name descname"><span class="pre">get_engine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy.ext.serializer.Deserializer.get_engine" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.ext.serializer.Deserializer.persistent_load">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.ext.serializer.Deserializer"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.ext.serializer.Deserializer.</span></code></a><span class="sig-name descname"><span class="pre">persistent_load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy.ext.serializer.Deserializer.persistent_load" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy.ext.serializer.Serializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.ext.serializer.</span></span><span class="sig-name descname"><span class="pre">Serializer</span></span><a class="headerlink" href="#sqlalchemy.ext.serializer.Serializer" title="Link to this definition">¶</a></dt>
+<dd><div class="class-members docutils container">
+<p><strong>Members</strong></p>
+<p><a class="reference internal" href="#sqlalchemy.ext.serializer.Serializer.persistent_id"><span class="sig-name descname">persistent_id()</span></a></p>
+</div>
+<div class="class-bases docutils container">
+<p><strong>Class signature</strong></p>
+<p>class <a class="reference internal" href="#sqlalchemy.ext.serializer.Serializer" title="sqlalchemy.ext.serializer.Serializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.serializer.Serializer</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">_pickle.Pickler</span></code>)</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.ext.serializer.Serializer.persistent_id">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.ext.serializer.Serializer"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.ext.serializer.Serializer.</span></code></a><span class="sig-name descname"><span class="pre">persistent_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy.ext.serializer.Serializer.persistent_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy.ext.serializer.dumps">
+<em class="property"><span class="pre">function</span> </em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.ext.serializer.</span></span><span class="sig-name descname"><span class="pre">dumps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy.ext.serializer.dumps" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy.ext.serializer.loads">
+<em class="property"><span class="pre">function</span> </em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.ext.serializer.</span></span><span class="sig-name descname"><span class="pre">loads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoped_session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy.ext.serializer.loads" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="compiler.html" title="previous chapter">Custom SQL Constructs and Compilation Extension</a>
+        Next:
+        <a href="foundation.html" title="next chapter">SQL Expression Language Foundational Constructs</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

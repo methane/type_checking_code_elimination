@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Composite Column Types
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="ORM Mapped Class Configuration" href="mapper_config.html" />
+        <link rel="next" title="Mapping Class Inheritance Hierarchies" href="inheritance.html" />
+        <link rel="prev" title="Changing Attribute Behavior" href="mapped_attributes.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapper_config.html">ORM Mapped Class Configuration</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="mapping_styles.html">ORM Mapped Class Overview</a></span></li>
+<li><span class="link-container"><a class="reference external" href="declarative_mapping.html">Mapping Classes with Declarative</a></span></li>
+<li><span class="link-container"><a class="reference external" href="dataclasses.html">Integration with dataclasses and attrs</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapped_sql_expr.html">SQL Expressions as Mapped Attributes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapped_attributes.html">Changing Attribute Behavior</a></span></li>
+<li class="selected"><span class="link-container"><strong>Composite Column Types</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#working-with-mapped-composite-column-types">Working with Mapped Composite Column Types</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#other-mapping-forms-for-composites">Other mapping forms for composites</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#map-columns-directly-then-pass-to-composite">Map columns directly, then pass to composite</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#map-columns-directly-pass-attribute-names-to-composite">Map columns directly, pass attribute names to composite</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#imperative-mapping-and-imperative-table">Imperative mapping and imperative table</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#using-legacy-non-dataclasses">Using Legacy Non-Dataclasses</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#tracking-in-place-mutations-on-composites">Tracking In-Place Mutations on Composites</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#redefining-comparison-operations-for-composites">Redefining Comparison Operations for Composites</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#nesting-composites">Nesting Composites</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#composite-api">Composite API</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.composite"><code class="docutils literal notranslate"><span class="pre">composite()</span></code></a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="inheritance.html">Mapping Class Inheritance Hierarchies</a></span></li>
+<li><span class="link-container"><a class="reference external" href="nonstandard_mappings.html">Non-Traditional Mappings</a></span></li>
+<li><span class="link-container"><a class="reference external" href="versioning.html">Configuring a Version Counter</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapping_api.html">Class Mapping API</a></span></li>
+<li><span class="link-container"><a class="reference external" href="scalar_mapping.html">Mapping SQL Expressions</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="queryguide/index.html">ORM Querying Guide</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="mapped_attributes.html" title="previous chapter">Changing Attribute Behavior</a></li>
+                <li><b>Next:</b>
+                <a href="inheritance.html" title="next chapter">Mapping Class Inheritance Hierarchies</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                    <ul><li><a href="mapper_config.html" title="ORM Mapped Class Configuration">ORM Mapped Class Configuration</a></li>
+                </ul>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#composite-column-types">Composite Column Types</a><ul>
+<li><a class="reference internal" href="#working-with-mapped-composite-column-types">Working with Mapped Composite Column Types</a></li>
+<li><a class="reference internal" href="#other-mapping-forms-for-composites">Other mapping forms for composites</a><ul>
+<li><a class="reference internal" href="#map-columns-directly-then-pass-to-composite">Map columns directly, then pass to composite</a></li>
+<li><a class="reference internal" href="#map-columns-directly-pass-attribute-names-to-composite">Map columns directly, pass attribute names to composite</a></li>
+<li><a class="reference internal" href="#imperative-mapping-and-imperative-table">Imperative mapping and imperative table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-legacy-non-dataclasses">Using Legacy Non-Dataclasses</a></li>
+<li><a class="reference internal" href="#tracking-in-place-mutations-on-composites">Tracking In-Place Mutations on Composites</a></li>
+<li><a class="reference internal" href="#redefining-comparison-operations-for-composites">Redefining Comparison Operations for Composites</a></li>
+<li><a class="reference internal" href="#nesting-composites">Nesting Composites</a></li>
+<li><a class="reference internal" href="#composite-api">Composite API</a><ul>
+<li><a class="reference internal" href="#sqlalchemy.orm.composite"><code class="docutils literal notranslate"><span class="pre">composite()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-composites" >
+        
+<section id="composite-column-types">
+<span id="mapper-composite"></span><h1>Composite Column Types<a class="headerlink" href="#composite-column-types" title="Link to this heading">¶</a></h1>
+<p>Sets of columns can be associated with a single user-defined datatype,
+which in modern use is normally a Python <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html">dataclass</a>. The ORM
+provides a single attribute which represents the group of columns using the
+class you provide.</p>
+<p>A simple example represents pairs of <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.Integer" title="sqlalchemy.types.Integer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a> columns as a
+<code class="docutils literal notranslate"><span class="pre">Point</span></code> object, with attributes <code class="docutils literal notranslate"><span class="pre">.x</span></code> and <code class="docutils literal notranslate"><span class="pre">.y</span></code>.   Using a
+dataclass, these attributes are defined with the corresponding <code class="docutils literal notranslate"><span class="pre">int</span></code>
+Python type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+
+
+<span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">int</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Non-dataclass forms are also accepted, but require additional methods
+to be implemented.  For an example using a non-dataclass class, see the section
+<a class="reference internal" href="#composite-legacy-no-dataclass"><span class="std std-ref">Using Legacy Non-Dataclasses</span></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0: </span>The <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> construct fully supports
+Python dataclasses including the ability to derive mapped column datatypes
+from the composite class.</p>
+</div>
+<p>We will create a mapping to a table <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, which represents two points
+as <code class="docutils literal notranslate"><span class="pre">x1/y1</span></code> and <code class="docutils literal notranslate"><span class="pre">x2/y2</span></code>.   The <code class="docutils literal notranslate"><span class="pre">Point</span></code> class is associated with
+the mapped columns using the <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> construct.</p>
+<p>The example below illustrates the most modern form of <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> as
+used with a fully
+<a class="reference internal" href="declarative_tables.html#orm-declarative-mapped-column"><span class="std std-ref">Annotated Declarative Table</span></a>
+configuration. <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> constructs representing each column
+are passed directly to <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a>, indicating zero or more aspects
+of the columns to be generated, in this case the names; the
+<a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> construct derives the column types (in this case
+<code class="docutils literal notranslate"><span class="pre">int</span></code>, corresponding to <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.Integer" title="sqlalchemy.types.Integer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>) from the dataclass directly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span><span class="p">,</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">composite</span><span class="p">,</span> <span class="n">mapped_column</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Vertex</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;vertices&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">start</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span><span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">),</span> <span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;y1&quot;</span><span class="p">))</span>
+    <span class="n">end</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span><span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">),</span> <span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;y2&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Vertex(start=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="si">}</span><span class="s2">, end=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="si">}</span><span class="s2">)&quot;</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In the example above the columns that represent the composites
+(<code class="docutils literal notranslate"><span class="pre">x1</span></code>, <code class="docutils literal notranslate"><span class="pre">y1</span></code>, etc.) are also accessible on the class but are not
+correctly understood by type checkers.
+If accessing the single columns is important they can be explicitly declared,
+as shown in <a class="reference internal" href="#composite-with-typing"><span class="std std-ref">Map columns directly, pass attribute names to composite</span></a>.</p>
+</div>
+<p>The above mapping would correspond to a CREATE TABLE statement as:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateTable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">CreateTable</span><span class="p">(</span><span class="n">Vertex</span><span class="o">.</span><span class="n">__table__</span><span class="p">))</span>
+<div class='show_sql_print'><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">x1</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">y1</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">x2</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">y2</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span>
+</div></pre></div>
+</div>
+<section id="working-with-mapped-composite-column-types">
+<h2>Working with Mapped Composite Column Types<a class="headerlink" href="#working-with-mapped-composite-column-types" title="Link to this heading">¶</a></h2>
+<p>With a mapping as illustrated in the top section, we can work with the
+<code class="docutils literal notranslate"><span class="pre">Vertex</span></code> class, where the <code class="docutils literal notranslate"><span class="pre">.start</span></code> and <code class="docutils literal notranslate"><span class="pre">.end</span></code> attributes will
+transparently refer to the columns referenced by the <code class="docutils literal notranslate"><span class="pre">Point</span></code> class, as
+well as with instances of the <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> class, where the <code class="docutils literal notranslate"><span class="pre">.start</span></code> and
+<code class="docutils literal notranslate"><span class="pre">.end</span></code> attributes will refer to instances of the <code class="docutils literal notranslate"><span class="pre">Point</span></code> class. The <code class="docutils literal notranslate"><span class="pre">x1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">y1</span></code>, <code class="docutils literal notranslate"><span class="pre">x2</span></code>, and <code class="docutils literal notranslate"><span class="pre">y2</span></code> columns are handled transparently:</p>
+<ul>
+<li><p><strong>Persisting Point objects</strong></p>
+<p>We can create a <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> object, assign <code class="docutils literal notranslate"><span class="pre">Point</span></code> objects as members,
+and they will be persisted as expected:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">Vertex</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="n">Point</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">y2</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[</span><span class="k">generated</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">...]</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+</li>
+<li><p><strong>Selecting Point objects as columns</strong></p>
+<p><a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> will allow the <code class="docutils literal notranslate"><span class="pre">Vertex.start</span></code> and <code class="docutils literal notranslate"><span class="pre">Vertex.end</span></code>
+attributes to behave like a single SQL expression to as much an extent
+as possible when using the ORM <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> (including the legacy
+<a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> object) to select <code class="docutils literal notranslate"><span class="pre">Point</span></code> objects:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Vertex</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">Vertex</span><span class="o">.</span><span class="n">end</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y2</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">vertices</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+</div><span class="go">[(Point(x=3, y=4), Point(x=5, y=6))]</span></pre></div>
+</div>
+</li>
+<li><p><strong>Comparing Point objects in SQL expressions</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Vertex.start</span></code> and <code class="docutils literal notranslate"><span class="pre">Vertex.end</span></code> attributes may be used in
+WHERE criteria and similar, using ad-hoc <code class="docutils literal notranslate"><span class="pre">Point</span></code> objects for comparisons:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Vertex</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Vertex</span><span class="o">.</span><span class="n">start</span> <span class="o">==</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Vertex</span><span class="o">.</span><span class="n">end</span> <span class="o">&lt;</span> <span class="n">Point</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y2</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">vertices</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span>
+</div><span class="go">[Vertex(Point(x=3, y=4), Point(x=5, y=6))]</span></pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0: </span><a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> constructs now support
+“ordering” comparisons such as <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, and similar, in addition
+to the already-present support for <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The “ordering” comparison above using the “less than” operator (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code>)
+as well as the “equality” comparison using <code class="docutils literal notranslate"><span class="pre">==</span></code>, when used to generate
+SQL expressions, are implemented by the <code class="xref py py-class docutils literal notranslate"><span class="pre">Comparator</span></code>
+class, and don’t make use of the comparison methods on the composite class
+itself, e.g. the <code class="docutils literal notranslate"><span class="pre">__lt__()</span></code> or <code class="docutils literal notranslate"><span class="pre">__eq__()</span></code> methods. From this it
+follows that the <code class="docutils literal notranslate"><span class="pre">Point</span></code> dataclass above also need not implement the
+dataclasses <code class="docutils literal notranslate"><span class="pre">order=True</span></code> parameter for the above SQL operations to work.
+The section <a class="reference internal" href="#composite-operations"><span class="std std-ref">Redefining Comparison Operations for Composites</span></a> contains background on how
+to customize the comparison operations.</p>
+</div>
+</li>
+<li><p><strong>Updating Point objects on Vertex Instances</strong></p>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">Point</span></code> object <strong>must be replaced by a new object</strong> for
+changes to be detected:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">Vertex</span><span class="p">))</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y2</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">vertices</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">x2</span><span class="o">=?</span><span class="p">,</span><span class="w"> </span><span class="n">y2</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>In order to allow in place changes on the composite object, the
+<a class="reference internal" href="extensions/mutable.html"><span class="std std-ref">Mutation Tracking</span></a> extension must be used.  See the section
+<a class="reference internal" href="extensions/mutable.html#mutable-composites"><span class="std std-ref">Establishing Mutability on Composites</span></a> for examples.</p>
+</li>
+</ul>
+</section>
+<section id="other-mapping-forms-for-composites">
+<span id="orm-composite-other-forms"></span><h2>Other mapping forms for composites<a class="headerlink" href="#other-mapping-forms-for-composites" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> construct may be passed the relevant columns
+using a <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> construct, a <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>,
+or the string name of an existing mapped column.   The following examples
+illustrate an equivalent mapping as that of the main section above.</p>
+<section id="map-columns-directly-then-pass-to-composite">
+<h3>Map columns directly, then pass to composite<a class="headerlink" href="#map-columns-directly-then-pass-to-composite" title="Link to this heading">¶</a></h3>
+<p>Here we pass the existing <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> instances to the
+<a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> construct, as in the non-annotated example below
+where we also pass the <code class="docutils literal notranslate"><span class="pre">Point</span></code> class as the first argument to
+<a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Integer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span><span class="p">,</span> <span class="n">composite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Vertex</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;vertices&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+    <span class="n">y1</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+</section>
+<section id="map-columns-directly-pass-attribute-names-to-composite">
+<span id="composite-with-typing"></span><h3>Map columns directly, pass attribute names to composite<a class="headerlink" href="#map-columns-directly-pass-attribute-names-to-composite" title="Link to this heading">¶</a></h3>
+<p>We can write the same example above using more annotated forms where we have
+the option to pass attribute names to <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> instead of
+full column constructs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span><span class="p">,</span> <span class="n">composite</span><span class="p">,</span> <span class="n">Mapped</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Vertex</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;vertices&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+    <span class="n">y1</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+    <span class="n">x2</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+    <span class="n">y2</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+
+    <span class="n">start</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;y1&quot;</span><span class="p">)</span>
+    <span class="n">end</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;y2&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+</section>
+<section id="imperative-mapping-and-imperative-table">
+<h3>Imperative mapping and imperative table<a class="headerlink" href="#imperative-mapping-and-imperative-table" title="Link to this heading">¶</a></h3>
+<p>When using <a class="reference internal" href="declarative_tables.html#orm-imperative-table-configuration"><span class="std std-ref">imperative table</span></a> or
+fully <a class="reference internal" href="mapping_styles.html#orm-imperative-mapping"><span class="std std-ref">imperative</span></a> mappings, we have access
+to <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> objects directly.  These may be passed to
+<a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> as well, as in the imperative example below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mapper_registry</span><span class="o">.</span><span class="n">map_imperatively</span><span class="p">(</span>
+    <span class="n">Vertex</span><span class="p">,</span>
+    <span class="n">vertices_table</span><span class="p">,</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">composite</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="n">vertices_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="n">vertices_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">y1</span><span class="p">),</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">composite</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="n">vertices_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="n">vertices_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">y2</span><span class="p">),</span>
+    <span class="p">},</span>
+<span class="p">)</span></pre></div>
+</div>
+</section>
+</section>
+<section id="using-legacy-non-dataclasses">
+<span id="composite-legacy-no-dataclass"></span><h2>Using Legacy Non-Dataclasses<a class="headerlink" href="#using-legacy-non-dataclasses" title="Link to this heading">¶</a></h2>
+<p>If not using a dataclass, the requirements for the custom datatype class are
+that it have a constructor
+which accepts positional arguments corresponding to its column format, and
+also provides a method <code class="docutils literal notranslate"><span class="pre">__composite_values__()</span></code> which returns the state of
+the object as a list or tuple, in order of its column-based attributes. It
+also should supply adequate <code class="docutils literal notranslate"><span class="pre">__eq__()</span></code> and <code class="docutils literal notranslate"><span class="pre">__ne__()</span></code> methods which test
+the equality of two instances.</p>
+<p>To illustrate the equivalent <code class="docutils literal notranslate"><span class="pre">Point</span></code> class from the main section
+not using a dataclass:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__composite_values__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Point(x=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">!r}</span><span class="s2">, y=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Point</span><span class="p">)</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Usage with <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> then proceeds where the columns to be
+associated with the <code class="docutils literal notranslate"><span class="pre">Point</span></code> class must also be declared with explicit
+types, using one of the forms at <a class="reference internal" href="#orm-composite-other-forms"><span class="std std-ref">Other mapping forms for composites</span></a>.</p>
+</section>
+<section id="tracking-in-place-mutations-on-composites">
+<h2>Tracking In-Place Mutations on Composites<a class="headerlink" href="#tracking-in-place-mutations-on-composites" title="Link to this heading">¶</a></h2>
+<p>In-place changes to an existing composite value are
+not tracked automatically.  Instead, the composite class needs to provide
+events to its parent object explicitly.   This task is largely automated
+via the usage of the <a class="reference internal" href="extensions/mutable.html#sqlalchemy.ext.mutable.MutableComposite" title="sqlalchemy.ext.mutable.MutableComposite"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableComposite</span></code></a> mixin, which uses events
+to associate each user-defined composite object with all parent associations.
+Please see the example in <a class="reference internal" href="extensions/mutable.html#mutable-composites"><span class="std std-ref">Establishing Mutability on Composites</span></a>.</p>
+</section>
+<section id="redefining-comparison-operations-for-composites">
+<span id="composite-operations"></span><h2>Redefining Comparison Operations for Composites<a class="headerlink" href="#redefining-comparison-operations-for-composites" title="Link to this heading">¶</a></h2>
+<p>The “equals” comparison operation by default produces an AND of all
+corresponding columns equated to one another. This can be changed using
+the <code class="docutils literal notranslate"><span class="pre">comparator_factory</span></code> argument to <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a>, where we
+specify a custom <a class="reference internal" href="internals.html#sqlalchemy.orm.CompositeProperty.Comparator" title="sqlalchemy.orm.CompositeProperty.Comparator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comparator</span></code></a> class
+to define existing or new operations.
+Below we illustrate the “greater than” operator, implementing
+the same expression that the base “greater than” does:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">composite</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">CompositeProperty</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">and_</span>
+
+
+<span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">int</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PointComparator</span><span class="p">(</span><span class="n">CompositeProperty</span><span class="o">.</span><span class="n">Comparator</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;redefine the &#39;greater than&#39; operation&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">and_</span><span class="p">(</span>
+            <span class="o">*</span><span class="p">[</span>
+                <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span>
+                <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">zip</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__clause_element__</span><span class="p">()</span><span class="o">.</span><span class="n">clauses</span><span class="p">,</span>
+                    <span class="n">dataclasses</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="n">other</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Vertex</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;vertices&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">start</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span>
+        <span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">),</span> <span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;y1&quot;</span><span class="p">),</span> <span class="n">comparator_factory</span><span class="o">=</span><span class="n">PointComparator</span>
+    <span class="p">)</span>
+    <span class="n">end</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span>
+        <span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">),</span> <span class="n">mapped_column</span><span class="p">(</span><span class="s2">&quot;y2&quot;</span><span class="p">),</span> <span class="n">comparator_factory</span><span class="o">=</span><span class="n">PointComparator</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Since <code class="docutils literal notranslate"><span class="pre">Point</span></code> is a dataclass, we may make use of
+<code class="docutils literal notranslate"><span class="pre">dataclasses.astuple()</span></code> to get a tuple form of <code class="docutils literal notranslate"><span class="pre">Point</span></code> instances.</p>
+<p>The custom comparator then returns the appropriate SQL expression:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">Vertex</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">Point</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class='show_sql_print'><span class="n">vertices</span><span class="p">.</span><span class="n">x1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="n">x1_1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">y1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="n">y1_1</span>
+</div></pre></div>
+</div>
+</section>
+<section id="nesting-composites">
+<h2>Nesting Composites<a class="headerlink" href="#nesting-composites" title="Link to this heading">¶</a></h2>
+<p>Composite objects can be defined to work in simple nested schemes, by
+redefining behaviors within the composite class to work as desired, then
+mapping the composite class to the full length of individual columns normally.
+This requires that additional methods to move between the “nested” and
+“flat” forms are defined.</p>
+<p>Below we reorganize the <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> class to itself be a composite object which
+refers to <code class="docutils literal notranslate"><span class="pre">Point</span></code> objects. <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> and <code class="docutils literal notranslate"><span class="pre">Point</span></code> can be dataclasses,
+however we will add a custom construction method to <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> that can be used
+to create new <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> objects given four column values, which will will
+arbitrarily name <code class="docutils literal notranslate"><span class="pre">_generate()</span></code> and define as a classmethod so that we can
+make new <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> objects by passing values to the <code class="docutils literal notranslate"><span class="pre">Vertex._generate()</span></code>
+method.</p>
+<p>We will also implement the <code class="docutils literal notranslate"><span class="pre">__composite_values__()</span></code> method, which is a fixed
+name recognized by the <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> construct (introduced previously
+at <a class="reference internal" href="#composite-legacy-no-dataclass"><span class="std std-ref">Using Legacy Non-Dataclasses</span></a>) that indicates a standard way of
+receiving the object as a flat tuple of column values, which in this case will
+supersede the usual dataclass-oriented methodology.</p>
+<p>With our custom <code class="docutils literal notranslate"><span class="pre">_generate()</span></code> constructor and
+<code class="docutils literal notranslate"><span class="pre">__composite_values__()</span></code> serializer method, we can now move between
+a flat tuple of columns and <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> objects that contain <code class="docutils literal notranslate"><span class="pre">Point</span></code>
+instances.   The <code class="docutils literal notranslate"><span class="pre">Vertex._generate</span></code> method is passed as the
+first argument to the <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a> construct as the source of new
+<code class="docutils literal notranslate"><span class="pre">Vertex</span></code> instances, and the <code class="docutils literal notranslate"><span class="pre">__composite_values__()</span></code> method will be
+used implicitly by <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a>.</p>
+<p>For the purposes of the example, the <code class="docutils literal notranslate"><span class="pre">Vertex</span></code> composite is then mapped to a
+class called <code class="docutils literal notranslate"><span class="pre">HasVertex</span></code>, which is where the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> containing the
+four source columns ultimately resides:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">composite</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+
+
+<span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">int</span>
+
+
+<span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Vertex</span><span class="p">:</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">Point</span>
+    <span class="n">end</span><span class="p">:</span> <span class="n">Point</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">int</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span> <span class="n">int</span><span class="p">,</span> <span class="n">x2</span><span class="p">:</span> <span class="n">int</span><span class="p">,</span> <span class="n">y2</span><span class="p">:</span> <span class="n">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vertex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate a Vertex from a row&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Vertex</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__composite_values__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate a row from a Vertex&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HasVertex</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;has_vertex&quot;</span>
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">x1</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+    <span class="n">y1</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+    <span class="n">x2</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+    <span class="n">y2</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span>
+
+    <span class="n">vertex</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Vertex</span><span class="p">]</span> <span class="o">=</span> <span class="n">composite</span><span class="p">(</span><span class="n">Vertex</span><span class="o">.</span><span class="n">_generate</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;y1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;y2&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The above mapping can then be used in terms of <code class="docutils literal notranslate"><span class="pre">HasVertex</span></code>, <code class="docutils literal notranslate"><span class="pre">Vertex</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">Point</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hv</span> <span class="o">=</span> <span class="n">HasVertex</span><span class="p">(</span><span class="n">vertex</span><span class="o">=</span><span class="n">Vertex</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">hv</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">HasVertex</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">HasVertex</span><span class="o">.</span><span class="n">vertex</span> <span class="o">==</span> <span class="n">Vertex</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+<span class="n">hv</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="n">print</span><span class="p">(</span><span class="n">hv</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+<span class="n">print</span><span class="p">(</span><span class="n">hv</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">end</span><span class="p">)</span></pre></div>
+</div>
+</section>
+<section id="composite-api">
+<h2>Composite API<a class="headerlink" href="#composite-api" title="Link to this heading">¶</a></h2>
+<table class="longtable docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head">Object Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.orm.composite"><span class="sig-name descname">composite</span></a>([_class_or_attr], *attrs, [group, deferred, raiseload, comparator_factory, active_history, init, repr, default, default_factory, compare, kw_only, hash, info, doc], **__kw)</p></td>
+<td><p>Return a composite column-based property for use with a Mapper.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy.orm.composite">
+<em class="property"><span class="pre">function</span> </em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.orm.</span></span><span class="sig-name descname"><span class="pre">composite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_class_or_attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">_CC</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_CC</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_CompositeAttrType</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attrs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_CompositeAttrType</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deferred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raiseload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparator_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Composite.Comparator</span><span class="p"><span class="pre">[</span></span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">active_history</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_NoArg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_NoArg.NO_ARG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_NoArg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_NoArg.NO_ARG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_NoArg.NO_ARG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_NoArg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_NoArg.NO_ARG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_NoArg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_NoArg.NO_ARG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_NoArg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_NoArg.NO_ARG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_NoArg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">_NoArg.NO_ARG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_InfoType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">__kw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="internals.html#sqlalchemy.orm.Composite" title="sqlalchemy.orm.Composite"><span class="pre">Composite</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sqlalchemy.orm.composite" title="Link to this definition">¶</a></dt>
+<dd><p>Return a composite column-based property for use with a Mapper.</p>
+<p>See the mapping documentation section <a class="reference internal" href="#mapper-composite"><span class="std std-ref">Composite Column Types</span></a> for a
+full usage example.</p>
+<p>The <a class="reference internal" href="internals.html#sqlalchemy.orm.MapperProperty" title="sqlalchemy.orm.MapperProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapperProperty</span></code></a> returned by <a class="reference internal" href="#sqlalchemy.orm.composite" title="sqlalchemy.orm.composite"><code class="xref py py-func docutils literal notranslate"><span class="pre">composite()</span></code></a>
+is the <a class="reference internal" href="internals.html#sqlalchemy.orm.Composite" title="sqlalchemy.orm.Composite"><code class="xref py py-class docutils literal notranslate"><span class="pre">Composite</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.class_"></span><strong>class_</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.class_">¶</a> – The “composite type” class, or any classmethod or callable which
+will produce a new instance of the composite object given the
+column values in order.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.*attrs"></span><strong>*attrs</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.*attrs">¶</a> – <p>List of elements to be mapped, which may include:</p>
+<ul>
+<li><p><a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> objects</p></li>
+<li><p><a class="reference internal" href="mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> constructs</p></li>
+<li><p>string names of other attributes on the mapped class, which may be
+any other SQL or object-mapped attribute.  This can for
+example allow a composite that refers to a many-to-one relationship</p></li>
+</ul>
+</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.active_history"></span><strong>active_history=False</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.active_history">¶</a> – When <code class="docutils literal notranslate"><span class="pre">True</span></code>, indicates that the “previous” value for a
+scalar attribute should be loaded when replaced, if not
+already loaded.  See the same flag on <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.column_property" title="sqlalchemy.orm.column_property"><code class="xref py py-func docutils literal notranslate"><span class="pre">column_property()</span></code></a>.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.group"></span><strong>group</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.group">¶</a> – A group name for this property when marked as deferred.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.deferred"></span><strong>deferred</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.deferred">¶</a> – When True, the column property is “deferred”, meaning that it does
+not load immediately, and is instead loaded when the attribute is
+first accessed on an instance.  See also
+<a class="reference internal" href="queryguide/columns.html#sqlalchemy.orm.deferred" title="sqlalchemy.orm.deferred"><code class="xref py py-func docutils literal notranslate"><span class="pre">deferred()</span></code></a>.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.comparator_factory"></span><strong>comparator_factory</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.comparator_factory">¶</a> – a class which extends
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Comparator</span></code> which provides custom SQL
+clause generation for comparison operations.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.doc"></span><strong>doc</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.doc">¶</a> – optional string that will be applied as the doc on the
+class-bound descriptor.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.info"></span><strong>info</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.info">¶</a> – Optional data dictionary which will be populated into the
+<a class="reference internal" href="internals.html#sqlalchemy.orm.MapperProperty.info" title="sqlalchemy.orm.MapperProperty.info"><code class="xref py py-attr docutils literal notranslate"><span class="pre">MapperProperty.info</span></code></a> attribute of this object.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.init"></span><strong>init</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.init">¶</a> – Specific to <a class="reference internal" href="dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a>,
+specifies if the mapped attribute should be part of the <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>
+method as generated by the dataclass process.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.repr"></span><strong>repr</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.repr">¶</a> – Specific to <a class="reference internal" href="dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a>,
+specifies if the mapped attribute should be part of the <code class="docutils literal notranslate"><span class="pre">__repr__()</span></code>
+method as generated by the dataclass process.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.default_factory"></span><strong>default_factory</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.default_factory">¶</a> – Specific to
+<a class="reference internal" href="dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a>,
+specifies a default-value generation function that will take place
+as part of the <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>
+method as generated by the dataclass process.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.compare"></span><strong>compare</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.compare">¶</a> – <p>Specific to
+<a class="reference internal" href="dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a>, indicates if this field
+should be included in comparison operations when generating the
+<code class="docutils literal notranslate"><span class="pre">__eq__()</span></code> and <code class="docutils literal notranslate"><span class="pre">__ne__()</span></code> methods for the mapped class.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.0b4.</span></p>
+</div>
+</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.kw_only"></span><strong>kw_only</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.kw_only">¶</a> – Specific to
+<a class="reference internal" href="dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a>, indicates if this field
+should be marked as keyword-only when generating the <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.composite.params.hash"></span><strong>hash</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.composite.params.hash">¶</a> – <p>Specific to
+<a class="reference internal" href="dataclasses.html#orm-declarative-native-dataclasses"><span class="std std-ref">Declarative Dataclass Mapping</span></a>, controls if this field
+is included when generating the <code class="docutils literal notranslate"><span class="pre">__hash__()</span></code> method for the mapped
+class.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.36.</span></p>
+</div>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="mapped_attributes.html" title="previous chapter">Changing Attribute Behavior</a>
+        Next:
+        <a href="inheritance.html" title="next chapter">Mapping Class Inheritance Hierarchies</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

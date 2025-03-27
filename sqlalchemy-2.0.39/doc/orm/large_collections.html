@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Working with Large Collections
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="Relationship Configuration" href="relationships.html" />
+        <link rel="next" title="Collection Customization and API Details" href="collection_api.html" />
+        <link rel="prev" title="Configuring how Relationship Joins" href="join_conditions.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Configuration</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="basic_relationships.html">Basic Relationship Patterns</a></span></li>
+<li><span class="link-container"><a class="reference external" href="self_referential.html">Adjacency List Relationships</a></span></li>
+<li><span class="link-container"><a class="reference external" href="join_conditions.html">Configuring how Relationship Joins</a></span></li>
+<li class="selected"><span class="link-container"><strong>Working with Large Collections</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#write-only-relationships">Write Only Relationships</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#creating-and-persisting-new-write-only-collections">Creating and Persisting New Write Only Collections</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#adding-new-items-to-an-existing-collection">Adding New Items to an Existing Collection</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#querying-items">Querying Items</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#removing-items">Removing Items</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#bulk-insert-of-new-items">Bulk INSERT of New Items</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#one-to-many-collections">One to Many Collections</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#many-to-many-collections">Many to Many Collections</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#bulk-update-and-delete-of-items">Bulk UPDATE and DELETE of Items</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#id1">One To Many Collections</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#id2">Many to Many Collections</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#write-only-collections-api-documentation">Write Only Collections - API Documentation</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection.add"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.add()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection.add_all"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.add_all()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection.delete"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.delete()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection.insert"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.insert()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection.remove"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.remove()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection.select"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.select()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyCollection.update"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.update()</span></code></a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.WriteOnlyMapped"><code class="docutils literal notranslate"><span class="pre">WriteOnlyMapped</span></code></a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#dynamic-relationship-loaders">Dynamic Relationship Loaders</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#dynamic-relationship-loaders-api">Dynamic Relationship Loaders - API</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.AppenderQuery.add"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.add()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.AppenderQuery.add_all"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.add_all()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.AppenderQuery.append"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.append()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.AppenderQuery.count"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.count()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.AppenderQuery.extend"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.extend()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.AppenderQuery.remove"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.remove()</span></code></a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.DynamicMapped"><code class="docutils literal notranslate"><span class="pre">DynamicMapped</span></code></a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#setting-raiseload">Setting RaiseLoad</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-passive-deletes">Using Passive Deletes</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="collection_api.html">Collection Customization and API Details</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationship_persistence.html">Special Relationship Persistence Patterns</a></span></li>
+<li><span class="link-container"><a class="reference external" href="backref.html">Using the legacy ‘backref’ relationship parameter</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationship_api.html">Relationships API</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="queryguide/index.html">ORM Querying Guide</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="join_conditions.html" title="previous chapter">Configuring how Relationship Joins</a></li>
+                <li><b>Next:</b>
+                <a href="collection_api.html" title="next chapter">Collection Customization and API Details</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                    <ul><li><a href="relationships.html" title="Relationship Configuration">Relationship Configuration</a></li>
+                </ul>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#working-with-large-collections">Working with Large Collections</a><ul>
+<li><a class="reference internal" href="#write-only-relationships">Write Only Relationships</a><ul>
+<li><a class="reference internal" href="#creating-and-persisting-new-write-only-collections">Creating and Persisting New Write Only Collections</a></li>
+<li><a class="reference internal" href="#adding-new-items-to-an-existing-collection">Adding New Items to an Existing Collection</a></li>
+<li><a class="reference internal" href="#querying-items">Querying Items</a></li>
+<li><a class="reference internal" href="#removing-items">Removing Items</a></li>
+<li><a class="reference internal" href="#bulk-insert-of-new-items">Bulk INSERT of New Items</a><ul>
+<li><a class="reference internal" href="#one-to-many-collections">One to Many Collections</a></li>
+<li><a class="reference internal" href="#many-to-many-collections">Many to Many Collections</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bulk-update-and-delete-of-items">Bulk UPDATE and DELETE of Items</a><ul>
+<li><a class="reference internal" href="#id1">One To Many Collections</a></li>
+<li><a class="reference internal" href="#id2">Many to Many Collections</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#write-only-collections-api-documentation">Write Only Collections - API Documentation</a><ul>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.add()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add_all"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.add_all()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.delete"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.delete()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.insert"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.insert()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.remove"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.remove()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.select"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.select()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.update"><code class="docutils literal notranslate"><span class="pre">WriteOnlyCollection.update()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyMapped"><code class="docutils literal notranslate"><span class="pre">WriteOnlyMapped</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dynamic-relationship-loaders">Dynamic Relationship Loaders</a><ul>
+<li><a class="reference internal" href="#dynamic-relationship-loaders-api">Dynamic Relationship Loaders - API</a><ul>
+<li><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.add"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.add()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.add_all"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.add_all()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.append"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.append()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.count"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.count()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.extend"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.extend()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.remove"><code class="docutils literal notranslate"><span class="pre">AppenderQuery.remove()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy.orm.DynamicMapped"><code class="docutils literal notranslate"><span class="pre">DynamicMapped</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setting-raiseload">Setting RaiseLoad</a></li>
+<li><a class="reference internal" href="#using-passive-deletes">Using Passive Deletes</a></li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-large_collections" >
+        
+<section id="working-with-large-collections">
+<span id="largecollections"></span><h1>Working with Large Collections<a class="headerlink" href="#working-with-large-collections" title="Link to this heading">¶</a></h1>
+<p>The default behavior of <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> is to fully load
+the contents of collections into memory, based on a configured
+<a class="reference internal" href="queryguide/relationships.html#orm-queryguide-relationship-loaders"><span class="std std-ref">loader strategy</span></a> that controls
+when and how these contents are loaded from the database.  Related collections
+may be loaded into memory not just when they are accessed, or eagerly loaded,
+but in most cases will require population when the collection
+itself is mutated, as well as in cases where the owning object is to be
+deleted by the unit of work system.</p>
+<p>When a related collection is potentially very large, it may not be feasible
+for such a collection to be populated into memory under any circumstances,
+as the operation may be overly consuming of time, network and memory
+resources.</p>
+<p>This section includes API features intended to allow <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+to be used with large collections while maintaining adequate performance.</p>
+<section id="write-only-relationships">
+<span id="write-only-relationship"></span><h2>Write Only Relationships<a class="headerlink" href="#write-only-relationships" title="Link to this heading">¶</a></h2>
+<p>The <strong>write only</strong> loader strategy is the primary means of configuring a
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> that will remain writeable, but will not load
+its contents into memory.  A write-only ORM configuration in modern
+type-annotated Declarative form is illustrated below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">func</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapped</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapped_column</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">WriteOnlyMapped</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Account</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;account&quot;</span>
+<span class="gp">... </span>    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">identifier</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">account_transactions</span><span class="p">:</span> <span class="n">WriteOnlyMapped</span><span class="p">[</span><span class="s2">&quot;AccountTransaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">cascade</span><span class="o">=</span><span class="s2">&quot;all, delete-orphan&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">passive_deletes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;AccountTransaction.timestamp&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Account(identifier=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">identifier</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">AccountTransaction</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;account_transaction&quot;</span>
+<span class="gp">... </span>    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">account_id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;account.id&quot;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s2">&quot;cascade&quot;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span>    <span class="n">description</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">amount</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">timestamp</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">(</span>
+<span class="gp">... </span>            <span class="sa">f</span><span class="s2">&quot;AccountTransaction(amount=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, &quot;</span>
+<span class="gp">... </span>            <span class="sa">f</span><span class="s2">&quot;timestamp=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+<span class="gp">... </span>        <span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;eager_defaults&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Above, the <code class="docutils literal notranslate"><span class="pre">account_transactions</span></code> relationship is configured not using the
+ordinary <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation, but instead
+using the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyMapped" title="sqlalchemy.orm.WriteOnlyMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyMapped</span></code></a> type annotation, which at runtime will
+assign the <a class="reference internal" href="queryguide/relationships.html#orm-queryguide-relationship-loaders"><span class="std std-ref">loader strategy</span></a> of
+<code class="docutils literal notranslate"><span class="pre">lazy=&quot;write_only&quot;</span></code> to the target <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>.
+The <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyMapped" title="sqlalchemy.orm.WriteOnlyMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyMapped</span></code></a> annotation is an
+alternative form of the <a class="reference internal" href="internals.html#sqlalchemy.orm.Mapped" title="sqlalchemy.orm.Mapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapped</span></code></a> annotation which indicate the use
+of the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> collection type on instances of the
+object.</p>
+<p>The above <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> configuration also includes several
+elements that are specific to what action to take when <code class="docutils literal notranslate"><span class="pre">Account</span></code> objects
+are deleted, as well as when <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects are removed from the
+<code class="docutils literal notranslate"><span class="pre">account_transactions</span></code> collection.  These elements are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">passive_deletes=True</span></code> - allows the <a class="reference internal" href="../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a> to forego having
+to load the collection when <code class="docutils literal notranslate"><span class="pre">Account</span></code> is deleted; see
+<a class="reference internal" href="cascades.html#passive-deletes"><span class="std std-ref">Using foreign key ON DELETE cascade with ORM relationships</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ondelete=&quot;cascade&quot;</span></code> configured on the <a class="reference internal" href="../core/constraints.html#sqlalchemy.schema.ForeignKey" title="sqlalchemy.schema.ForeignKey"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForeignKey</span></code></a> constraint.
+This is also detailed at <a class="reference internal" href="cascades.html#passive-deletes"><span class="std std-ref">Using foreign key ON DELETE cascade with ORM relationships</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cascade=&quot;all,</span> <span class="pre">delete-orphan&quot;</span></code> - instructs the <a class="reference internal" href="../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a> to
+delete <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects when they are removed from the
+collection.  See <a class="reference internal" href="cascades.html#cascade-delete-orphan"><span class="std std-ref">delete-orphan</span></a> in the <a class="reference internal" href="cascades.html#unitofwork-cascades"><span class="std std-ref">Cascades</span></a>
+document.</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0: </span>Added “Write only” relationship loaders.</p>
+</div>
+<section id="creating-and-persisting-new-write-only-collections">
+<h3>Creating and Persisting New Write Only Collections<a class="headerlink" href="#creating-and-persisting-new-write-only-collections" title="Link to this heading">¶</a></h3>
+<p>The write-only collection allows for direct assignment of the collection
+as a whole <strong>only</strong> for <a class="reference internal" href="../glossary.html#term-transient"><span class="xref std std-term">transient</span></a> or <a class="reference internal" href="../glossary.html#term-pending"><span class="xref std std-term">pending</span></a> objects.
+With our above mapping, this indicates we can create a new <code class="docutils literal notranslate"><span class="pre">Account</span></code>
+object with a sequence of <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects to be added
+to a <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>.   Any Python iterable may be used as the
+source of objects to start, where below we use a Python <code class="docutils literal notranslate"><span class="pre">list</span></code>:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_account</span> <span class="o">=</span> <span class="n">Account</span><span class="p">(</span>
+<span class="go">...     identifier=&quot;account_01&quot;,</span>
+<span class="go">...     account_transactions=[</span>
+<span class="go">...         AccountTransaction(description=&quot;initial deposit&quot;, amount=Decimal(&quot;500.00&quot;)),</span>
+<span class="go">...         AccountTransaction(description=&quot;transfer&quot;, amount=Decimal(&quot;1000.00&quot;)),</span>
+<span class="go">...         AccountTransaction(description=&quot;withdrawal&quot;, amount=Decimal(&quot;-29.50&quot;)),</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<span class="go">...     session.add(new_account)</span>
+<span class="go">...     session.commit()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="p">(</span><span class="n">identifier</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;account_01&#39;</span><span class="p">,)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;initial deposit&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="p">[</span><span class="n">insertmanyvalues</span><span class="w"> </span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;transfer&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="p">[</span><span class="n">insertmanyvalues</span><span class="w"> </span><span class="mi">3</span><span class="o">/</span><span class="mi">3</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;withdrawal&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">29</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>Once an object is database-persisted (i.e. in the <a class="reference internal" href="../glossary.html#term-persistent"><span class="xref std std-term">persistent</span></a> or
+<a class="reference internal" href="../glossary.html#term-detached"><span class="xref std std-term">detached</span></a> state), the collection has the ability to be extended with new
+items as well as the ability for individual items to be removed. However, the
+collection may <strong>no longer be re-assigned with a full replacement collection</strong>,
+as such an operation requires that the previous collection is fully
+loaded into memory in order to reconcile the old entries with the new ones:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_account</span><span class="o">.</span><span class="n">account_transactions</span> <span class="o">=</span> <span class="p">[</span>
+<span class="go">...     AccountTransaction(description=&quot;some transaction&quot;, amount=Decimal(&quot;10.00&quot;))</span>
+<span class="go">... ]</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="go">...</span>
+<span class="go">sqlalchemy.exc.InvalidRequestError: Collection &quot;Account.account_transactions&quot; does not</span>
+<span class="go">support implicit iteration; collection replacement operations can&#39;t be used</span></pre></div>
+</div>
+</section>
+<section id="adding-new-items-to-an-existing-collection">
+<h3>Adding New Items to an Existing Collection<a class="headerlink" href="#adding-new-items-to-an-existing-collection" title="Link to this heading">¶</a></h3>
+<p>For write-only collections of persistent objects,
+modifications to the collection using <a class="reference internal" href="../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a> processes may proceed
+only by using the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add" title="sqlalchemy.orm.WriteOnlyCollection.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.add()</span></code></a>,
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add_all" title="sqlalchemy.orm.WriteOnlyCollection.add_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.add_all()</span></code></a> and <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.remove" title="sqlalchemy.orm.WriteOnlyCollection.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.remove()</span></code></a>
+methods:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">existing_account</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">Account</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;account_01&quot;</span><span class="p">))</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">identifier</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;account_01&#39;</span><span class="p">,)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">existing_account</span><span class="o">.</span><span class="n">account_transactions</span><span class="o">.</span><span class="n">add_all</span><span class="p">(</span>
+<span class="go">...     [</span>
+<span class="go">...         AccountTransaction(description=&quot;paycheck&quot;, amount=Decimal(&quot;2000.00&quot;)),</span>
+<span class="go">...         AccountTransaction(description=&quot;rent&quot;, amount=Decimal(&quot;-800.00&quot;)),</span>
+<span class="go">...     ]</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;paycheck&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2000</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="p">[</span><span class="n">insertmanyvalues</span><span class="w"> </span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;rent&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">800</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>The items added above are held in a pending queue within the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> until the next flush, at which point they are INSERTed
+into the database, assuming the added objects were previously <a class="reference internal" href="../glossary.html#term-transient"><span class="xref std std-term">transient</span></a>.</p>
+</section>
+<section id="querying-items">
+<h3>Querying Items<a class="headerlink" href="#querying-items" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> does not at any point store a reference
+to the current contents of the collection, nor does it have any behavior where
+it would directly emit a SELECT to the database in order to load them; the
+overriding assumption is that the collection may contain many thousands or
+millions of rows, and should never be fully loaded into memory as a side effect
+of any other operation.</p>
+<p>Instead, the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> includes SQL-generating helpers
+such as <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.select" title="sqlalchemy.orm.WriteOnlyCollection.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.select()</span></code></a>, which will generate
+a <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a> construct pre-configured with the correct WHERE / FROM
+criteria for the current parent row, which can then be further modified in
+order to SELECT any range of rows desired, as well as invoked using features
+like <a class="reference internal" href="queryguide/api.html#orm-queryguide-yield-per"><span class="std std-ref">server side cursors</span></a> for processes that
+wish to iterate through the full collection in a memory-efficient manner.</p>
+<p>The statement generated is illustrated below. Note it also includes ORDER BY
+criteria, indicated in the example mapping by the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.order_by" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.order_by</span></code></a> parameter of <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>;
+this criteria would be omitted if the parameter were not configured:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">existing_account</span><span class="o">.</span><span class="n">account_transactions</span><span class="o">.</span><span class="n">select</span><span class="p">())</span>
+<div class='show_sql_print'><span class="k">SELECT</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">description</span><span class="p">,</span>
+<span class="n">account_transaction</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="k">timestamp</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">account_transaction</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="p">:</span><span class="n">param_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">account_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="k">timestamp</span>
+</div></pre></div>
+</div>
+<p>We may use this <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a> construct along with the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>
+in order to query for <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects, most easily using the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.scalars" title="sqlalchemy.orm.Session.scalars"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.scalars()</span></code></a> method that will return a <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Result" title="sqlalchemy.engine.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a> that
+yields ORM objects directly. It’s typical, though not required, that the
+<a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a> would be modified further to limit the records returned; in
+the example below, additional WHERE criteria to load only “debit” account
+transactions is added, along with “LIMIT 10” to retrieve only the first ten
+rows:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">account_transactions</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     existing_account.account_transactions.select()</span>
+<span class="go">...     .where(AccountTransaction.amount &lt; 0)</span>
+<span class="go">...     .limit(10)</span>
+<span class="go">... ).all()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">description</span><span class="p">,</span>
+<span class="n">account_transaction</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="k">timestamp</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">account_transaction</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">account_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">?</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="k">timestamp</span><span class="w">  </span><span class="k">LIMIT</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">OFFSET</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">account_transactions</span><span class="p">)</span>
+<span class="go">[AccountTransaction(amount=-29.50, timestamp=&#39;...&#39;), AccountTransaction(amount=-800.00, timestamp=&#39;...&#39;)]</span></pre></div>
+</div>
+</section>
+<section id="removing-items">
+<h3>Removing Items<a class="headerlink" href="#removing-items" title="Link to this heading">¶</a></h3>
+<p>Individual items that are loaded in the <a class="reference internal" href="../glossary.html#term-persistent"><span class="xref std std-term">persistent</span></a>
+state against the current <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> may be marked for removal
+from the collection using the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.remove" title="sqlalchemy.orm.WriteOnlyCollection.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.remove()</span></code></a> method.
+The flush process will implicitly consider the object to be already part
+of the collection when the operation proceeds.   The example below
+illustrates removal of an individual <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> item,
+which per <a class="reference internal" href="cascades.html#unitofwork-cascades"><span class="std std-ref">cascade</span></a> settings results in a
+DELETE of that row:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">existing_transaction</span> <span class="o">=</span> <span class="n">account_transactions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">existing_account</span><span class="o">.</span><span class="n">account_transactions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">existing_transaction</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<div class='show_sql'><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<p>As with any ORM-mapped collection, object removal may proceed either to
+de-associate the object from the collection while leaving the object present in
+the database, or may issue a DELETE for its row, based on the
+<a class="reference internal" href="cascades.html#cascade-delete-orphan"><span class="std std-ref">delete-orphan</span></a> configuration of the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>.</p>
+<p>Collection removal without deletion involves setting foreign key columns to
+NULL for a <a class="reference internal" href="basic_relationships.html#relationship-patterns-o2m"><span class="std std-ref">one-to-many</span></a> relationship, or
+deleting the corresponding association row for a
+<a class="reference internal" href="basic_relationships.html#relationships-many-to-many"><span class="std std-ref">many-to-many</span></a> relationship.</p>
+</section>
+<section id="bulk-insert-of-new-items">
+<h3>Bulk INSERT of New Items<a class="headerlink" href="#bulk-insert-of-new-items" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> can generate DML constructs such as
+<a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> objects, which may be used in an ORM context to
+produce bulk insert behavior.  See the section
+<a class="reference internal" href="queryguide/dml.html#orm-queryguide-bulk-insert"><span class="std std-ref">ORM Bulk INSERT Statements</span></a> for an overview of ORM bulk inserts.</p>
+<section id="one-to-many-collections">
+<h4>One to Many Collections<a class="headerlink" href="#one-to-many-collections" title="Link to this heading">¶</a></h4>
+<p>For a <strong>regular one to many collection only</strong>, the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.insert" title="sqlalchemy.orm.WriteOnlyCollection.insert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.insert()</span></code></a>
+method will produce an <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> construct which is pre-established with
+VALUES criteria corresponding to the parent object.  As this VALUES criteria
+is entirely against the related table, the statement can be used to
+INSERT new rows that will at the same time become new records in the
+related collection:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     existing_account.account_transactions.insert(),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;description&quot;: &quot;transaction 1&quot;, &quot;amount&quot;: Decimal(&quot;47.50&quot;)},</span>
+<span class="go">...         {&quot;description&quot;: &quot;transaction 2&quot;, &quot;amount&quot;: Decimal(&quot;-501.25&quot;)},</span>
+<span class="go">...         {&quot;description&quot;: &quot;transaction 3&quot;, &quot;amount&quot;: Decimal(&quot;1800.00&quot;)},</span>
+<span class="go">...         {&quot;description&quot;: &quot;transaction 4&quot;, &quot;amount&quot;: Decimal(&quot;-300.00&quot;)},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;transaction 1&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">47</span><span class="p">.</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;transaction 2&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">501</span><span class="p">.</span><span class="mi">25</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;transaction 3&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1800</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;transaction 4&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">300</span><span class="p">.</span><span class="mi">0</span><span class="p">)]</span>
+<span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="go">COMMIT</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="queryguide/dml.html#orm-queryguide-bulk-insert"><span class="std std-ref">ORM Bulk INSERT Statements</span></a> - in the <a class="reference internal" href="queryguide/index.html"><span class="std std-ref">ORM Querying Guide</span></a></p>
+<p><a class="reference internal" href="basic_relationships.html#relationship-patterns-o2m"><span class="std std-ref">One To Many</span></a> - at <a class="reference internal" href="basic_relationships.html#relationship-patterns"><span class="std std-ref">Basic Relationship Patterns</span></a></p>
+</div>
+</section>
+<section id="many-to-many-collections">
+<h4>Many to Many Collections<a class="headerlink" href="#many-to-many-collections" title="Link to this heading">¶</a></h4>
+<p>For a <strong>many to many collection</strong>, the relationship between two classes
+involves a third table that is configured using the
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a> parameter of <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-class docutils literal notranslate"><span class="pre">relationship</span></code></a>.
+To bulk insert rows into a collection of this type using
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>, the new records may be bulk-inserted separately
+first, retrieved using RETURNING, and those records then passed to the
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add_all" title="sqlalchemy.orm.WriteOnlyCollection.add_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.add_all()</span></code></a> method where the unit of work process
+will proceed to persist them as part of the collection.</p>
+<p>Supposing a class <code class="docutils literal notranslate"><span class="pre">BankAudit</span></code> referred to many <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code>
+records using a many-to-many table:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span><span class="p">,</span> <span class="n">Column</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">audit_to_transaction</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
+<span class="go">...     &quot;audit_transaction&quot;,</span>
+<span class="go">...     Base.metadata,</span>
+<span class="go">...     Column(&quot;audit_id&quot;, ForeignKey(&quot;audit.id&quot;, ondelete=&quot;CASCADE&quot;), primary_key=True),</span>
+<span class="go">...     Column(</span>
+<span class="go">...         &quot;transaction_id&quot;,</span>
+<span class="go">...         ForeignKey(&quot;account_transaction.id&quot;, ondelete=&quot;CASCADE&quot;),</span>
+<span class="go">...         primary_key=True,</span>
+<span class="go">...     ),</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">BankAudit</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="go">...     __tablename__ = &quot;audit&quot;</span>
+<span class="go">...     id: Mapped[int] = mapped_column(primary_key=True)</span>
+<span class="go">...     account_transactions: WriteOnlyMapped[&quot;AccountTransaction&quot;] = relationship(</span>
+<span class="go">...         secondary=audit_to_transaction, passive_deletes=True</span>
+<span class="go">...     )</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>To illustrate the two operations, we add more <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects
+using bulk insert, which we retrieve using RETURNING by adding
+<code class="docutils literal notranslate"><span class="pre">returning(AccountTransaction)</span></code> to the bulk INSERT statement (note that
+we could just as easily use existing <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects as well):</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_transactions</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     existing_account.account_transactions.insert().returning(AccountTransaction),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;description&quot;: &quot;odd trans 1&quot;, &quot;amount&quot;: Decimal(&quot;50000.00&quot;)},</span>
+<span class="go">...         {&quot;description&quot;: &quot;odd trans 2&quot;, &quot;amount&quot;: Decimal(&quot;25000.00&quot;)},</span>
+<span class="go">...         {&quot;description&quot;: &quot;odd trans 3&quot;, &quot;amount&quot;: Decimal(&quot;45.00&quot;)},</span>
+<span class="go">...     ],</span>
+<span class="go">... ).all()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span>
+<span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">account_id</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;odd trans 1&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">50000</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;odd trans 2&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">25000</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;odd trans 3&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">45</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+</div></pre></div>
+</div>
+<p>With a list of <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects ready, the
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add_all" title="sqlalchemy.orm.WriteOnlyCollection.add_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.add_all()</span></code></a> method is used to associate many rows
+at once with a new <code class="docutils literal notranslate"><span class="pre">BankAudit</span></code> object:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bank_audit</span> <span class="o">=</span> <span class="n">BankAudit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">bank_audit</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bank_audit</span><span class="o">.</span><span class="n">account_transactions</span><span class="o">.</span><span class="n">add_all</span><span class="p">(</span><span class="n">new_transactions</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">audit</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">audit_transaction</span><span class="w"> </span><span class="p">(</span><span class="n">audit_id</span><span class="p">,</span><span class="w"> </span><span class="n">transaction_id</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">)]</span>
+<span class="k">COMMIT</span>
+</div></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="queryguide/dml.html#orm-queryguide-bulk-insert"><span class="std std-ref">ORM Bulk INSERT Statements</span></a> - in the <a class="reference internal" href="queryguide/index.html"><span class="std std-ref">ORM Querying Guide</span></a></p>
+<p><a class="reference internal" href="basic_relationships.html#relationships-many-to-many"><span class="std std-ref">Many To Many</span></a> - at <a class="reference internal" href="basic_relationships.html#relationship-patterns"><span class="std std-ref">Basic Relationship Patterns</span></a></p>
+</div>
+</section>
+</section>
+<section id="bulk-update-and-delete-of-items">
+<h3>Bulk UPDATE and DELETE of Items<a class="headerlink" href="#bulk-update-and-delete-of-items" title="Link to this heading">¶</a></h3>
+<p>In a similar way in which <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> can generate
+<a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a> constructs with WHERE criteria pre-established, it can
+also generate <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> and <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Delete" title="sqlalchemy.sql.expression.Delete"><code class="xref py py-class docutils literal notranslate"><span class="pre">Delete</span></code></a> constructs with that
+same WHERE criteria, to allow criteria-oriented UPDATE and DELETE statements
+against the elements in a large collection.</p>
+<section id="id1">
+<h4>One To Many Collections<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<p>As is the case with INSERT, this feature is most straightforward with <strong>one
+to many collections</strong>.</p>
+<p>In the example below, the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.update" title="sqlalchemy.orm.WriteOnlyCollection.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.update()</span></code></a> method is used
+to generate an UPDATE statement is emitted against the elements
+in the collection, locating rows where the “amount” is equal to <code class="docutils literal notranslate"><span class="pre">-800</span></code> and
+adding the amount of <code class="docutils literal notranslate"><span class="pre">200</span></code> to them:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     existing_account.account_transactions.update()</span>
+<span class="go">...     .values(amount=AccountTransaction.amount + 200)</span>
+<span class="go">...     .where(AccountTransaction.amount == -800),</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">amount</span><span class="o">=</span><span class="p">(</span><span class="n">account_transaction</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">account_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">800</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>In a similar way, <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.delete" title="sqlalchemy.orm.WriteOnlyCollection.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.delete()</span></code></a> will produce a
+DELETE statement that is invoked in the same way:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     existing_account.account_transactions.delete().where(</span>
+<span class="go">...         AccountTransaction.amount.between(0, 30)</span>
+<span class="go">...     ),</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">account_id</span>
+<span class="k">AND</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+</div></pre></div>
+</div>
+</section>
+<section id="id2">
+<h4>Many to Many Collections<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The techniques here involve multi-table UPDATE expressions, which are
+slightly more advanced.</p>
+</div>
+<p>For bulk UPDATE and DELETE of <strong>many to many collections</strong>, in order for
+an UPDATE or DELETE statement to relate to the primary key of the
+parent object, the association table must be explicitly part of the
+UPDATE/DELETE statement, which requires
+either that the backend includes supports for non-standard SQL syntaxes,
+or extra explicit steps when constructing the UPDATE or DELETE statement.</p>
+<p>For backends that support multi-table versions of UPDATE, the
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.update" title="sqlalchemy.orm.WriteOnlyCollection.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.update()</span></code></a> method should work without extra steps
+for a many-to-many collection, as in the example below where an UPDATE
+is emitted against <code class="docutils literal notranslate"><span class="pre">AccountTransaction</span></code> objects in terms of the
+many-to-many <code class="docutils literal notranslate"><span class="pre">BankAudit.account_transactions</span></code> collection:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     bank_audit.account_transactions.update().values(</span>
+<span class="go">...         description=AccountTransaction.description + &quot; (audited)&quot;</span>
+<span class="go">...     )</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">description</span><span class="o">=</span><span class="p">(</span><span class="n">account_transaction</span><span class="p">.</span><span class="n">description</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">audit_transaction</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">audit_transaction</span><span class="p">.</span><span class="n">audit_id</span>
+<span class="k">AND</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">audit_transaction</span><span class="p">.</span><span class="n">transaction_id</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39; (audited)&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>The above statement automatically makes use of “UPDATE..FROM” syntax,
+supported by SQLite and others, to name the additional <code class="docutils literal notranslate"><span class="pre">audit_transaction</span></code>
+table in the WHERE clause.</p>
+<p>To UPDATE or DELETE a many-to-many collection where multi-table syntax is
+not available, the many-to-many criteria may be moved into SELECT that
+for example may be combined with IN to match rows.
+The <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> still helps us here, as we use the
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.select" title="sqlalchemy.orm.WriteOnlyCollection.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">WriteOnlyCollection.select()</span></code></a> method to generate this SELECT for
+us, making use of the <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select.with_only_columns" title="sqlalchemy.sql.expression.Select.with_only_columns"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Select.with_only_columns()</span></code></a> method to
+produce a <a class="reference internal" href="../glossary.html#term-scalar-subquery"><span class="xref std std-term">scalar subquery</span></a>:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subq</span> <span class="o">=</span> <span class="n">bank_audit</span><span class="o">.</span><span class="n">account_transactions</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">with_only_columns</span><span class="p">(</span><span class="n">AccountTransaction</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     update(AccountTransaction)</span>
+<span class="go">...     .values(description=AccountTransaction.description + &quot; (audited)&quot;)</span>
+<span class="go">...     .where(AccountTransaction.id.in_(subq))</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">account_transaction</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">description</span><span class="o">=</span><span class="p">(</span><span class="n">account_transaction</span><span class="p">.</span><span class="n">description</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">audit_transaction</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">audit_transaction</span><span class="p">.</span><span class="n">audit_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">account_transaction</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">audit_transaction</span><span class="p">.</span><span class="n">transaction_id</span><span class="p">)</span>
+<span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39; (audited)&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+</div></pre></div>
+</div>
+</section>
+</section>
+<section id="write-only-collections-api-documentation">
+<h3>Write Only Collections - API Documentation<a class="headerlink" href="#write-only-collections-api-documentation" title="Link to this heading">¶</a></h3>
+<table class="longtable docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head">Object Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><span class="sig-name descname">WriteOnlyCollection</span></a></p></td>
+<td><p>Write-only collection which can synchronize changes into the
+attribute event system.</p></td>
+</tr>
+<tr class="row-odd"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyMapped"><span class="sig-name descname">WriteOnlyMapped</span></a></p></td>
+<td><p>Represent the ORM mapped attribute type for a “write only” relationship.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.orm.</span></span><span class="sig-name descname"><span class="pre">WriteOnlyCollection</span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection" title="Link to this definition">¶</a></dt>
+<dd><p>Write-only collection which can synchronize changes into the
+attribute event system.</p>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> is used in a mapping by
+using the <code class="docutils literal notranslate"><span class="pre">&quot;write_only&quot;</span></code> lazy loading strategy with
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>.     For background on this configuration,
+see <a class="reference internal" href="#write-only-relationship"><span class="std std-ref">Write Only Relationships</span></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#write-only-relationship"><span class="std std-ref">Write Only Relationships</span></a></p>
+</div>
+<div class="class-members docutils container">
+<p><strong>Members</strong></p>
+<p><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add"><span class="sig-name descname">add()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.add_all"><span class="sig-name descname">add_all()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.delete"><span class="sig-name descname">delete()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.insert"><span class="sig-name descname">insert()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.remove"><span class="sig-name descname">remove()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.select"><span class="sig-name descname">select()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection.update"><span class="sig-name descname">update()</span></a></p>
+</div>
+<div class="class-bases docutils container">
+<p><strong>Class signature</strong></p>
+<p>class <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.writeonly.AbstractCollectionWriter</span></code>)</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection.add">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection.</span></code></a><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add an item to this <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>.</p>
+<p>The given item will be persisted to the database in terms of
+the parent instance’s collection on the next flush.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection.add_all">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection.</span></code></a><span class="sig-name descname"><span class="pre">add_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection.add_all" title="Link to this definition">¶</a></dt>
+<dd><p>Add an iterable of items to this <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>.</p>
+<p>The given items will be persisted to the database in terms of
+the parent instance’s collection on the next flush.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection.delete">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection.</span></code></a><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Delete" title="sqlalchemy.sql.dml.Delete"><span class="pre">Delete</span></a></span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Produce a <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Delete" title="sqlalchemy.sql.expression.Delete"><code class="xref py py-class docutils literal notranslate"><span class="pre">Delete</span></code></a> which will refer to rows in terms
+of this instance-local <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection.insert">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection.</span></code></a><span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.dml.Insert"><span class="pre">Insert</span></a></span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection.insert" title="Link to this definition">¶</a></dt>
+<dd><p>For one-to-many collections, produce a <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> which
+will insert new rows in terms of this this instance-local
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>.</p>
+<p>This construct is only supported for a <a class="reference internal" href="internals.html#sqlalchemy.orm.Relationship" title="sqlalchemy.orm.Relationship"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relationship</span></code></a>
+that does <strong>not</strong> include the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.secondary" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.secondary</span></code></a>
+parameter.  For relationships that refer to a many-to-many table,
+use ordinary bulk insert techniques to produce new objects, then
+use <code class="xref py py-meth docutils literal notranslate"><span class="pre">AbstractCollectionWriter.add_all()</span></code> to associate them
+with the collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection.remove">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection.</span></code></a><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection.remove" title="Link to this definition">¶</a></dt>
+<dd><p>Remove an item from this <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>.</p>
+<p>The given item will be removed from the parent instance’s collection on
+the next flush.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection.select">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection.</span></code></a><span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><span class="pre">Select</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.Tuple" title="sqlalchemy.sql.expression.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection.select" title="Link to this definition">¶</a></dt>
+<dd><p>Produce a <a class="reference internal" href="../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a> construct that represents the
+rows within this instance-local <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyCollection.update">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyCollection.</span></code></a><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.dml.Update"><span class="pre">Update</span></a></span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyCollection.update" title="Link to this definition">¶</a></dt>
+<dd><p>Produce a <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> which will refer to rows in terms
+of this instance-local <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy.orm.WriteOnlyMapped">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.orm.</span></span><span class="sig-name descname"><span class="pre">WriteOnlyMapped</span></span><a class="headerlink" href="#sqlalchemy.orm.WriteOnlyMapped" title="Link to this definition">¶</a></dt>
+<dd><p>Represent the ORM mapped attribute type for a “write only” relationship.</p>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyMapped" title="sqlalchemy.orm.WriteOnlyMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyMapped</span></code></a> type annotation may be used in an
+<a class="reference internal" href="declarative_tables.html#orm-declarative-mapped-column"><span class="std std-ref">Annotated Declarative Table</span></a> mapping
+to indicate that the <code class="docutils literal notranslate"><span class="pre">lazy=&quot;write_only&quot;</span></code> loader strategy should be used
+for a particular <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>.</p>
+<p>E.g.:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="go">class User(Base):</span>
+<span class="go">    __tablename__ = &quot;user&quot;</span>
+<span class="go">    id: Mapped[int] = mapped_column(primary_key=True)</span>
+<span class="go">    addresses: WriteOnlyMapped[Address] = relationship(</span>
+<span class="go">        cascade=&quot;all,delete-orphan&quot;</span>
+<span class="go">    )</span></pre></div>
+</div>
+<p>See the section <a class="reference internal" href="#write-only-relationship"><span class="std std-ref">Write Only Relationships</span></a> for background.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#write-only-relationship"><span class="std std-ref">Write Only Relationships</span></a> - complete background</p>
+<p><a class="reference internal" href="#sqlalchemy.orm.DynamicMapped" title="sqlalchemy.orm.DynamicMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicMapped</span></code></a> - includes legacy <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> support</p>
+</div>
+<div class="class-bases docutils container">
+<p><strong>Class signature</strong></p>
+<p>class <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyMapped" title="sqlalchemy.orm.WriteOnlyMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.WriteOnlyMapped</span></code></a> (<code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.base._MappedAnnotationBase</span></code>)</p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="dynamic-relationship-loaders">
+<span id="dynamic-relationship"></span><h2>Dynamic Relationship Loaders<a class="headerlink" href="#dynamic-relationship-loaders" title="Link to this heading">¶</a></h2>
+<div class="admonition legacy">
+<p class="admonition-title">Legacy Feature</p>
+<p>The “dynamic” lazy loader strategy is the legacy form of what is
+now the “write_only” strategy described in the section
+<a class="reference internal" href="#write-only-relationship"><span class="std std-ref">Write Only Relationships</span></a>.</p>
+<p>The “dynamic” strategy produces a legacy <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> object from the
+related collection. However, a major drawback of “dynamic” relationships is
+that there are several cases where the collection will fully iterate, some
+of which are non-obvious, which can only be prevented with careful
+programming and testing on a case-by-case basis. Therefore, for truly large
+collection management, the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> should be
+preferred.</p>
+<p>The dynamic loader is also not compatible with the <a class="reference internal" href="extensions/asyncio.html"><span class="std std-ref">Asynchronous I/O (asyncio)</span></a>
+extension. It can be used with some limitations, as indicated in
+<a class="reference internal" href="extensions/asyncio.html#dynamic-asyncio"><span class="std std-ref">Asyncio dynamic guidelines</span></a>, but again the
+<a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a>, which is fully compatible with asyncio,
+should be preferred.</p>
+</div>
+<p>The dynamic relationship strategy allows configuration of a
+<a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> which when accessed on an instance will return a
+legacy <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> object in place of the collection. The
+<a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> can then be modified further so that the database
+collection may be iterated based on filtering criteria. The returned
+<a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> object is an instance of <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a>, which
+combines the loading and iteration behavior of <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> along with
+rudimentary collection mutation methods such as
+<a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.append" title="sqlalchemy.orm.AppenderQuery.append"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderQuery.append()</span></code></a> and <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.remove" title="sqlalchemy.orm.AppenderQuery.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderQuery.remove()</span></code></a>.</p>
+<p>The “dynamic” loader strategy may be configured with
+type-annotated Declarative form using the <a class="reference internal" href="#sqlalchemy.orm.DynamicMapped" title="sqlalchemy.orm.DynamicMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicMapped</span></code></a>
+annotation class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DynamicMapped</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">posts</span><span class="p">:</span> <span class="n">DynamicMapped</span><span class="p">[</span><span class="n">Post</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">()</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Above, the <code class="docutils literal notranslate"><span class="pre">User.posts</span></code> collection on an individual <code class="docutils literal notranslate"><span class="pre">User</span></code> object
+will return the <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a> object, which is a subclass
+of <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> that also supports basic collection mutation
+operations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jack</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">id</span><span class="p">)</span>
+
+<span class="c1"># filter Jack&#39;s blog posts</span>
+<span class="n">posts</span> <span class="o">=</span> <span class="n">jack</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Post</span><span class="o">.</span><span class="n">headline</span> <span class="o">==</span> <span class="s2">&quot;this is a post&quot;</span><span class="p">)</span>
+
+<span class="c1"># apply array slices</span>
+<span class="n">posts</span> <span class="o">=</span> <span class="n">jack</span><span class="o">.</span><span class="n">posts</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span></pre></div>
+</div>
+<p>The dynamic relationship supports limited write operations, via the
+<a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.append" title="sqlalchemy.orm.AppenderQuery.append"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderQuery.append()</span></code></a> and <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.remove" title="sqlalchemy.orm.AppenderQuery.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderQuery.remove()</span></code></a> methods:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">oldpost</span> <span class="o">=</span> <span class="n">jack</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Post</span><span class="o">.</span><span class="n">headline</span> <span class="o">==</span> <span class="s2">&quot;old post&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+<span class="n">jack</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">oldpost</span><span class="p">)</span>
+
+<span class="n">jack</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Post</span><span class="p">(</span><span class="s2">&quot;new post&quot;</span><span class="p">))</span></pre></div>
+</div>
+<p>Since the read side of the dynamic relationship always queries the
+database, changes to the underlying collection will not be visible
+until the data has been flushed.  However, as long as “autoflush” is
+enabled on the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> in use, this will occur
+automatically each time the collection is about to emit a
+query.</p>
+<section id="dynamic-relationship-loaders-api">
+<h3>Dynamic Relationship Loaders - API<a class="headerlink" href="#dynamic-relationship-loaders-api" title="Link to this heading">¶</a></h3>
+<table class="longtable docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head">Object Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><span class="sig-name descname">AppenderQuery</span></a></p></td>
+<td><p>A dynamic query that supports basic collection storage operations.</p></td>
+</tr>
+<tr class="row-odd"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.orm.DynamicMapped"><span class="sig-name descname">DynamicMapped</span></a></p></td>
+<td><p>Represent the ORM mapped attribute type for a “dynamic” relationship.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy.orm.AppenderQuery">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.orm.</span></span><span class="sig-name descname"><span class="pre">AppenderQuery</span></span><a class="headerlink" href="#sqlalchemy.orm.AppenderQuery" title="Link to this definition">¶</a></dt>
+<dd><p>A dynamic query that supports basic collection storage operations.</p>
+<p>Methods on <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a> include all methods of
+<a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a>, plus additional methods used for collection
+persistence.</p>
+<div class="class-members docutils container">
+<p><strong>Members</strong></p>
+<p><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.add"><span class="sig-name descname">add()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.add_all"><span class="sig-name descname">add_all()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.append"><span class="sig-name descname">append()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.count"><span class="sig-name descname">count()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.extend"><span class="sig-name descname">extend()</span></a>, <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery.remove"><span class="sig-name descname">remove()</span></a></p>
+</div>
+<div class="class-bases docutils container">
+<p><strong>Class signature</strong></p>
+<p>class <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.AppenderQuery</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.dynamic.AppenderMixin</span></code>, <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.Query</span></code></a>)</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.AppenderQuery.add">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.AppenderQuery.</span></code></a><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.AppenderQuery.add" title="Link to this definition">¶</a></dt>
+<dd><div class="inherited-member docutils container">
+<p><em>inherited from the</em> <code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderMixin.add()</span></code> <em>method of</em> <code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderMixin</span></code></p>
+</div>
+<p>Add an item to this <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a>.</p>
+<p>The given item will be persisted to the database in terms of
+the parent instance’s collection on the next flush.</p>
+<p>This method is provided to assist in delivering forwards-compatibility
+with the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> collection class.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.AppenderQuery.add_all">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.AppenderQuery.</span></code></a><span class="sig-name descname"><span class="pre">add_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.AppenderQuery.add_all" title="Link to this definition">¶</a></dt>
+<dd><div class="inherited-member docutils container">
+<p><em>inherited from the</em> <code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderMixin.add_all()</span></code> <em>method of</em> <code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderMixin</span></code></p>
+</div>
+<p>Add an iterable of items to this <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a>.</p>
+<p>The given items will be persisted to the database in terms of
+the parent instance’s collection on the next flush.</p>
+<p>This method is provided to assist in delivering forwards-compatibility
+with the <a class="reference internal" href="#sqlalchemy.orm.WriteOnlyCollection" title="sqlalchemy.orm.WriteOnlyCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyCollection</span></code></a> collection class.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.AppenderQuery.append">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.AppenderQuery.</span></code></a><span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.AppenderQuery.append" title="Link to this definition">¶</a></dt>
+<dd><div class="inherited-member docutils container">
+<p><em>inherited from the</em> <code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderMixin.append()</span></code> <em>method of</em> <code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderMixin</span></code></p>
+</div>
+<p>Append an item to this <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a>.</p>
+<p>The given item will be persisted to the database in terms of
+the parent instance’s collection on the next flush.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.AppenderQuery.count">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.AppenderQuery.</span></code></a><span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#sqlalchemy.orm.AppenderQuery.count" title="Link to this definition">¶</a></dt>
+<dd><div class="inherited-member docutils container">
+<p><em>inherited from the</em> <code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderMixin.count()</span></code> <em>method of</em> <code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderMixin</span></code></p>
+</div>
+<p>Return a count of rows this the SQL formed by this <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a>
+would return.</p>
+<p>This generates the SQL for this Query as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">count_1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">&lt;</span><span class="n">rest</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="n">follows</span><span class="p">...</span><span class="o">&gt;</span>
+<span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">anon_1</span></pre></div>
+</div>
+<p>The above SQL returns a single row, which is the aggregate value
+of the count function; the <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query.count" title="sqlalchemy.orm.Query.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.count()</span></code></a>
+method then returns
+that single integer value.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is important to note that the value returned by
+count() is <strong>not the same as the number of ORM objects that this
+Query would return from a method such as the .all() method</strong>.
+The <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> object,
+when asked to return full entities,
+will <strong>deduplicate entries based on primary key</strong>, meaning if the
+same primary key value would appear in the results more than once,
+only one object of that primary key would be present.  This does
+not apply to a query that is against individual columns.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../faq/sessions.html#faq-query-deduplicating"><span class="std std-ref">My Query does not return the same number of objects as query.count() tells me - why?</span></a></p>
+</div>
+</div>
+<p>For fine grained control over specific columns to count, to skip the
+usage of a subquery or otherwise control of the FROM clause, or to use
+other aggregate functions, use <a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><code class="xref py py-attr docutils literal notranslate"><span class="pre">expression.func</span></code></a>
+expressions in conjunction with <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.query" title="sqlalchemy.orm.Session.query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.query()</span></code></a>, i.e.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">func</span>
+
+<span class="c1"># count User records, without</span>
+<span class="c1"># using a subquery.</span>
+<span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+
+<span class="c1"># return count of user &quot;id&quot; grouped</span>
+<span class="c1"># by &quot;name&quot;</span>
+<span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">id</span><span class="p">))</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">distinct</span>
+
+<span class="c1"># count distinct &quot;name&quot; values</span>
+<span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">)))</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../changelog/migration_20.html#migration-20-query-usage"><span class="std std-ref">2.0 Migration - ORM Usage</span></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.AppenderQuery.extend">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.AppenderQuery.</span></code></a><span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.AppenderQuery.extend" title="Link to this definition">¶</a></dt>
+<dd><div class="inherited-member docutils container">
+<p><em>inherited from the</em> <code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderMixin.extend()</span></code> <em>method of</em> <code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderMixin</span></code></p>
+</div>
+<p>Add an iterable of items to this <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a>.</p>
+<p>The given items will be persisted to the database in terms of
+the parent instance’s collection on the next flush.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy.orm.AppenderQuery.remove">
+<em class="property"><span class="pre">method</span> </em><a class="reference internal" href="#sqlalchemy.orm.AppenderQuery"><code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.AppenderQuery.</span></code></a><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#sqlalchemy.orm.AppenderQuery.remove" title="Link to this definition">¶</a></dt>
+<dd><div class="inherited-member docutils container">
+<p><em>inherited from the</em> <code class="xref py py-meth docutils literal notranslate"><span class="pre">AppenderMixin.remove()</span></code> <em>method of</em> <code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderMixin</span></code></p>
+</div>
+<p>Remove an item from this <a class="reference internal" href="#sqlalchemy.orm.AppenderQuery" title="sqlalchemy.orm.AppenderQuery"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppenderQuery</span></code></a>.</p>
+<p>The given item will be removed from the parent instance’s collection on
+the next flush.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy.orm.DynamicMapped">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.orm.</span></span><span class="sig-name descname"><span class="pre">DynamicMapped</span></span><a class="headerlink" href="#sqlalchemy.orm.DynamicMapped" title="Link to this definition">¶</a></dt>
+<dd><p>Represent the ORM mapped attribute type for a “dynamic” relationship.</p>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.DynamicMapped" title="sqlalchemy.orm.DynamicMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicMapped</span></code></a> type annotation may be used in an
+<a class="reference internal" href="declarative_tables.html#orm-declarative-mapped-column"><span class="std std-ref">Annotated Declarative Table</span></a> mapping
+to indicate that the <code class="docutils literal notranslate"><span class="pre">lazy=&quot;dynamic&quot;</span></code> loader strategy should be used
+for a particular <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>.</p>
+<div class="admonition legacy">
+<p class="admonition-title">Legacy Feature</p>
+<p>The “dynamic” lazy loader strategy is the legacy form of what
+is now the “write_only” strategy described in the section
+<a class="reference internal" href="#write-only-relationship"><span class="std std-ref">Write Only Relationships</span></a>.</p>
+</div>
+<p>E.g.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">addresses</span><span class="p">:</span> <span class="n">DynamicMapped</span><span class="p">[</span><span class="n">Address</span><span class="p">]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="n">cascade</span><span class="o">=</span><span class="s2">&quot;all,delete-orphan&quot;</span>
+    <span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>See the section <a class="reference internal" href="#dynamic-relationship"><span class="std std-ref">Dynamic Relationship Loaders</span></a> for background.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#dynamic-relationship"><span class="std std-ref">Dynamic Relationship Loaders</span></a> - complete background</p>
+<p><a class="reference internal" href="#sqlalchemy.orm.WriteOnlyMapped" title="sqlalchemy.orm.WriteOnlyMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteOnlyMapped</span></code></a> - fully 2.0 style version</p>
+</div>
+<div class="class-bases docutils container">
+<p><strong>Class signature</strong></p>
+<p>class <a class="reference internal" href="#sqlalchemy.orm.DynamicMapped" title="sqlalchemy.orm.DynamicMapped"><code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.DynamicMapped</span></code></a> (<code class="docutils literal notranslate"><span class="pre">sqlalchemy.orm.base._MappedAnnotationBase</span></code>)</p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="setting-raiseload">
+<span id="collections-raiseload"></span><h2>Setting RaiseLoad<a class="headerlink" href="#setting-raiseload" title="Link to this heading">¶</a></h2>
+<p>A “raise”-loaded relationship will raise an
+<a class="reference internal" href="../core/exceptions.html#sqlalchemy.exc.InvalidRequestError" title="sqlalchemy.exc.InvalidRequestError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InvalidRequestError</span></code></a> where the attribute would normally
+emit a lazy load:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;some_table&quot;</span>
+
+    <span class="c1"># ...</span>
+
+    <span class="n">children</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">MyRelatedClass</span><span class="p">]]</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">lazy</span><span class="o">=</span><span class="s2">&quot;raise&quot;</span><span class="p">)</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Above, attribute access on the <code class="docutils literal notranslate"><span class="pre">children</span></code> collection will raise an exception
+if it was not previously populated.  This includes read access but for
+collections will also affect write access, as collections can’t be mutated
+without first loading them.  The rationale for this is to ensure that an
+application is not emitting any unexpected lazy loads within a certain context.
+Rather than having to read through SQL logs to determine that all necessary
+attributes were eager loaded, the “raise” strategy will cause unloaded
+attributes to raise immediately if accessed.  The raise strategy is
+also available on a query option basis using the <a class="reference internal" href="queryguide/relationships.html#sqlalchemy.orm.raiseload" title="sqlalchemy.orm.raiseload"><code class="xref py py-func docutils literal notranslate"><span class="pre">raiseload()</span></code></a>
+loader option.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="queryguide/relationships.html#prevent-lazy-with-raiseload"><span class="std std-ref">Preventing unwanted lazy loads using raiseload</span></a></p>
+</div>
+</section>
+<section id="using-passive-deletes">
+<h2>Using Passive Deletes<a class="headerlink" href="#using-passive-deletes" title="Link to this heading">¶</a></h2>
+<p>An important aspect of collection management in SQLAlchemy is that when an
+object that refers to a collection is deleted, SQLAlchemy needs to consider the
+objects that are inside this collection. Those objects will need to be
+de-associated from the parent, which for a one-to-many collection would mean
+that foreign key columns are set to NULL, or based on
+<a class="reference internal" href="cascades.html#unitofwork-cascades"><span class="std std-ref">cascade</span></a> settings, may instead want to emit a
+DELETE for these rows.</p>
+<p>The <a class="reference internal" href="../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a> process only considers objects on a row-by-row basis,
+meaning a DELETE operation implies that all rows within a collection must be
+fully loaded into memory inside the flush process. This is not feasible for
+large collections, so we instead seek to rely upon the database’s own
+capability to update or delete the rows automatically using foreign key ON
+DELETE rules, instructing the unit of work to forego actually needing to load
+these rows in order to handle them. The unit of work can be instructed to work
+in this manner by configuring <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship.params.passive_deletes" title="sqlalchemy.orm.relationship"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">relationship.passive_deletes</span></code></a> on
+the <a class="reference internal" href="relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct; the foreign key constraints in use
+must also be correctly configured.</p>
+<p>For further detail on a complete “passive delete” configuration, see the
+section <a class="reference internal" href="cascades.html#passive-deletes"><span class="std std-ref">Using foreign key ON DELETE cascade with ORM relationships</span></a>.</p>
+</section>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="join_conditions.html" title="previous chapter">Configuring how Relationship Joins</a>
+        Next:
+        <a href="collection_api.html" title="next chapter">Collection Customization and API Details</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

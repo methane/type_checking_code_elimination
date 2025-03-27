@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Additional Persistence Techniques
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="Using the Session" href="session.html" />
+        <link rel="next" title="Contextual/Thread-local Sessions" href="contextual.html" />
+        <link rel="prev" title="Transactions and Connection Management" href="session_transaction.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="queryguide/index.html">ORM Querying Guide</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session.html">Using the Session</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="session_basics.html">Session Basics</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session_state_management.html">State Management</a></span></li>
+<li><span class="link-container"><a class="reference external" href="cascades.html">Cascades</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session_transaction.html">Transactions and Connection Management</a></span></li>
+<li class="selected"><span class="link-container"><strong>Additional Persistence Techniques</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#embedding-sql-insert-update-expressions-into-a-flush">Embedding SQL Insert/Update Expressions into a Flush</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-sql-expressions-with-sessions">Using SQL Expressions with Sessions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#forcing-null-on-a-column-with-a-default">Forcing NULL on a column with a default</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#fetching-server-generated-defaults">Fetching Server-Generated Defaults</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#case-1-non-primary-key-returning-or-equivalent-is-supported">Case 1: non primary key, RETURNING or equivalent is supported</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#case-2-table-includes-trigger-generated-values-which-are-not-compatible-with-returning">Case 2: Table includes trigger-generated values which are not compatible with RETURNING</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#case-3-non-primary-key-returning-or-equivalent-is-not-supported-or-not-needed">Case 3: non primary key, RETURNING or equivalent is not supported or not needed</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#case-4-primary-key-returning-or-equivalent-is-supported">Case 4: primary key, RETURNING or equivalent is supported</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#case-5-primary-key-returning-or-equivalent-is-not-supported">Case 5: primary key, RETURNING or equivalent is not supported</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#mysql-with-datetime-primary-key">MySQL with DateTime primary key</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#mysql-with-timestamp-primary-key">MySQL with TIMESTAMP primary key</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#notes-on-eagerly-fetching-client-invoked-sql-expressions-used-for-insert-or-update">Notes on eagerly fetching client invoked SQL expressions used for INSERT or UPDATE</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#using-insert-update-and-on-conflict-i-e-upsert-to-return-orm-objects">Using INSERT, UPDATE and ON CONFLICT (i.e. upsert) to return ORM Objects</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#using-postgresql-on-conflict-with-returning-to-return-upserted-orm-objects">Using PostgreSQL ON CONFLICT with RETURNING to return upserted ORM objects</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#partitioning-strategies-e-g-multiple-database-backends-per-session">Partitioning Strategies (e.g. multiple database backends per Session)</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#simple-vertical-partitioning">Simple Vertical Partitioning</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#coordination-of-transactions-for-a-multiple-engine-session">Coordination of Transactions for a multiple-engine Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#custom-vertical-partitioning">Custom Vertical Partitioning</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#horizontal-partitioning">Horizontal Partitioning</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#bulk-operations">Bulk Operations</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="contextual.html">Contextual/Thread-local Sessions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session_events.html">Tracking queries, object and Session Changes with Events</a></span></li>
+<li><span class="link-container"><a class="reference external" href="session_api.html">Session API</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="session_transaction.html" title="previous chapter">Transactions and Connection Management</a></li>
+                <li><b>Next:</b>
+                <a href="contextual.html" title="next chapter">Contextual/Thread-local Sessions</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                    <ul><li><a href="session.html" title="Using the Session">Using the Session</a></li>
+                </ul>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#additional-persistence-techniques">Additional Persistence Techniques</a><ul>
+<li><a class="reference internal" href="#embedding-sql-insert-update-expressions-into-a-flush">Embedding SQL Insert/Update Expressions into a Flush</a></li>
+<li><a class="reference internal" href="#using-sql-expressions-with-sessions">Using SQL Expressions with Sessions</a></li>
+<li><a class="reference internal" href="#forcing-null-on-a-column-with-a-default">Forcing NULL on a column with a default</a></li>
+<li><a class="reference internal" href="#fetching-server-generated-defaults">Fetching Server-Generated Defaults</a><ul>
+<li><a class="reference internal" href="#case-1-non-primary-key-returning-or-equivalent-is-supported">Case 1: non primary key, RETURNING or equivalent is supported</a></li>
+<li><a class="reference internal" href="#case-2-table-includes-trigger-generated-values-which-are-not-compatible-with-returning">Case 2: Table includes trigger-generated values which are not compatible with RETURNING</a></li>
+<li><a class="reference internal" href="#case-3-non-primary-key-returning-or-equivalent-is-not-supported-or-not-needed">Case 3: non primary key, RETURNING or equivalent is not supported or not needed</a></li>
+<li><a class="reference internal" href="#case-4-primary-key-returning-or-equivalent-is-supported">Case 4: primary key, RETURNING or equivalent is supported</a></li>
+<li><a class="reference internal" href="#case-5-primary-key-returning-or-equivalent-is-not-supported">Case 5: primary key, RETURNING or equivalent is not supported</a><ul>
+<li><a class="reference internal" href="#mysql-with-datetime-primary-key">MySQL with DateTime primary key</a></li>
+<li><a class="reference internal" href="#mysql-with-timestamp-primary-key">MySQL with TIMESTAMP primary key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes-on-eagerly-fetching-client-invoked-sql-expressions-used-for-insert-or-update">Notes on eagerly fetching client invoked SQL expressions used for INSERT or UPDATE</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-insert-update-and-on-conflict-i-e-upsert-to-return-orm-objects">Using INSERT, UPDATE and ON CONFLICT (i.e. upsert) to return ORM Objects</a><ul>
+<li><a class="reference internal" href="#using-postgresql-on-conflict-with-returning-to-return-upserted-orm-objects">Using PostgreSQL ON CONFLICT with RETURNING to return upserted ORM objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#partitioning-strategies-e-g-multiple-database-backends-per-session">Partitioning Strategies (e.g. multiple database backends per Session)</a><ul>
+<li><a class="reference internal" href="#simple-vertical-partitioning">Simple Vertical Partitioning</a></li>
+<li><a class="reference internal" href="#coordination-of-transactions-for-a-multiple-engine-session">Coordination of Transactions for a multiple-engine Session</a></li>
+<li><a class="reference internal" href="#custom-vertical-partitioning">Custom Vertical Partitioning</a></li>
+<li><a class="reference internal" href="#horizontal-partitioning">Horizontal Partitioning</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bulk-operations">Bulk Operations</a></li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-persistence_techniques" >
+        
+<section id="additional-persistence-techniques">
+<h1>Additional Persistence Techniques<a class="headerlink" href="#additional-persistence-techniques" title="Link to this heading">¶</a></h1>
+<section id="embedding-sql-insert-update-expressions-into-a-flush">
+<span id="flush-embedded-sql-expressions"></span><h2>Embedding SQL Insert/Update Expressions into a Flush<a class="headerlink" href="#embedding-sql-insert-update-expressions-into-a-flush" title="Link to this heading">¶</a></h2>
+<p>This feature allows the value of a database column to be set to a SQL
+expression instead of a literal value. It’s especially useful for atomic
+updates, calling stored procedures, etc. All you do is assign an expression to
+an attribute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SomeClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;some_table&quot;</span>
+
+    <span class="c1"># ...</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+
+
+<span class="n">someobject</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">SomeClass</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># set &#39;value&#39; attribute to a SQL expression adding one</span>
+<span class="n">someobject</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">SomeClass</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="c1"># issues &quot;UPDATE some_table SET value=value+1&quot;</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>This technique works both for INSERT and UPDATE statements. After the
+flush/commit operation, the <code class="docutils literal notranslate"><span class="pre">value</span></code> attribute on <code class="docutils literal notranslate"><span class="pre">someobject</span></code> above is
+expired, so that when next accessed the newly generated value will be loaded
+from the database.</p>
+<p>The feature also has conditional support to work in conjunction with
+primary key columns.  For backends that have RETURNING support
+(including Oracle Database, SQL Server, MariaDB 10.5, SQLite 3.35) a
+SQL expression may be assigned to a primary key column as well.  This allows
+both the SQL expression to be evaluated, as well as allows any server side
+triggers that modify the primary key value on INSERT, to be successfully
+retrieved by the ORM as part of the object’s primary key:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span>
+    <span class="n">pk</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">)</span>
+
+
+<span class="n">e</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;postgresql+psycopg2://scott:tiger@localhost/test&quot;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">sql</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">coalesce</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Foo</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>On PostgreSQL, the above <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> will emit the following INSERT:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="p">(</span><span class="n">foopk</span><span class="p">,</span><span class="w"> </span><span class="n">bar</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="k">coalesce</span><span class="p">(</span><span class="k">max</span><span class="p">(</span><span class="n">foo</span><span class="p">.</span><span class="n">foopk</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">%</span><span class="p">(</span><span class="n">max_1</span><span class="p">)</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="p">(</span><span class="n">coalesce_2</span><span class="p">)</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">coalesce_1</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">foo</span><span class="p">),</span><span class="w"> </span><span class="o">%</span><span class="p">(</span><span class="n">bar</span><span class="p">)</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">foo</span><span class="p">.</span><span class="n">foopk</span></pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3: </span>SQL expressions can now be passed to a primary key column during an ORM
+flush; if the database supports RETURNING, or if pysqlite is in use, the
+ORM will be able to retrieve the server-generated value as the value
+of the primary key attribute.</p>
+</div>
+</section>
+<section id="using-sql-expressions-with-sessions">
+<span id="session-sql-expressions"></span><h2>Using SQL Expressions with Sessions<a class="headerlink" href="#using-sql-expressions-with-sessions" title="Link to this heading">¶</a></h2>
+<p>SQL expressions and strings can be executed via the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.session.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> within its transactional context.
+This is most easily accomplished using the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> method, which returns a
+<a class="reference internal" href="../core/connections.html#sqlalchemy.engine.CursorResult" title="sqlalchemy.engine.CursorResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">CursorResult</span></code></a> in the same manner as an
+<a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a> or
+<a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+
+<span class="c1"># execute a string statement</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;select * from table where id=:id&quot;</span><span class="p">),</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">})</span>
+
+<span class="c1"># execute a SQL expression construct</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">mytable</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mytable</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">7</span><span class="p">))</span></pre></div>
+</div>
+<p>The current <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a> held by the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.session.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is accessible using the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.connection" title="sqlalchemy.orm.Session.connection"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.connection()</span></code></a> method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">connection</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span></pre></div>
+</div>
+<p>The examples above deal with a <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> that’s
+bound to a single <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a> or
+<a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a>. To execute statements using a
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> which is bound either to multiple
+engines, or none at all (i.e. relies upon bound metadata), both
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> and
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.connection" title="sqlalchemy.orm.Session.connection"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.connection()</span></code></a> accept a dictionary of bind arguments
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.execute.params.bind_arguments" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.bind_arguments</span></code></a> which may include “mapper”
+which is passed a mapped class or
+<a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper" title="sqlalchemy.orm.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a> instance, which is used to locate the
+proper context for the desired engine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">()</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+
+<span class="c1"># need to specify mapper or class when executing</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">(</span><span class="s2">&quot;select * from table where id=:id&quot;</span><span class="p">),</span>
+    <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span>
+    <span class="n">bind_arguments</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;mapper&quot;</span><span class="p">:</span> <span class="n">MyMappedClass</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="n">select</span><span class="p">(</span><span class="n">mytable</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mytable</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">7</span><span class="p">),</span> <span class="n">bind_arguments</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;mapper&quot;</span><span class="p">:</span> <span class="n">MyMappedClass</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span><span class="n">MyMappedClass</span><span class="p">)</span></pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.4: </span>the <code class="docutils literal notranslate"><span class="pre">mapper</span></code> and <code class="docutils literal notranslate"><span class="pre">clause</span></code> arguments to
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> are now passed as part of a dictionary
+sent as the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.execute.params.bind_arguments" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.bind_arguments</span></code></a> parameter.
+The previous arguments are still accepted however this usage is
+deprecated.</p>
+</div>
+</section>
+<section id="forcing-null-on-a-column-with-a-default">
+<span id="session-forcing-null"></span><h2>Forcing NULL on a column with a default<a class="headerlink" href="#forcing-null-on-a-column-with-a-default" title="Link to this heading">¶</a></h2>
+<p>The ORM considers any attribute that was never set on an object as a
+“default” case; the attribute will be omitted from the INSERT statement:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyObject</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">MyObject</span><span class="p">(</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># INSERT with the &#39;data&#39; column omitted; the database</span>
+<span class="c1"># itself will persist this as the NULL value</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Omitting a column from the INSERT means that the column will
+have the NULL value set, <em>unless</em> the column has a default set up,
+in which case the default value will be persisted.   This holds true
+both from a pure SQL perspective with server-side defaults, as well as the
+behavior of SQLAlchemy’s insert behavior with both client-side and server-side
+defaults:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyObject</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">server_default</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">MyObject</span><span class="p">(</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># INSERT with the &#39;data&#39; column omitted; the database</span>
+<span class="c1"># itself will persist this as the value &#39;default&#39;</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>However, in the ORM, even if one assigns the Python value <code class="docutils literal notranslate"><span class="pre">None</span></code> explicitly
+to the object, this is treated the <strong>same</strong> as though the value were never
+assigned:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyObject</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">server_default</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">MyObject</span><span class="p">(</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># INSERT with the &#39;data&#39; column explicitly set to None;</span>
+<span class="c1"># the ORM still omits it from the statement and the</span>
+<span class="c1"># database will still persist this as the value &#39;default&#39;</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>The above operation will persist into the <code class="docutils literal notranslate"><span class="pre">data</span></code> column the
+server default value of <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> and not SQL NULL, even though <code class="docutils literal notranslate"><span class="pre">None</span></code>
+was passed; this is a long-standing behavior of the ORM that many applications
+hold as an assumption.</p>
+<p>So what if we want to actually put NULL into this column, even though the
+column has a default value?  There are two approaches.  One is that
+on a per-instance level, we assign the attribute using the
+<a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.null" title="sqlalchemy.sql.expression.null"><code class="xref py py-obj docutils literal notranslate"><span class="pre">null</span></code></a> SQL construct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">null</span>
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">MyObject</span><span class="p">(</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">null</span><span class="p">())</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># INSERT with the &#39;data&#39; column explicitly set as null();</span>
+<span class="c1"># the ORM uses this directly, bypassing all client-</span>
+<span class="c1"># and server-side defaults, and the database will</span>
+<span class="c1"># persist this as the NULL value</span></pre></div>
+</div>
+<p>The <a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.null" title="sqlalchemy.sql.expression.null"><code class="xref py py-obj docutils literal notranslate"><span class="pre">null</span></code></a> SQL construct always translates into the SQL
+NULL value being directly present in the target INSERT statement.</p>
+<p>If we’d like to be able to use the Python value <code class="docutils literal notranslate"><span class="pre">None</span></code> and have this
+also be persisted as NULL despite the presence of column defaults,
+we can configure this for the ORM using a Core-level modifier
+<a class="reference internal" href="../core/type_api.html#sqlalchemy.types.TypeEngine.evaluates_none" title="sqlalchemy.types.TypeEngine.evaluates_none"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TypeEngine.evaluates_none()</span></code></a>, which indicates
+a type where the ORM should treat the value <code class="docutils literal notranslate"><span class="pre">None</span></code> the same as any other
+value and pass it through, rather than omitting it as a “missing” value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyObject</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">evaluates_none</span><span class="p">(),</span>  <span class="c1"># indicate that None should always be passed</span>
+        <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">server_default</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">MyObject</span><span class="p">(</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># INSERT with the &#39;data&#39; column explicitly set to None;</span>
+<span class="c1"># the ORM uses this directly, bypassing all client-</span>
+<span class="c1"># and server-side defaults, and the database will</span>
+<span class="c1"># persist this as the NULL value</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<aside class="topic">
+<p class="topic-title">Evaluating None</p>
+<p>The <a class="reference internal" href="../core/type_api.html#sqlalchemy.types.TypeEngine.evaluates_none" title="sqlalchemy.types.TypeEngine.evaluates_none"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TypeEngine.evaluates_none()</span></code></a> modifier is primarily intended to
+signal a type where the Python value “None” is significant, the primary
+example being a JSON type which may want to persist the JSON <code class="docutils literal notranslate"><span class="pre">null</span></code> value
+rather than SQL NULL.  We are slightly repurposing it here in order to
+signal to the ORM that we’d like <code class="docutils literal notranslate"><span class="pre">None</span></code> to be passed into the type whenever
+present, even though no special type-level behaviors are assigned to it.</p>
+</aside>
+</section>
+<section id="fetching-server-generated-defaults">
+<span id="orm-server-defaults"></span><h2>Fetching Server-Generated Defaults<a class="headerlink" href="#fetching-server-generated-defaults" title="Link to this heading">¶</a></h2>
+<p>As introduced in the sections <a class="reference internal" href="../core/defaults.html#server-defaults"><span class="std std-ref">Server-invoked DDL-Explicit Default Expressions</span></a> and <a class="reference internal" href="../core/defaults.html#triggered-columns"><span class="std std-ref">Marking Implicitly Generated Values, timestamps, and Triggered Columns</span></a>,
+the Core supports the notion of database columns for which the database
+itself generates a value upon INSERT and in less common cases upon UPDATE
+statements.  The ORM features support for such columns regarding being
+able to fetch these newly generated values upon flush.   This behavior is
+required in the case of primary key columns that are generated by the server,
+since the ORM has to know the primary key of an object once it is persisted.</p>
+<p>In the vast majority of cases, primary key columns that have their value
+generated automatically by the database are  simple integer columns, which are
+implemented by the database as either a so-called “autoincrement” column, or
+from a sequence associated with the column.   Every database dialect within
+SQLAlchemy Core supports a method of retrieving these primary key values which
+is often native to the Python DBAPI, and in general this process is automatic.
+There is more documentation regarding this at
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.autoincrement" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.autoincrement</span></code></a>.</p>
+<p>For server-generating columns that are not primary key columns or that are not
+simple autoincrementing integer columns, the ORM requires that these columns
+are marked with an appropriate <code class="docutils literal notranslate"><span class="pre">server_default</span></code> directive that allows the ORM to
+retrieve this value.   Not all methods are supported on all backends, however,
+so care must be taken to use the appropriate method. The two questions to be
+answered are, 1. is this column part of the primary key or not, and 2. does the
+database support RETURNING or an equivalent, such as “OUTPUT inserted”; these
+are SQL phrases which return a server-generated value at the same time as the
+INSERT or UPDATE statement is invoked.   RETURNING is currently supported
+by PostgreSQL, Oracle Database, MariaDB 10.5, SQLite 3.35, and SQL Server.</p>
+<section id="case-1-non-primary-key-returning-or-equivalent-is-supported">
+<h3>Case 1: non primary key, RETURNING or equivalent is supported<a class="headerlink" href="#case-1-non-primary-key-returning-or-equivalent-is-supported" title="Link to this heading">¶</a></h3>
+<p>In this case, columns should be marked as <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.FetchedValue" title="sqlalchemy.schema.FetchedValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">FetchedValue</span></code></a> or with an
+explicit <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.server_default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.server_default</span></code></a>.   The ORM will
+automatically add these columns to the RETURNING clause when performing
+INSERT statements, assuming the
+<a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, or
+if left at its default setting of <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>, for dialects that support
+both RETURNING as well as <a class="reference internal" href="../core/connections.html#engine-insertmanyvalues"><span class="std std-ref">insertmanyvalues</span></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># server-side SQL date function generates a new timestamp</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">(),</span> <span class="n">server_default</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+
+    <span class="c1"># some other server-side function not named here, such as a trigger,</span>
+    <span class="c1"># populates a value into this column during INSERT</span>
+    <span class="n">special_identifier</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">server_default</span><span class="o">=</span><span class="n">FetchedValue</span><span class="p">())</span>
+
+    <span class="c1"># set eager defaults to True.  This is usually optional, as if the</span>
+    <span class="c1"># backend supports RETURNING + insertmanyvalues, eager defaults</span>
+    <span class="c1"># will take place regardless on INSERT</span>
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;eager_defaults&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Above, an INSERT statement that does not specify explicit values for
+“timestamp” or “special_identifier” from the client side will include the
+“timestamp” and “special_identifier” columns within the RETURNING clause so
+they are available immediately. On the PostgreSQL database, an INSERT for the
+above table will look like:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">special_identifier</span></pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0.0rc1: </span>The <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> parameter now defaults
+to a new setting <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>, which will automatically make use of RETURNING
+to fetch server-generated default values on INSERT if the backing database
+supports both RETURNING as well as <a class="reference internal" href="../core/connections.html#engine-insertmanyvalues"><span class="std std-ref">insertmanyvalues</span></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> value for <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> only
+applies to INSERT statements.  UPDATE statements will not use RETURNING,
+even if available, unless <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> is set to
+<code class="docutils literal notranslate"><span class="pre">True</span></code>.  This is because there is no equivalent “insertmanyvalues” feature
+for UPDATE, so UPDATE RETURNING will require that UPDATE statements are
+emitted individually for each row being UPDATEd.</p>
+</div>
+</section>
+<section id="case-2-table-includes-trigger-generated-values-which-are-not-compatible-with-returning">
+<h3>Case 2: Table includes trigger-generated values which are not compatible with RETURNING<a class="headerlink" href="#case-2-table-includes-trigger-generated-values-which-are-not-compatible-with-returning" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> setting of <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> means that
+a backend that supports RETURNING will usually make use of RETURNING with
+INSERT statements in order to retrieve newly generated default values.
+However there are limitations of server-generated values that are generated
+using triggers, such that RETURNING can’t be used:</p>
+<ul class="simple">
+<li><p>SQL Server does not allow RETURNING to be used in an INSERT statement
+to retrieve a trigger-generated value; the statement will fail.</p></li>
+<li><p>SQLite has limitations in combining the use of RETURNING with triggers, such
+that the RETURNING clause will not have the INSERTed value available</p></li>
+<li><p>Other backends may have limitations with RETURNING in conjunction with
+triggers, or other kinds of server-generated values.</p></li>
+</ul>
+<p>To disable the use of RETURNING for such values, including not just for
+server generated default values but also to ensure that the ORM will never
+use RETURNING with a particular table, specify
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table.params.implicit_returning" title="sqlalchemy.schema.Table"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Table.implicit_returning</span></code></a>
+as <code class="docutils literal notranslate"><span class="pre">False</span></code> for the mapped <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>.  Using a Declarative mapping
+this looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+
+    <span class="c1"># assume a database trigger populates a value into this column</span>
+    <span class="c1"># during INSERT</span>
+    <span class="n">special_identifier</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">server_default</span><span class="o">=</span><span class="n">FetchedValue</span><span class="p">())</span>
+
+    <span class="c1"># disable all use of RETURNING for the table</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;implicit_returning&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>On SQL Server with the pyodbc driver, an INSERT for the above table will
+not use RETURNING and will use the SQL Server <code class="docutils literal notranslate"><span class="pre">scope_identity()</span></code> function
+to retrieve the newly generated primary key value:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">);</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="n">scope_identity</span><span class="p">()</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../dialects/mssql.html#mssql-insert-behavior"><span class="std std-ref">INSERT behavior</span></a> - background on the SQL Server dialect’s
+methods of fetching newly generated primary key values</p>
+</div>
+</section>
+<section id="case-3-non-primary-key-returning-or-equivalent-is-not-supported-or-not-needed">
+<h3>Case 3: non primary key, RETURNING or equivalent is not supported or not needed<a class="headerlink" href="#case-3-non-primary-key-returning-or-equivalent-is-not-supported-or-not-needed" title="Link to this heading">¶</a></h3>
+<p>This case is the same as case 1 above, except we typically don’t want to
+use <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a>, as its current implementation
+in the absence of RETURNING support is to emit a SELECT-per-row, which
+is not performant.  Therefore the parameter is omitted in the mapping below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">(),</span> <span class="n">server_default</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+
+    <span class="c1"># assume a database trigger populates a value into this column</span>
+    <span class="c1"># during INSERT</span>
+    <span class="n">special_identifier</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">server_default</span><span class="o">=</span><span class="n">FetchedValue</span><span class="p">())</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>After a record with the above mapping is INSERTed on a backend that does not
+include RETURNING or “insertmanyvalues” support, the “timestamp” and
+“special_identifier” columns will remain empty, and will be fetched via a
+second SELECT statement when they are first accessed after the flush, e.g. they
+are marked as “expired”.</p>
+<p>If the <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> is explicitly provided with a
+value of <code class="docutils literal notranslate"><span class="pre">True</span></code>, and the backend database does not support RETURNING or an
+equivalent, the ORM will emit a SELECT statement immediately following the
+INSERT statement in order to fetch newly generated values; the ORM does not
+currently have the ability to SELECT many newly inserted rows in batch if
+RETURNING was not available. This is usually undesirable as it adds additional
+SELECT statements to the flush process that may not be needed. Using the above
+mapping with the <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> flag set to True
+against MySQL (not MariaDB) results in SQL like this upon flush:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">()</span>
+
+<span class="c1">-- when eager_defaults **is** used, but RETURNING is not supported</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">my_table_timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">special_identifier</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">my_table_special_identifier</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">%</span><span class="n">s</span></pre></div>
+</div>
+<p>A future release of SQLAlchemy may seek to improve the efficiency of
+eager defaults in the abcense of RETURNING to batch many rows within a
+single SELECT statement.</p>
+</section>
+<section id="case-4-primary-key-returning-or-equivalent-is-supported">
+<h3>Case 4: primary key, RETURNING or equivalent is supported<a class="headerlink" href="#case-4-primary-key-returning-or-equivalent-is-supported" title="Link to this heading">¶</a></h3>
+<p>A primary key column with a server-generated value must be fetched immediately
+upon INSERT; the ORM can only access rows for which it has a primary key value,
+so if the primary key is generated by the server, the ORM needs a way
+to retrieve that new value immediately upon INSERT.</p>
+<p>As mentioned above, for integer “autoincrement” columns, as well as
+columns marked with <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.Identity" title="sqlalchemy.schema.Identity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identity</span></code></a> and special constructs such as
+PostgreSQL SERIAL, these types are handled automatically by the Core; databases
+include functions for fetching the “last inserted id” where RETURNING
+is not supported, and where RETURNING is supported SQLAlchemy will use that.</p>
+<p>For example, using Oracle Database with a column marked as <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.Identity" title="sqlalchemy.schema.Identity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identity</span></code></a>,
+RETURNING is used automatically to fetch the new primary key value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyOracleModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Identity</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>The INSERT for a model as above on Oracle Database looks like:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(:</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">ret_0</span></pre></div>
+</div>
+<p>SQLAlchemy renders an INSERT for the “data” field, but only includes “id” in
+the RETURNING clause, so that server-side generation for “id” will take
+place and the new value will be returned immediately.</p>
+<p>For non-integer values generated by server side functions or triggers, as well
+as for integer values that come from constructs outside the table itself,
+including explicit sequences and triggers, the server default generation must
+be marked in the table metadata. Using Oracle Database as the example again, we can
+illustrate a similar table as above naming an explicit sequence using the
+<a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.Sequence" title="sqlalchemy.schema.Sequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> construct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyOracleModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Sequence</span><span class="p">(</span><span class="s2">&quot;my_oracle_seq&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>An INSERT for this version of the model on Oracle Database would look like:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">my_oracle_seq</span><span class="p">.</span><span class="n">nextval</span><span class="p">,</span><span class="w"> </span><span class="p">:</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="p">:</span><span class="n">ret_0</span></pre></div>
+</div>
+<p>Where above, SQLAlchemy renders <code class="docutils literal notranslate"><span class="pre">my_sequence.nextval</span></code> for the primary key
+column so that it is used for new primary key generation, and also uses
+RETURNING to get the new value back immediately.</p>
+<p>If the source of data is not represented by a simple SQL function or
+<a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.Sequence" title="sqlalchemy.schema.Sequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>, such as when using triggers or database-specific datatypes
+that produce new values, the presence of a value-generating default may be
+indicated by using <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.FetchedValue" title="sqlalchemy.schema.FetchedValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">FetchedValue</span></code></a> within the column definition. Below
+is a model that uses a SQL Server TIMESTAMP column as the primary key; on SQL
+Server, this datatype generates new values automatically, so this is indicated
+in the table metadata by indicating <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.FetchedValue" title="sqlalchemy.schema.FetchedValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">FetchedValue</span></code></a> for the
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.server_default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.server_default</span></code></a> parameter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MySQLServerModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">TIMESTAMP</span><span class="p">(),</span> <span class="n">server_default</span><span class="o">=</span><span class="n">FetchedValue</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>An INSERT for the above table on SQL Server looks like:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"> </span><span class="k">OUTPUT</span><span class="w"> </span><span class="n">inserted</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span></pre></div>
+</div>
+</section>
+<section id="case-5-primary-key-returning-or-equivalent-is-not-supported">
+<h3>Case 5: primary key, RETURNING or equivalent is not supported<a class="headerlink" href="#case-5-primary-key-returning-or-equivalent-is-not-supported" title="Link to this heading">¶</a></h3>
+<p>In this area we are generating rows for a database such as MySQL
+where some means of generating a default is occurring on the server, but is
+outside of the database’s usual autoincrement routine. In this case, we have to
+make sure SQLAlchemy can “pre-execute” the default, which means it has to be an
+explicit SQL expression.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section will illustrate multiple recipes involving
+datetime values for MySQL, since the datetime datatypes on this
+backend has additional idiosyncratic requirements that are useful to
+illustrate.  Keep in mind however that MySQL requires an explicit
+“pre-executed” default generator for <em>any</em> auto-generated datatype used as
+the primary key other than the usual single-column autoincrementing integer
+value.</p>
+</div>
+<section id="mysql-with-datetime-primary-key">
+<h4>MySQL with DateTime primary key<a class="headerlink" href="#mysql-with-datetime-primary-key" title="Link to this heading">¶</a></h4>
+<p>Using the example of a <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.DateTime" title="sqlalchemy.types.DateTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">DateTime</span></code></a> column for MySQL, we add an explicit
+pre-execute-supported default using the “NOW()” SQL function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Where above, we select the “NOW()” function to deliver a datetime value
+to the column.  The SQL generated by the above is:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">anon_1</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">(</span><span class="k">timestamp</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">%</span><span class="n">s</span><span class="p">)</span>
+<span class="p">(</span><span class="s1">&#39;2018-08-09 13:08:46&#39;</span><span class="p">,)</span></pre></div>
+</div>
+</section>
+<section id="mysql-with-timestamp-primary-key">
+<h4>MySQL with TIMESTAMP primary key<a class="headerlink" href="#mysql-with-timestamp-primary-key" title="Link to this heading">¶</a></h4>
+<p>When using the <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.TIMESTAMP" title="sqlalchemy.types.TIMESTAMP"><code class="xref py py-class docutils literal notranslate"><span class="pre">TIMESTAMP</span></code></a> datatype with MySQL, MySQL ordinarily
+associates a server-side default with this datatype automatically.  However
+when we use one as a primary key, the Core cannot retrieve the newly generated
+value unless we execute the function ourselves.  As <a class="reference internal" href="../core/type_basics.html#sqlalchemy.types.TIMESTAMP" title="sqlalchemy.types.TIMESTAMP"><code class="xref py py-class docutils literal notranslate"><span class="pre">TIMESTAMP</span></code></a> on
+MySQL actually stores a binary value, we need to add an additional “CAST” to our
+usage of “NOW()” so that we retrieve a binary value that can be persisted
+into the column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Binary</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">TIMESTAMP</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">Binary</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Above, in addition to selecting the “NOW()” function, we additionally make
+use of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code> datatype in conjunction with <a class="reference internal" href="../core/sqlelement.html#sqlalchemy.sql.expression.cast" title="sqlalchemy.sql.expression.cast"><code class="xref py py-func docutils literal notranslate"><span class="pre">cast()</span></code></a> so that
+the returned value is binary.  SQL rendered from the above within an
+INSERT looks like:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">BINARY</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">anon_1</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">(</span><span class="k">timestamp</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">%</span><span class="n">s</span><span class="p">)</span>
+<span class="p">(</span><span class="n">b</span><span class="s1">&#39;2018-08-09 13:08:46&#39;</span><span class="p">,)</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../core/defaults.html"><span class="std std-ref">Column INSERT/UPDATE Defaults</span></a></p>
+</div>
+</section>
+</section>
+<section id="notes-on-eagerly-fetching-client-invoked-sql-expressions-used-for-insert-or-update">
+<h3>Notes on eagerly fetching client invoked SQL expressions used for INSERT or UPDATE<a class="headerlink" href="#notes-on-eagerly-fetching-client-invoked-sql-expressions-used-for-insert-or-update" title="Link to this heading">¶</a></h3>
+<p>The preceding examples indicate the use of <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.server_default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.server_default</span></code></a>
+to create tables that include default-generation functions within their
+DDL.</p>
+<p>SQLAlchemy also supports non-DDL server side defaults, as documented at
+<a class="reference internal" href="../core/defaults.html#defaults-client-invoked-sql"><span class="std std-ref">Client-Invoked SQL Expressions</span></a>; these “client invoked SQL expressions”
+are set up using the <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.default</span></code></a> and
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.onupdate" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.onupdate</span></code></a> parameters.</p>
+<p>These SQL expressions currently are subject to the same limitations within the
+ORM as occurs for true server-side defaults; they won’t be eagerly fetched with
+RETURNING when <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> is set to <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">True</span></code> unless the <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.FetchedValue" title="sqlalchemy.schema.FetchedValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">FetchedValue</span></code></a> directive is associated with the
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>, even though these expressions are not DDL server
+defaults and are actively rendered by SQLAlchemy itself. This limitation may be
+addressed in future SQLAlchemy releases.</p>
+<p>The <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.FetchedValue" title="sqlalchemy.schema.FetchedValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">FetchedValue</span></code></a> construct can be applied to
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.server_default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.server_default</span></code></a> or
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.server_onupdate" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.server_onupdate</span></code></a> at the same time that a SQL
+expression is used with <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.default</span></code></a> and
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.onupdate" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.onupdate</span></code></a>, such as in the example below where the
+<code class="docutils literal notranslate"><span class="pre">func.now()</span></code> construct is used as a client-invoked SQL expression
+for <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.default</span></code></a> and
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.onupdate" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.onupdate</span></code></a>.  In order for the behavior of
+<a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper.params.eager_defaults" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.eager_defaults</span></code></a> to include that it fetches these
+values using RETURNING when available, <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.server_default" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.server_default</span></code></a> and
+<a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Column.params.server_onupdate" title="sqlalchemy.schema.Column"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Column.server_onupdate</span></code></a> are used with <a class="reference internal" href="../core/defaults.html#sqlalchemy.schema.FetchedValue" title="sqlalchemy.schema.FetchedValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">FetchedValue</span></code></a>
+to ensure that the fetch occurs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_table&quot;</span>
+
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">created</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">DateTime</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">server_default</span><span class="o">=</span><span class="n">FetchedValue</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+        <span class="n">DateTime</span><span class="p">(),</span>
+        <span class="n">onupdate</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+        <span class="n">server_default</span><span class="o">=</span><span class="n">FetchedValue</span><span class="p">(),</span>
+        <span class="n">server_onupdate</span><span class="o">=</span><span class="n">FetchedValue</span><span class="p">(),</span>
+    <span class="p">)</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;eager_defaults&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>With a mapping similar to the above, the SQL rendered by the ORM for
+INSERT and UPDATE will include <code class="docutils literal notranslate"><span class="pre">created</span></code> and <code class="docutils literal notranslate"><span class="pre">updated</span></code> in the RETURNING
+clause:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="p">(</span><span class="n">created</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">now</span><span class="p">())</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">created</span><span class="p">,</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">updated</span>
+
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">my_table</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">updated</span><span class="o">=</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">%</span><span class="p">(</span><span class="n">my_table_id</span><span class="p">)</span><span class="n">s</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">my_table</span><span class="p">.</span><span class="n">updated</span></pre></div>
+</div>
+</section>
+</section>
+<section id="using-insert-update-and-on-conflict-i-e-upsert-to-return-orm-objects">
+<span id="orm-dml-returning-objects"></span><h2>Using INSERT, UPDATE and ON CONFLICT (i.e. upsert) to return ORM Objects<a class="headerlink" href="#using-insert-update-and-on-conflict-i-e-upsert-to-return-orm-objects" title="Link to this heading">¶</a></h2>
+<p>SQLAlchemy 2.0 includes enhanced capabilities for emitting several varieties
+of ORM-enabled INSERT, UPDATE, and upsert statements.  See the
+document at <a class="reference internal" href="queryguide/dml.html"><span class="doc">ORM-Enabled INSERT, UPDATE, and DELETE statements</span></a> for documentation.  For upsert, see
+<a class="reference internal" href="queryguide/dml.html#orm-queryguide-upsert"><span class="std std-ref">ORM “upsert” Statements</span></a>.</p>
+<section id="using-postgresql-on-conflict-with-returning-to-return-upserted-orm-objects">
+<h3>Using PostgreSQL ON CONFLICT with RETURNING to return upserted ORM objects<a class="headerlink" href="#using-postgresql-on-conflict-with-returning-to-return-upserted-orm-objects" title="Link to this heading">¶</a></h3>
+<p>This section has moved to <a class="reference internal" href="queryguide/dml.html#orm-queryguide-upsert"><span class="std std-ref">ORM “upsert” Statements</span></a>.</p>
+</section>
+</section>
+<section id="partitioning-strategies-e-g-multiple-database-backends-per-session">
+<span id="session-partitioning"></span><h2>Partitioning Strategies (e.g. multiple database backends per Session)<a class="headerlink" href="#partitioning-strategies-e-g-multiple-database-backends-per-session" title="Link to this heading">¶</a></h2>
+<section id="simple-vertical-partitioning">
+<h3>Simple Vertical Partitioning<a class="headerlink" href="#simple-vertical-partitioning" title="Link to this heading">¶</a></h3>
+<p>Vertical partitioning places different classes, class hierarchies,
+or mapped tables, across multiple databases, by configuring the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> with the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.params.binds" title="sqlalchemy.orm.Session"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.binds</span></code></a> argument. This
+argument receives a dictionary that contains any combination of
+ORM-mapped classes, arbitrary classes within a mapped hierarchy (such
+as declarative base classes or mixins), <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects,
+and <a class="reference internal" href="mapping_api.html#sqlalchemy.orm.Mapper" title="sqlalchemy.orm.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a> objects as keys, which then refer typically to
+<a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a> or less typically <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a> objects as targets.
+The dictionary is consulted whenever the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> needs to
+emit SQL on behalf of a particular kind of mapped class in order to locate
+the appropriate source of database connectivity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">engine1</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;postgresql+psycopg2://db1&quot;</span><span class="p">)</span>
+<span class="n">engine2</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;postgresql+psycopg2://db2&quot;</span><span class="p">)</span>
+
+<span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">()</span>
+
+<span class="c1"># bind User operations to engine 1, Account operations to engine 2</span>
+<span class="n">Session</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">binds</span><span class="o">=</span><span class="p">{</span><span class="n">User</span><span class="p">:</span> <span class="n">engine1</span><span class="p">,</span> <span class="n">Account</span><span class="p">:</span> <span class="n">engine2</span><span class="p">})</span>
+
+<span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span></pre></div>
+</div>
+<p>Above, SQL operations against either class will make usage of the <a class="reference internal" href="../core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><code class="xref py py-class docutils literal notranslate"><span class="pre">Engine</span></code></a>
+linked to that class.     The functionality is comprehensive across both
+read and write operations; a <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> that is against entities
+mapped to <code class="docutils literal notranslate"><span class="pre">engine1</span></code> (determined by looking at the first entity in the
+list of items requested) will make use of <code class="docutils literal notranslate"><span class="pre">engine1</span></code> to run the query.   A
+flush operation will make use of <strong>both</strong> engines on a per-class basis as it
+flushes objects of type <code class="docutils literal notranslate"><span class="pre">User</span></code> and <code class="docutils literal notranslate"><span class="pre">Account</span></code>.</p>
+<p>In the more common case, there are typically base or mixin classes that  can be
+used to distinguish between operations that are destined for different database
+connections.  The <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.params.binds" title="sqlalchemy.orm.Session"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.binds</span></code></a> argument can accommodate any
+arbitrary Python class as a key, which will be used if it is found to be in the
+<code class="docutils literal notranslate"><span class="pre">__mro__</span></code> (Python method resolution order) for a particular  mapped class.
+Supposing two declarative bases are representing two different database
+connections:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseA</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseB</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseA</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Address</span><span class="p">(</span><span class="n">BaseA</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GameInfo</span><span class="p">(</span><span class="n">BaseB</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GameStats</span><span class="p">(</span><span class="n">BaseB</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">()</span>
+
+<span class="c1"># all User/Address operations will be on engine 1, all</span>
+<span class="c1"># Game operations will be on engine 2</span>
+<span class="n">Session</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">binds</span><span class="o">=</span><span class="p">{</span><span class="n">BaseA</span><span class="p">:</span> <span class="n">engine1</span><span class="p">,</span> <span class="n">BaseB</span><span class="p">:</span> <span class="n">engine2</span><span class="p">})</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>Above, classes which descend from <code class="docutils literal notranslate"><span class="pre">BaseA</span></code> and <code class="docutils literal notranslate"><span class="pre">BaseB</span></code> will have their
+SQL operations routed to one of two engines based on which superclass
+they descend from, if any.   In the case of a class that descends from more
+than one “bound” superclass, the superclass that is highest in the target
+class’ hierarchy will be chosen to represent which engine should be used.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.params.binds" title="sqlalchemy.orm.Session"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.binds</span></code></a></p>
+</div>
+</section>
+<section id="coordination-of-transactions-for-a-multiple-engine-session">
+<h3>Coordination of Transactions for a multiple-engine Session<a class="headerlink" href="#coordination-of-transactions-for-a-multiple-engine-session" title="Link to this heading">¶</a></h3>
+<p>One caveat to using multiple bound engines is in the case where a commit
+operation may fail on one backend after the commit has succeeded on another.
+This is an inconsistency problem that in relational databases is solved
+using a “two phase transaction”, which adds an additional “prepare” step
+to the commit sequence that allows for multiple databases to agree to commit
+before actually completing the transaction.</p>
+<p>Due to limited support within DBAPIs,  SQLAlchemy has limited support for two-
+phase transactions across backends.  Most typically, it is known to work well
+with the PostgreSQL backend and to  a lesser extent with the MySQL backend.
+However, the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is fully capable of taking advantage of the two
+phase transaction feature when the backend supports it, by setting the
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.params.use_twophase" title="sqlalchemy.orm.Session"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.use_twophase</span></code></a> flag within <a class="reference internal" href="session_api.html#sqlalchemy.orm.sessionmaker" title="sqlalchemy.orm.sessionmaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">sessionmaker</span></code></a> or
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>.  See <a class="reference internal" href="session_transaction.html#session-twophase"><span class="std std-ref">Enabling Two-Phase Commit</span></a> for an example.</p>
+</section>
+<section id="custom-vertical-partitioning">
+<span id="session-custom-partitioning"></span><h3>Custom Vertical Partitioning<a class="headerlink" href="#custom-vertical-partitioning" title="Link to this heading">¶</a></h3>
+<p>More comprehensive rule-based class-level partitioning can be built by
+overriding the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.get_bind" title="sqlalchemy.orm.Session.get_bind"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.get_bind()</span></code></a> method.   Below we illustrate
+a custom <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> which delivers the following rules:</p>
+<ol class="arabic simple">
+<li><p>Flush operations, as well as bulk “update” and “delete” operations,
+are delivered to the engine named <code class="docutils literal notranslate"><span class="pre">leader</span></code>.</p></li>
+<li><p>Operations on objects that subclass <code class="docutils literal notranslate"><span class="pre">MyOtherClass</span></code> all
+occur on the <code class="docutils literal notranslate"><span class="pre">other</span></code> engine.</p></li>
+<li><p>Read operations for all other classes occur on a random
+choice of the <code class="docutils literal notranslate"><span class="pre">follower1</span></code> or <code class="docutils literal notranslate"><span class="pre">follower2</span></code> database.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">engines</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;leader&quot;</span><span class="p">:</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;sqlite:///leader.db&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;other&quot;</span><span class="p">:</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;sqlite:///other.db&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;follower1&quot;</span><span class="p">:</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;sqlite:///follower1.db&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;follower2&quot;</span><span class="p">:</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;sqlite:///follower2.db&quot;</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">Update</span><span class="p">,</span> <span class="n">Delete</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span><span class="p">,</span> <span class="n">sessionmaker</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RoutingSession</span><span class="p">(</span><span class="n">Session</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clause</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mapper</span> <span class="ow">and</span> <span class="n">issubclass</span><span class="p">(</span><span class="n">mapper</span><span class="o">.</span><span class="n">class_</span><span class="p">,</span> <span class="n">MyOtherClass</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;other&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flushing</span> <span class="ow">or</span> <span class="n">isinstance</span><span class="p">(</span><span class="n">clause</span><span class="p">,</span> <span class="p">(</span><span class="n">Update</span><span class="p">,</span> <span class="n">Delete</span><span class="p">)):</span>
+            <span class="c1"># NOTE: this is for example, however in practice reader/writer</span>
+            <span class="c1"># splits are likely more straightforward by using two distinct</span>
+            <span class="c1"># Sessions at the top of a &quot;reader&quot; or &quot;writer&quot; operation.</span>
+            <span class="c1"># See note below</span>
+            <span class="k">return</span> <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;leader&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">engines</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;follower1&quot;</span><span class="p">,</span> <span class="s2">&quot;follower2&quot;</span><span class="p">])]</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>The above <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> class is plugged in using the <code class="docutils literal notranslate"><span class="pre">class_</span></code>
+argument to <a class="reference internal" href="session_api.html#sqlalchemy.orm.sessionmaker" title="sqlalchemy.orm.sessionmaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">sessionmaker</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">class_</span><span class="o">=</span><span class="n">RoutingSession</span><span class="p">)</span></pre></div>
+</div>
+<p>This approach can be combined with multiple <a class="reference internal" href="../core/metadata.html#sqlalchemy.schema.MetaData" title="sqlalchemy.schema.MetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaData</span></code></a> objects,
+using an approach such as that of using the declarative <code class="docutils literal notranslate"><span class="pre">__abstract__</span></code>
+keyword, described at <a class="reference internal" href="declarative_config.html#declarative-abstract"><span class="std std-ref">__abstract__</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the above example illustrates routing of specific SQL statements
+to a so-called “leader” or “follower” database based on whether or not the
+statement expects to write data, this is likely not a practical approach,
+as it leads to uncoordinated transaction behavior between reading
+and writing within the same operation.  In practice, it’s likely best
+to construct the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> up front as a “reader” or “writer”
+session, based on the overall operation / transaction that’s proceeding.
+That way, an operation that will be writing data will also emit its read-queries
+within the same transaction scope.  See the example at
+<a class="reference internal" href="session_transaction.html#session-transaction-isolation-enginewide"><span class="std std-ref">Setting Isolation For A Sessionmaker / Engine Wide</span></a> for a recipe that sets up
+one <a class="reference internal" href="session_api.html#sqlalchemy.orm.sessionmaker" title="sqlalchemy.orm.sessionmaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">sessionmaker</span></code></a> for “read only” operations using autocommit
+connections, and another for “write” operations which will include DML /
+COMMIT.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://techspot.zzzeek.org/2012/01/11/django-style-database-routers-in-sqlalchemy/">Django-style Database Routers in SQLAlchemy</a>  - blog post on a more comprehensive example of <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.get_bind" title="sqlalchemy.orm.Session.get_bind"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.get_bind()</span></code></a></p>
+</div>
+</section>
+<section id="horizontal-partitioning">
+<h3>Horizontal Partitioning<a class="headerlink" href="#horizontal-partitioning" title="Link to this heading">¶</a></h3>
+<p>Horizontal partitioning partitions the rows of a single table (or a set of
+tables) across multiple databases.    The SQLAlchemy <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>
+contains support for this concept, however to use it fully requires that
+<a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> and <a class="reference internal" href="queryguide/query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> subclasses are used.  A basic version
+of these subclasses are available in the <a class="reference internal" href="extensions/horizontal_shard.html"><span class="std std-ref">Horizontal Sharding</span></a>
+ORM extension.   An example of use is at: <a class="reference internal" href="examples.html#examples-sharding"><span class="std std-ref">Horizontal Sharding</span></a>.</p>
+</section>
+</section>
+<section id="bulk-operations">
+<span id="id1"></span><h2>Bulk Operations<a class="headerlink" href="#bulk-operations" title="Link to this heading">¶</a></h2>
+<div class="admonition legacy">
+<p class="admonition-title">Legacy Feature</p>
+<p>SQLAlchemy 2.0 has integrated the <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> “bulk insert” and
+“bulk update” capabilities into 2.0 style <a class="reference internal" href="session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a>
+method, making direct use of <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> and <a class="reference internal" href="../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a>
+constructs. See the document at <a class="reference internal" href="queryguide/dml.html"><span class="doc">ORM-Enabled INSERT, UPDATE, and DELETE statements</span></a> for documentation,
+including <a class="reference internal" href="queryguide/dml.html#orm-queryguide-legacy-bulk-insert"><span class="std std-ref">Legacy Session Bulk INSERT Methods</span></a> which illustrates migration
+from the older methods to the new methods.</p>
+</div>
+</section>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="session_transaction.html" title="previous chapter">Transactions and Connection Management</a>
+        Next:
+        <a href="contextual.html" title="next chapter">Contextual/Thread-local Sessions</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

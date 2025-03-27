@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    SQL Statements and Expressions API
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../index.html" />
+        <link rel="up" title="SQLAlchemy Core" href="index.html" />
+        <link rel="next" title="Column Elements and Expressions" href="sqlelement.html" />
+        <link rel="prev" title="SQLAlchemy Core" href="index.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a>
+        </h3>
+
+        <ul>
+<li class="selected"><span class="link-container"><strong>SQL Statements and Expressions API</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="sqlelement.html">Column Elements and Expressions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="operators.html">Operator Reference</a></span></li>
+<li><span class="link-container"><a class="reference external" href="selectable.html">SELECT and Related Constructs</a></span></li>
+<li><span class="link-container"><a class="reference external" href="dml.html">Insert, Updates, Deletes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="functions.html">SQL and Generic Functions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="compiler.html">Custom SQL Constructs and Compilation Extension</a></span></li>
+<li><span class="link-container"><a class="reference external" href="serializer.html">Expression Serializer Extension</a></span></li>
+<li><span class="link-container"><a class="reference external" href="foundation.html">SQL Expression Language Foundational Constructs</a></span></li>
+<li><span class="link-container"><a class="reference external" href="visitors.html">Visitor and Traversal Utilities</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="schema.html">Schema Definition Language</a></span></li>
+<li><span class="link-container"><a class="reference external" href="types.html">SQL Datatype Objects</a></span></li>
+<li><span class="link-container"><a class="reference external" href="engines_connections.html">Engine and Connection Use</a></span></li>
+<li><span class="link-container"><a class="reference external" href="api_basics.html">Core API Basics</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="index.html" title="previous chapter">SQLAlchemy Core</a></li>
+                <li><b>Next:</b>
+                <a href="sqlelement.html" title="next chapter">Column Elements and Expressions</a></li>
+
+            <li><b>Up:</b> <a href="../index.html">Home</a></li>
+                    <ul><li><a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a></li>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#module-sqlalchemy.sql.expression">SQL Statements and Expressions API</a></li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar core-expression_api" >
+        
+<section id="module-sqlalchemy.sql.expression">
+<span id="sql-statements-and-expressions-api"></span><span id="expression-api-toplevel"></span><h1>SQL Statements and Expressions API<a class="headerlink" href="#module-sqlalchemy.sql.expression" title="Link to this heading">¶</a></h1>
+<p>This section presents the API reference for the SQL Expression Language.
+For an introduction, start with <a class="reference internal" href="../tutorial/data.html#tutorial-working-with-data"><span class="std std-ref">Working with Data</span></a>
+in the <a class="reference internal" href="../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sqlelement.html">Column Elements and Expressions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sqlelement.html#column-element-foundational-constructors">Column Element Foundational Constructors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.and_"><code class="docutils literal notranslate"><span class="pre">and_()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.bindparam"><code class="docutils literal notranslate"><span class="pre">bindparam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.bitwise_not"><code class="docutils literal notranslate"><span class="pre">bitwise_not()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.case"><code class="docutils literal notranslate"><span class="pre">case()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.cast"><code class="docutils literal notranslate"><span class="pre">cast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.column"><code class="docutils literal notranslate"><span class="pre">column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.custom_op"><code class="docutils literal notranslate"><span class="pre">custom_op</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.distinct"><code class="docutils literal notranslate"><span class="pre">distinct()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.extract"><code class="docutils literal notranslate"><span class="pre">extract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.false"><code class="docutils literal notranslate"><span class="pre">false()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func"><code class="docutils literal notranslate"><span class="pre">func</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.lambda_stmt"><code class="docutils literal notranslate"><span class="pre">lambda_stmt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.literal"><code class="docutils literal notranslate"><span class="pre">literal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.literal_column"><code class="docutils literal notranslate"><span class="pre">literal_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.not_"><code class="docutils literal notranslate"><span class="pre">not_()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.null"><code class="docutils literal notranslate"><span class="pre">null()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.or_"><code class="docutils literal notranslate"><span class="pre">or_()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.outparam"><code class="docutils literal notranslate"><span class="pre">outparam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.text"><code class="docutils literal notranslate"><span class="pre">text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.true"><code class="docutils literal notranslate"><span class="pre">true()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.try_cast"><code class="docutils literal notranslate"><span class="pre">try_cast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.tuple_"><code class="docutils literal notranslate"><span class="pre">tuple_()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.type_coerce"><code class="docutils literal notranslate"><span class="pre">type_coerce()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.quoted_name"><code class="docutils literal notranslate"><span class="pre">quoted_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sqlelement.html#column-element-modifier-constructors">Column Element Modifier Constructors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.all_"><code class="docutils literal notranslate"><span class="pre">all_()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.any_"><code class="docutils literal notranslate"><span class="pre">any_()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.asc"><code class="docutils literal notranslate"><span class="pre">asc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.between"><code class="docutils literal notranslate"><span class="pre">between()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.collate"><code class="docutils literal notranslate"><span class="pre">collate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.desc"><code class="docutils literal notranslate"><span class="pre">desc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.funcfilter"><code class="docutils literal notranslate"><span class="pre">funcfilter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.label"><code class="docutils literal notranslate"><span class="pre">label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.nulls_first"><code class="docutils literal notranslate"><span class="pre">nulls_first()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.nullsfirst"><code class="docutils literal notranslate"><span class="pre">nullsfirst()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.nulls_last"><code class="docutils literal notranslate"><span class="pre">nulls_last()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.nullslast"><code class="docutils literal notranslate"><span class="pre">nullslast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.over"><code class="docutils literal notranslate"><span class="pre">over()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.within_group"><code class="docutils literal notranslate"><span class="pre">within_group()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sqlelement.html#column-element-class-documentation">Column Element Class Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.BinaryExpression"><code class="docutils literal notranslate"><span class="pre">BinaryExpression</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.BindParameter"><code class="docutils literal notranslate"><span class="pre">BindParameter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Case"><code class="docutils literal notranslate"><span class="pre">Case</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Cast"><code class="docutils literal notranslate"><span class="pre">Cast</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.ClauseList"><code class="docutils literal notranslate"><span class="pre">ClauseList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.ColumnClause"><code class="docutils literal notranslate"><span class="pre">ColumnClause</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.ColumnCollection"><code class="docutils literal notranslate"><span class="pre">ColumnCollection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.ColumnElement"><code class="docutils literal notranslate"><span class="pre">ColumnElement</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.ColumnExpressionArgument"><code class="docutils literal notranslate"><span class="pre">ColumnExpressionArgument</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.ColumnOperators"><code class="docutils literal notranslate"><span class="pre">ColumnOperators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Extract"><code class="docutils literal notranslate"><span class="pre">Extract</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.False_"><code class="docutils literal notranslate"><span class="pre">False_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.FunctionFilter"><code class="docutils literal notranslate"><span class="pre">FunctionFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Label"><code class="docutils literal notranslate"><span class="pre">Label</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Null"><code class="docutils literal notranslate"><span class="pre">Null</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Operators"><code class="docutils literal notranslate"><span class="pre">Operators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Over"><code class="docutils literal notranslate"><span class="pre">Over</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.SQLColumnExpression"><code class="docutils literal notranslate"><span class="pre">SQLColumnExpression</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.TextClause"><code class="docutils literal notranslate"><span class="pre">TextClause</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.TryCast"><code class="docutils literal notranslate"><span class="pre">TryCast</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.Tuple"><code class="docutils literal notranslate"><span class="pre">Tuple</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.WithinGroup"><code class="docutils literal notranslate"><span class="pre">WithinGroup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.elements.WrapsColumnExpression"><code class="docutils literal notranslate"><span class="pre">WrapsColumnExpression</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.True_"><code class="docutils literal notranslate"><span class="pre">True_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.TypeCoerce"><code class="docutils literal notranslate"><span class="pre">TypeCoerce</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.UnaryExpression"><code class="docutils literal notranslate"><span class="pre">UnaryExpression</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sqlelement.html#column-element-typing-utilities">Column Element Typing Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.NotNullable"><code class="docutils literal notranslate"><span class="pre">NotNullable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sqlelement.html#sqlalchemy.Nullable"><code class="docutils literal notranslate"><span class="pre">Nullable()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="operators.html">Operator Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#comparison-operators">Comparison Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#in-comparisons">IN Comparisons</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="operators.html#in-against-a-list-of-values">IN against a list of values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operators.html#empty-in-expressions">Empty IN Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operators.html#not-in">NOT IN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operators.html#tuple-in-expressions">Tuple IN Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="operators.html#subquery-in">Subquery IN</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#identity-comparisons">Identity Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#string-comparisons">String Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#string-containment">String Containment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#string-matching">String matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#string-alteration">String Alteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#arithmetic-operators">Arithmetic Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#bitwise-operators">Bitwise Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#using-conjunctions-and-negations">Using Conjunctions and Negations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html#conjunction-operators">Conjunction Operators</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="selectable.html">SELECT and Related Constructs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="selectable.html#selectable-foundational-constructors">Selectable Foundational Constructors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.except_"><code class="docutils literal notranslate"><span class="pre">except_()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.except_all"><code class="docutils literal notranslate"><span class="pre">except_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.exists"><code class="docutils literal notranslate"><span class="pre">exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.intersect"><code class="docutils literal notranslate"><span class="pre">intersect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.intersect_all"><code class="docutils literal notranslate"><span class="pre">intersect_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.select"><code class="docutils literal notranslate"><span class="pre">select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.table"><code class="docutils literal notranslate"><span class="pre">table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.union"><code class="docutils literal notranslate"><span class="pre">union()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.union_all"><code class="docutils literal notranslate"><span class="pre">union_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.values"><code class="docutils literal notranslate"><span class="pre">values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="selectable.html#selectable-modifier-constructors">Selectable Modifier Constructors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.alias"><code class="docutils literal notranslate"><span class="pre">alias()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.cte"><code class="docutils literal notranslate"><span class="pre">cte()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.join"><code class="docutils literal notranslate"><span class="pre">join()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.lateral"><code class="docutils literal notranslate"><span class="pre">lateral()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.outerjoin"><code class="docutils literal notranslate"><span class="pre">outerjoin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.tablesample"><code class="docutils literal notranslate"><span class="pre">tablesample()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="selectable.html#selectable-class-documentation">Selectable Class Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Alias"><code class="docutils literal notranslate"><span class="pre">Alias</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.AliasedReturnsRows"><code class="docutils literal notranslate"><span class="pre">AliasedReturnsRows</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.CompoundSelect"><code class="docutils literal notranslate"><span class="pre">CompoundSelect</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.CTE"><code class="docutils literal notranslate"><span class="pre">CTE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Executable"><code class="docutils literal notranslate"><span class="pre">Executable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Exists"><code class="docutils literal notranslate"><span class="pre">Exists</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.FromClause"><code class="docutils literal notranslate"><span class="pre">FromClause</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.GenerativeSelect"><code class="docutils literal notranslate"><span class="pre">GenerativeSelect</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.HasCTE"><code class="docutils literal notranslate"><span class="pre">HasCTE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.HasPrefixes"><code class="docutils literal notranslate"><span class="pre">HasPrefixes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.HasSuffixes"><code class="docutils literal notranslate"><span class="pre">HasSuffixes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Join"><code class="docutils literal notranslate"><span class="pre">Join</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Lateral"><code class="docutils literal notranslate"><span class="pre">Lateral</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.ReturnsRows"><code class="docutils literal notranslate"><span class="pre">ReturnsRows</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.ScalarSelect"><code class="docutils literal notranslate"><span class="pre">ScalarSelect</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Select"><code class="docutils literal notranslate"><span class="pre">Select</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Selectable"><code class="docutils literal notranslate"><span class="pre">Selectable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.SelectBase"><code class="docutils literal notranslate"><span class="pre">SelectBase</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Subquery"><code class="docutils literal notranslate"><span class="pre">Subquery</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.TableClause"><code class="docutils literal notranslate"><span class="pre">TableClause</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.TableSample"><code class="docutils literal notranslate"><span class="pre">TableSample</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.TableValuedAlias"><code class="docutils literal notranslate"><span class="pre">TableValuedAlias</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.TextualSelect"><code class="docutils literal notranslate"><span class="pre">TextualSelect</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.Values"><code class="docutils literal notranslate"><span class="pre">Values</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.ScalarValues"><code class="docutils literal notranslate"><span class="pre">ScalarValues</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="selectable.html#label-style-constants">Label Style Constants</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="selectable.html#sqlalchemy.sql.expression.SelectLabelStyle"><code class="docutils literal notranslate"><span class="pre">SelectLabelStyle</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dml.html">Insert, Updates, Deletes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dml.html#dml-foundational-constructors">DML Foundational Constructors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.insert"><code class="docutils literal notranslate"><span class="pre">insert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.update"><code class="docutils literal notranslate"><span class="pre">update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html#dml-class-documentation-constructors">DML Class Documentation Constructors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.Delete"><code class="docutils literal notranslate"><span class="pre">Delete</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.Insert"><code class="docutils literal notranslate"><span class="pre">Insert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.Update"><code class="docutils literal notranslate"><span class="pre">Update</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.UpdateBase"><code class="docutils literal notranslate"><span class="pre">UpdateBase</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sqlalchemy.sql.expression.ValuesBase"><code class="docutils literal notranslate"><span class="pre">ValuesBase</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">SQL and Generic Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#function-api">Function API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.AnsiFunction"><code class="docutils literal notranslate"><span class="pre">AnsiFunction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.Function"><code class="docutils literal notranslate"><span class="pre">Function</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.FunctionElement"><code class="docutils literal notranslate"><span class="pre">FunctionElement</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.GenericFunction"><code class="docutils literal notranslate"><span class="pre">GenericFunction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.register_function"><code class="docutils literal notranslate"><span class="pre">register_function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#selected-known-functions">Selected “Known” Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.aggregate_strings"><code class="docutils literal notranslate"><span class="pre">aggregate_strings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.array_agg"><code class="docutils literal notranslate"><span class="pre">array_agg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.char_length"><code class="docutils literal notranslate"><span class="pre">char_length</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.coalesce"><code class="docutils literal notranslate"><span class="pre">coalesce</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.concat"><code class="docutils literal notranslate"><span class="pre">concat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.count"><code class="docutils literal notranslate"><span class="pre">count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.cube"><code class="docutils literal notranslate"><span class="pre">cube</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.cume_dist"><code class="docutils literal notranslate"><span class="pre">cume_dist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.current_date"><code class="docutils literal notranslate"><span class="pre">current_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.current_time"><code class="docutils literal notranslate"><span class="pre">current_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.current_timestamp"><code class="docutils literal notranslate"><span class="pre">current_timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.current_user"><code class="docutils literal notranslate"><span class="pre">current_user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.dense_rank"><code class="docutils literal notranslate"><span class="pre">dense_rank</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.grouping_sets"><code class="docutils literal notranslate"><span class="pre">grouping_sets</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.localtime"><code class="docutils literal notranslate"><span class="pre">localtime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.localtimestamp"><code class="docutils literal notranslate"><span class="pre">localtimestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.max"><code class="docutils literal notranslate"><span class="pre">max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.min"><code class="docutils literal notranslate"><span class="pre">min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.mode"><code class="docutils literal notranslate"><span class="pre">mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.next_value"><code class="docutils literal notranslate"><span class="pre">next_value</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.now"><code class="docutils literal notranslate"><span class="pre">now</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.percent_rank"><code class="docutils literal notranslate"><span class="pre">percent_rank</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.percentile_cont"><code class="docutils literal notranslate"><span class="pre">percentile_cont</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.percentile_disc"><code class="docutils literal notranslate"><span class="pre">percentile_disc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.random"><code class="docutils literal notranslate"><span class="pre">random</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.rank"><code class="docutils literal notranslate"><span class="pre">rank</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.rollup"><code class="docutils literal notranslate"><span class="pre">rollup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.session_user"><code class="docutils literal notranslate"><span class="pre">session_user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.sum"><code class="docutils literal notranslate"><span class="pre">sum</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.sysdate"><code class="docutils literal notranslate"><span class="pre">sysdate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#sqlalchemy.sql.functions.user"><code class="docutils literal notranslate"><span class="pre">user</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compiler.html">Custom SQL Constructs and Compilation Extension</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#synopsis">Synopsis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#dialect-specific-compilation-rules">Dialect-specific compilation rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#compiling-sub-elements-of-a-custom-expression-construct">Compiling sub-elements of a custom expression construct</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="compiler.html#cross-compiling-between-sql-and-ddl-compilers">Cross Compiling between SQL and DDL compilers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#changing-the-default-compilation-of-existing-constructs">Changing the default compilation of existing constructs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#changing-compilation-of-types">Changing Compilation of Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#subclassing-guidelines">Subclassing Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#enabling-caching-support-for-custom-constructs">Enabling Caching Support for Custom Constructs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#further-examples">Further Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="compiler.html#utc-timestamp-function">“UTC timestamp” function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compiler.html#greatest-function">“GREATEST” function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compiler.html#false-expression">“false” expression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#sqlalchemy.ext.compiler.compiles"><code class="docutils literal notranslate"><span class="pre">compiles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#sqlalchemy.ext.compiler.deregister"><code class="docutils literal notranslate"><span class="pre">deregister()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="serializer.html">Expression Serializer Extension</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="serializer.html#sqlalchemy.ext.serializer.Deserializer"><code class="docutils literal notranslate"><span class="pre">Deserializer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="serializer.html#sqlalchemy.ext.serializer.Deserializer.get_engine"><code class="docutils literal notranslate"><span class="pre">Deserializer.get_engine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="serializer.html#sqlalchemy.ext.serializer.Deserializer.persistent_load"><code class="docutils literal notranslate"><span class="pre">Deserializer.persistent_load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="serializer.html#sqlalchemy.ext.serializer.Serializer"><code class="docutils literal notranslate"><span class="pre">Serializer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="serializer.html#sqlalchemy.ext.serializer.Serializer.persistent_id"><code class="docutils literal notranslate"><span class="pre">Serializer.persistent_id()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="serializer.html#sqlalchemy.ext.serializer.dumps"><code class="docutils literal notranslate"><span class="pre">dumps()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="serializer.html#sqlalchemy.ext.serializer.loads"><code class="docutils literal notranslate"><span class="pre">loads()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="foundation.html">SQL Expression Language Foundational Constructs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.CacheKey"><code class="docutils literal notranslate"><span class="pre">CacheKey</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.CacheKey.bindparams"><code class="docutils literal notranslate"><span class="pre">CacheKey.bindparams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.CacheKey.key"><code class="docutils literal notranslate"><span class="pre">CacheKey.key</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.CacheKey.to_offline_string"><code class="docutils literal notranslate"><span class="pre">CacheKey.to_offline_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement"><code class="docutils literal notranslate"><span class="pre">ClauseElement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement.compare"><code class="docutils literal notranslate"><span class="pre">ClauseElement.compare()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement.compile"><code class="docutils literal notranslate"><span class="pre">ClauseElement.compile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement.get_children"><code class="docutils literal notranslate"><span class="pre">ClauseElement.get_children()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement.inherit_cache"><code class="docutils literal notranslate"><span class="pre">ClauseElement.inherit_cache</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement.params"><code class="docutils literal notranslate"><span class="pre">ClauseElement.params()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement.self_group"><code class="docutils literal notranslate"><span class="pre">ClauseElement.self_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.ClauseElement.unique_params"><code class="docutils literal notranslate"><span class="pre">ClauseElement.unique_params()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foundation.html#sqlalchemy.sql.base.DialectKWArgs"><code class="docutils literal notranslate"><span class="pre">DialectKWArgs</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.base.DialectKWArgs.argument_for"><code class="docutils literal notranslate"><span class="pre">DialectKWArgs.argument_for()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.base.DialectKWArgs.dialect_kwargs"><code class="docutils literal notranslate"><span class="pre">DialectKWArgs.dialect_kwargs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.base.DialectKWArgs.dialect_options"><code class="docutils literal notranslate"><span class="pre">DialectKWArgs.dialect_options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.base.DialectKWArgs.kwargs"><code class="docutils literal notranslate"><span class="pre">DialectKWArgs.kwargs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foundation.html#sqlalchemy.sql.traversals.HasCacheKey"><code class="docutils literal notranslate"><span class="pre">HasCacheKey</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.traversals.HasCacheKey.inherit_cache"><code class="docutils literal notranslate"><span class="pre">HasCacheKey.inherit_cache</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.LambdaElement"><code class="docutils literal notranslate"><span class="pre">LambdaElement</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.add_criteria"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.add_criteria()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.is_delete"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.is_delete</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.is_dml"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.is_dml</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.is_insert"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.is_insert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.is_select"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.is_select</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.is_text"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.is_text</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.is_update"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.is_update</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="foundation.html#sqlalchemy.sql.expression.StatementLambdaElement.spoil"><code class="docutils literal notranslate"><span class="pre">StatementLambdaElement.spoil()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="visitors.html">Visitor and Traversal Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.ExternalTraversal"><code class="docutils literal notranslate"><span class="pre">ExternalTraversal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.ExternalTraversal.chain"><code class="docutils literal notranslate"><span class="pre">ExternalTraversal.chain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.ExternalTraversal.iterate"><code class="docutils literal notranslate"><span class="pre">ExternalTraversal.iterate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.ExternalTraversal.traverse"><code class="docutils literal notranslate"><span class="pre">ExternalTraversal.traverse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.ExternalTraversal.visitor_iterator"><code class="docutils literal notranslate"><span class="pre">ExternalTraversal.visitor_iterator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal"><code class="docutils literal notranslate"><span class="pre">InternalTraversal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_annotations_key"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_annotations_key</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_anon_name"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_anon_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_boolean"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_boolean</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_clauseelement"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_clauseelement</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_clauseelement_list"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_clauseelement_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_clauseelement_tuple"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_clauseelement_tuple</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_clauseelement_tuples"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_clauseelement_tuples</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_dialect_options"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_dialect_options</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_dml_multi_values"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_dml_multi_values</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_dml_ordered_values"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_dml_ordered_values</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_dml_values"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_dml_values</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_fromclause_canonical_column_collection"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_fromclause_canonical_column_collection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_fromclause_ordered_set"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_fromclause_ordered_set</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_has_cache_key"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_has_cache_key</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_has_cache_key_list"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_has_cache_key_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_has_cache_key_tuples"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_has_cache_key_tuples</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_ignore"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_ignore</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_inspectable"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_inspectable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_inspectable_list"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_inspectable_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_multi"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_multi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_multi_list"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_multi_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_named_ddl_element"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_named_ddl_element</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_operator"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_operator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_plain_dict"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_plain_dict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_plain_obj"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_plain_obj</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_prefix_sequence"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_prefix_sequence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_propagate_attrs"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_propagate_attrs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_statement_hint_list"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_statement_hint_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_string"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_string</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_string_clauseelement_dict"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_string_clauseelement_dict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_string_list"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_string_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_string_multi_dict"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_string_multi_dict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_table_hint_list"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_table_hint_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_type"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.InternalTraversal.dp_unknown_structure"><code class="docutils literal notranslate"><span class="pre">InternalTraversal.dp_unknown_structure</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.Visitable"><code class="docutils literal notranslate"><span class="pre">Visitable</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.anon_map"><code class="docutils literal notranslate"><span class="pre">anon_map</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.cloned_traverse"><code class="docutils literal notranslate"><span class="pre">cloned_traverse()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.iterate"><code class="docutils literal notranslate"><span class="pre">iterate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.replacement_traverse"><code class="docutils literal notranslate"><span class="pre">replacement_traverse()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.traverse"><code class="docutils literal notranslate"><span class="pre">traverse()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="visitors.html#sqlalchemy.sql.visitors.traverse_using"><code class="docutils literal notranslate"><span class="pre">traverse_using()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="index.html" title="previous chapter">SQLAlchemy Core</a>
+        Next:
+        <a href="sqlelement.html" title="next chapter">Column Elements and Expressions</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

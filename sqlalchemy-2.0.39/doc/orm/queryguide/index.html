@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    ORM Querying Guide
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+        <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../../index.html" />
+        <link rel="up" title="SQLAlchemy ORM" href="../index.html" />
+        <link rel="next" title="Writing SELECT statements for ORM Mapped Classes" href="select.html" />
+        <link rel="prev" title="Relationships API" href="../relationship_api.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="../index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="../quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../relationships.html">Relationship Configuration</a></span></li>
+<li class="selected"><span class="link-container"><strong>ORM Querying Guide</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="select.html">Writing SELECT statements for ORM Mapped Classes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="inheritance.html">Writing SELECT statements for Inheritance Mappings</a></span></li>
+<li><span class="link-container"><a class="reference external" href="dml.html">ORM-Enabled INSERT, UPDATE, and DELETE statements</a></span></li>
+<li><span class="link-container"><a class="reference external" href="columns.html">Column Loading Options</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Loading Techniques</a></span></li>
+<li><span class="link-container"><a class="reference external" href="api.html">ORM API Features for Querying</a></span></li>
+<li><span class="link-container"><a class="reference external" href="query.html">Legacy Query API</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="../session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="../relationship_api.html" title="previous chapter">Relationships API</a></li>
+                <li><b>Next:</b>
+                <a href="select.html" title="next chapter">Writing SELECT statements for ORM Mapped Classes</a></li>
+
+            <li><b>Up:</b> <a href="../../index.html">Home</a></li>
+                    <ul><li><a href="../index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#orm-querying-guide">ORM Querying Guide</a></li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-queryguide-index" >
+        
+<section id="orm-querying-guide">
+<span id="queryguide-toplevel"></span><h1>ORM Querying Guide<a class="headerlink" href="#orm-querying-guide" title="Link to this heading">¶</a></h1>
+<p>This section provides an overview of emitting queries with the
+SQLAlchemy ORM using <a class="reference internal" href="../../glossary.html#term-2.0-style"><span class="xref std std-term">2.0 style</span></a> usage.</p>
+<p>Readers of this section should be familiar with the SQLAlchemy overview
+at <a class="reference internal" href="../../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a>, and in particular most of the content here expands
+upon the content at <a class="reference internal" href="../../tutorial/data_select.html#tutorial-selecting-data"><span class="std std-ref">Using SELECT Statements</span></a>.</p>
+<div class="admonition-for-users-of-sqlalchemy-1-x admonition">
+<p class="admonition-title">For users of SQLAlchemy 1.x</p>
+<p>In the SQLAlchemy 2.x series, SQL SELECT statements for the ORM are
+constructed using the same <a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.select" title="sqlalchemy.sql.expression.select"><code class="xref py py-func docutils literal notranslate"><span class="pre">select()</span></code></a> construct as is used in
+Core, which is then invoked in terms of a <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> using the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> method (as are the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a> and
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.delete" title="sqlalchemy.sql.expression.delete"><code class="xref py py-func docutils literal notranslate"><span class="pre">delete()</span></code></a> constructs now used for the
+<a class="reference internal" href="dml.html#orm-expression-update-delete"><span class="std std-ref">ORM-Enabled INSERT, UPDATE, and DELETE statements</span></a> feature). However, the legacy
+<a class="reference internal" href="query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> object, which performs these same steps as more of an
+“all-in-one” object, continues to remain available as a thin facade over
+this new system, to support applications that were built on the 1.x series
+without the need for wholesale replacement of all queries. For reference on
+this object, see the section <a class="reference internal" href="query.html"><span class="std std-ref">Legacy Query API</span></a>.</p>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="select.html">Writing SELECT statements for ORM Mapped Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="select.html#selecting-orm-entities-and-attributes">Selecting ORM Entities and Attributes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="select.html#selecting-orm-entities">Selecting ORM Entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#selecting-multiple-orm-entities-simultaneously">Selecting Multiple ORM Entities Simultaneously</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#selecting-individual-attributes">Selecting Individual Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#grouping-selected-attributes-with-bundles">Grouping Selected Attributes with Bundles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#selecting-orm-aliases">Selecting ORM Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#getting-orm-results-from-textual-statements">Getting ORM Results from Textual Statements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#selecting-entities-from-subqueries">Selecting Entities from Subqueries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#selecting-entities-from-unions-and-other-set-operations">Selecting Entities from UNIONs and other set operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="select.html#joins">Joins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="select.html#simple-relationship-joins">Simple Relationship Joins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#chaining-multiple-joins">Chaining Multiple Joins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#joins-to-a-target-entity">Joins to a Target Entity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#joins-to-a-target-with-an-on-clause">Joins to a Target with an ON Clause</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#combining-relationship-with-custom-on-criteria">Combining Relationship with Custom ON Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#using-relationship-to-join-between-aliased-targets">Using Relationship to join between aliased targets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#joining-to-subqueries">Joining to Subqueries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#joining-to-subqueries-along-relationship-paths">Joining to Subqueries along Relationship paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#subqueries-that-refer-to-multiple-entities">Subqueries that Refer to Multiple Entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#setting-the-leftmost-from-clause-in-a-join">Setting the leftmost FROM clause in a join</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="select.html#relationship-where-operators">Relationship WHERE Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="select.html#exists-forms-has-any">EXISTS forms: has() / any()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="select.html#relationship-instance-comparison-operators">Relationship Instance Comparison Operators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="inheritance.html">Writing SELECT statements for Inheritance Mappings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="inheritance.html#selecting-from-the-base-class-vs-specific-sub-classes">SELECTing from the base class vs. specific sub-classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inheritance.html#using-selectin-polymorphic">Using selectin_polymorphic()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#applying-selectin-polymorphic-to-an-existing-eager-load">Applying selectin_polymorphic() to an existing eager load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#applying-loader-options-to-the-subclasses-loaded-by-selectin-polymorphic">Applying loader options to the subclasses loaded by selectin_polymorphic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#configuring-selectin-polymorphic-on-mappers">Configuring selectin_polymorphic() on mappers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inheritance.html#using-with-polymorphic">Using with_polymorphic()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#filtering-subclass-attributes-with-with-polymorphic">Filtering Subclass Attributes with with_polymorphic()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#using-aliasing-with-with-polymorphic">Using aliasing with with_polymorphic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#configuring-with-polymorphic-on-mappers">Configuring with_polymorphic() on mappers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inheritance.html#joining-to-specific-sub-types-or-with-polymorphic-entities">Joining to specific sub-types or with_polymorphic() entities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#eager-loading-of-polymorphic-subtypes">Eager Loading of Polymorphic Subtypes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inheritance.html#select-statements-for-single-inheritance-mappings">SELECT Statements for Single Inheritance Mappings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#optimizing-attribute-loads-for-single-inheritance">Optimizing Attribute Loads for Single Inheritance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inheritance.html#inheritance-loading-api">Inheritance Loading API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#sqlalchemy.orm.with_polymorphic"><code class="docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inheritance.html#sqlalchemy.orm.selectin_polymorphic"><code class="docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dml.html">ORM-Enabled INSERT, UPDATE, and DELETE statements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dml.html#orm-bulk-insert-statements">ORM Bulk INSERT Statements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#getting-new-objects-with-returning">Getting new objects with RETURNING</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#using-heterogeneous-parameter-dictionaries">Using Heterogeneous Parameter Dictionaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#sending-null-values-in-orm-bulk-insert-statements">Sending NULL values in ORM bulk INSERT statements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#bulk-insert-for-joined-table-inheritance">Bulk INSERT for Joined Table Inheritance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#orm-bulk-insert-with-sql-expressions">ORM Bulk Insert with SQL Expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#legacy-session-bulk-insert-methods">Legacy Session Bulk INSERT Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#orm-upsert-statements">ORM “upsert” Statements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html#orm-bulk-update-by-primary-key">ORM Bulk UPDATE by Primary Key</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#disabling-bulk-orm-update-by-primary-key-for-an-update-statement-with-multiple-parameter-sets">Disabling Bulk ORM Update by Primary Key for an UPDATE statement with multiple parameter sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#bulk-update-by-primary-key-for-joined-table-inheritance">Bulk UPDATE by Primary Key for Joined Table Inheritance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#legacy-session-bulk-update-methods">Legacy Session Bulk UPDATE Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dml.html#orm-update-and-delete-with-custom-where-criteria">ORM UPDATE and DELETE with Custom WHERE Criteria</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#important-notes-and-caveats-for-orm-enabled-update-and-delete">Important Notes and Caveats for ORM-Enabled Update and Delete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#selecting-a-synchronization-strategy">Selecting a Synchronization Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#using-returning-with-update-delete-and-custom-where-criteria">Using RETURNING with UPDATE/DELETE and Custom WHERE Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#update-delete-with-custom-where-criteria-for-joined-table-inheritance">UPDATE/DELETE with Custom WHERE Criteria for Joined Table Inheritance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dml.html#legacy-query-methods">Legacy Query Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="columns.html">Column Loading Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="columns.html#limiting-which-columns-load-with-column-deferral">Limiting which Columns Load with Column Deferral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#using-load-only-to-reduce-loaded-columns">Using <code class="docutils literal notranslate"><span class="pre">load_only()</span></code> to reduce loaded columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#using-defer-to-omit-specific-columns">Using <code class="docutils literal notranslate"><span class="pre">defer()</span></code> to omit specific columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#using-raiseload-to-prevent-deferred-column-loads">Using raiseload to prevent deferred column loads</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="columns.html#configuring-column-deferral-on-mappings">Configuring Column Deferral on Mappings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#using-deferred-for-imperative-mappers-mapped-sql-expressions">Using <code class="docutils literal notranslate"><span class="pre">deferred()</span></code> for imperative mappers, mapped SQL expressions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#using-undefer-to-eagerly-load-deferred-columns">Using <code class="docutils literal notranslate"><span class="pre">undefer()</span></code> to “eagerly” load deferred columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#loading-deferred-columns-in-groups">Loading deferred columns in groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#undeferring-by-group-with-undefer-group">Undeferring by group with <code class="docutils literal notranslate"><span class="pre">undefer_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#undeferring-on-wildcards">Undeferring on wildcards</a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#configuring-mapper-level-raiseload-behavior">Configuring mapper-level “raiseload” behavior</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="columns.html#loading-arbitrary-sql-expressions-onto-objects">Loading Arbitrary SQL Expressions onto Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#using-with-expression-with-unions-other-subqueries">Using <code class="docutils literal notranslate"><span class="pre">with_expression()</span></code> with UNIONs, other subqueries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="columns.html#column-loading-api">Column Loading API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#sqlalchemy.orm.defer"><code class="docutils literal notranslate"><span class="pre">defer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#sqlalchemy.orm.deferred"><code class="docutils literal notranslate"><span class="pre">deferred()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#sqlalchemy.orm.query_expression"><code class="docutils literal notranslate"><span class="pre">query_expression()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#sqlalchemy.orm.load_only"><code class="docutils literal notranslate"><span class="pre">load_only()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#sqlalchemy.orm.undefer"><code class="docutils literal notranslate"><span class="pre">undefer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#sqlalchemy.orm.undefer_group"><code class="docutils literal notranslate"><span class="pre">undefer_group()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="columns.html#sqlalchemy.orm.with_expression"><code class="docutils literal notranslate"><span class="pre">with_expression()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="relationships.html">Relationship Loading Techniques</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#summary-of-relationship-loading-styles">Summary of Relationship Loading Styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#configuring-loader-strategies-at-mapping-time">Configuring Loader Strategies at Mapping Time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#relationship-loading-with-loader-options">Relationship Loading with Loader Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#adding-criteria-to-loader-options">Adding Criteria to loader options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#specifying-sub-options-with-load-options">Specifying Sub-Options with Load.options()</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#lazy-loading">Lazy Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#preventing-unwanted-lazy-loads-using-raiseload">Preventing unwanted lazy loads using raiseload</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#joined-eager-loading">Joined Eager Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#the-zen-of-joined-eager-loading">The Zen of Joined Eager Loading</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#select-in-loading">Select IN loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#subquery-eager-loading">Subquery Eager Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#what-kind-of-loading-to-use">What Kind of Loading to Use ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#polymorphic-eager-loading">Polymorphic Eager Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#wildcard-loading-strategies">Wildcard Loading Strategies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#per-entity-wildcard-loading-strategies">Per-Entity Wildcard Loading Strategies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#routing-explicit-joins-statements-into-eagerly-loaded-collections">Routing Explicit Joins/Statements into Eagerly Loaded Collections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#using-contains-eager-to-load-a-custom-filtered-collection-result">Using contains_eager() to load a custom-filtered collection result</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="relationships.html#relationship-loader-api">Relationship Loader API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.contains_eager"><code class="docutils literal notranslate"><span class="pre">contains_eager()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.defaultload"><code class="docutils literal notranslate"><span class="pre">defaultload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.immediateload"><code class="docutils literal notranslate"><span class="pre">immediateload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.joinedload"><code class="docutils literal notranslate"><span class="pre">joinedload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.lazyload"><code class="docutils literal notranslate"><span class="pre">lazyload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.Load"><code class="docutils literal notranslate"><span class="pre">Load</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.noload"><code class="docutils literal notranslate"><span class="pre">noload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.raiseload"><code class="docutils literal notranslate"><span class="pre">raiseload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload"><code class="docutils literal notranslate"><span class="pre">selectinload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="relationships.html#sqlalchemy.orm.subqueryload"><code class="docutils literal notranslate"><span class="pre">subqueryload()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">ORM API Features for Querying</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#orm-loader-options">ORM Loader Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#orm-execution-options">ORM Execution Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#populate-existing">Populate Existing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#autoflush">Autoflush</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#fetching-large-result-sets-with-yield-per">Fetching Large Result Sets with Yield Per</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#queryguide-identity-token">Identity Token</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">Legacy Query API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="query.html#the-query-object">The Query Object</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query.html#sqlalchemy.orm.Query"><code class="docutils literal notranslate"><span class="pre">Query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="query.html#orm-specific-query-constructs">ORM-Specific Query Constructs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="../relationship_api.html" title="previous chapter">Relationships API</a>
+        Next:
+        <a href="select.html" title="next chapter">Writing SELECT statements for ORM Mapped Classes</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

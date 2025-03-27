@@ -1,0 +1,98 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=61.0",
+    "cython>=0.29.24; platform_python_implementation == 'CPython'", # Skip cython when using pypy
+]
+
+[tool.black]
+line-length = 79
+target-version = ['py37']
+
+[tool.zimports]
+black-line-length = 79
+
+[tool.slotscheck]
+exclude-modules = '''
+^sqlalchemy\.(
+  testing
+  |ext\.mypy  # see slotscheck/issues/178
+)
+'''
+
+
+# disable isort, for IDEs that just default isort to be turned on, e.g. vscode.
+# we use flake8-import-order for import sorting, using zimports to actually
+# reformat code.  isort is nicer in many ways but doesn't have our
+# "import *" fixer and also is not 100% compatible with flake8-import-order.
+[tool.isort]
+skip_glob=['*']
+
+
+[tool.pytest.ini_options]
+addopts = "--tb native -v -r sfxX --maxfail=250 -p warnings -p logging --strict-markers"
+norecursedirs = "examples build doc lib"
+python_files = "test_*.py"
+minversion = "6.2"
+filterwarnings = [
+    # NOTE: additional SQLAlchemy specific filters in
+    # sqlalchemy/testing/warnings.py.   SQLAlchemy modules cannot be named
+    # here as pytest loads them immediately, which breaks coverage as well
+    # as sys.path adjustments in conftest.py
+    "error::DeprecationWarning:test",
+    "error::DeprecationWarning:sqlalchemy",
+
+    # sqlite3 warnings due to test/dialect/test_sqlite.py->test_native_datetime,
+    # which is asserting that these deprecated-in-py312 handlers are functional
+    "ignore:The default (date)?(time)?(stamp)? (adapter|converter):DeprecationWarning",
+]
+markers = [
+    "memory_intensive: memory / CPU intensive suite tests",
+    "mypy: mypy integration / plugin tests",
+    "timing_intensive: time-oriented tests that are sensitive to race conditions",
+    "backend: tests that should run on all backends; typically dialect-sensitive",
+    "sparse_backend: tests that should run on multiple backends, not necessarily all",
+]
+
+[tool.pyright]
+
+reportPrivateUsage = "none"
+reportUnusedClass = "none"
+reportUnusedFunction = "none"
+reportTypedDictNotRequiredAccess = "warning"
+
+[tool.mypy]
+mypy_path = "./lib/"
+show_error_codes = true
+incremental = true
+
+[[tool.mypy.overrides]]
+
+module = [
+    "sqlalchemy.*"
+]
+
+warn_unused_ignores = true
+strict = true
+
+
+
+[tool.cibuildwheel]
+test-requires = "pytest pytest-xdist"
+# remove user site, otherwise the local checkout has precedence, disabling cyextensions
+test-command = "python -s -m pytest -c {project}/pyproject.toml -n4 -q --nomemory --notimingintensive --nomypy {project}/test"
+
+build = "*"
+# python 3.6 is no longer supported by sqlalchemy
+# pypy uses the universal wheel fallback, since it does not use any compiled extension
+skip = "cp36-* pp*"
+# TODO: remove this skip once action support arm macs
+test-skip = "*-macosx_arm64"
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "arm64"]
+
+# On an Linux Intel runner with qemu installed, build Intel and ARM wheels
+# NOTE: this is overriden in the pipeline using the CIBW_ARCHS_LINUX env variable to speed up the build
+[tool.cibuildwheel.linux]
+archs = ["x86_64", "aarch64"]

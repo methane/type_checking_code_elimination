@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    ORM-Enabled INSERT, UPDATE, and DELETE statements
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+        <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../../index.html" />
+        <link rel="up" title="ORM Querying Guide" href="index.html" />
+        <link rel="next" title="Column Loading Options" href="columns.html" />
+        <link rel="prev" title="Writing SELECT statements for Inheritance Mappings" href="inheritance.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="../index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="../quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../relationships.html">Relationship Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="index.html">ORM Querying Guide</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="select.html">Writing SELECT statements for ORM Mapped Classes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="inheritance.html">Writing SELECT statements for Inheritance Mappings</a></span></li>
+<li class="selected"><span class="link-container"><strong>ORM-Enabled INSERT, UPDATE, and DELETE statements</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#orm-bulk-insert-statements">ORM Bulk INSERT Statements</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#getting-new-objects-with-returning">Getting new objects with RETURNING</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#correlating-returning-records-with-input-data-order">Correlating RETURNING records with input data order</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#using-heterogeneous-parameter-dictionaries">Using Heterogeneous Parameter Dictionaries</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sending-null-values-in-orm-bulk-insert-statements">Sending NULL values in ORM bulk INSERT statements</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#bulk-insert-for-joined-table-inheritance">Bulk INSERT for Joined Table Inheritance</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#orm-bulk-insert-with-sql-expressions">ORM Bulk Insert with SQL Expressions</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#orm-bulk-insert-with-per-row-sql-expressions">ORM Bulk Insert with Per Row SQL Expressions</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#legacy-session-bulk-insert-methods">Legacy Session Bulk INSERT Methods</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#orm-upsert-statements">ORM “upsert” Statements</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#using-returning-with-upsert-statements">Using RETURNING with upsert statements</a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#orm-bulk-update-by-primary-key">ORM Bulk UPDATE by Primary Key</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#disabling-bulk-orm-update-by-primary-key-for-an-update-statement-with-multiple-parameter-sets">Disabling Bulk ORM Update by Primary Key for an UPDATE statement with multiple parameter sets</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#bulk-update-by-primary-key-for-joined-table-inheritance">Bulk UPDATE by Primary Key for Joined Table Inheritance</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#legacy-session-bulk-update-methods">Legacy Session Bulk UPDATE Methods</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#orm-update-and-delete-with-custom-where-criteria">ORM UPDATE and DELETE with Custom WHERE Criteria</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#important-notes-and-caveats-for-orm-enabled-update-and-delete">Important Notes and Caveats for ORM-Enabled Update and Delete</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#selecting-a-synchronization-strategy">Selecting a Synchronization Strategy</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-returning-with-update-delete-and-custom-where-criteria">Using RETURNING with UPDATE/DELETE and Custom WHERE Criteria</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#update-delete-with-custom-where-criteria-for-joined-table-inheritance">UPDATE/DELETE with Custom WHERE Criteria for Joined Table Inheritance</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#legacy-query-methods">Legacy Query Methods</a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="columns.html">Column Loading Options</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Loading Techniques</a></span></li>
+<li><span class="link-container"><a class="reference external" href="api.html">ORM API Features for Querying</a></span></li>
+<li><span class="link-container"><a class="reference external" href="query.html">Legacy Query API</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="../session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="inheritance.html" title="previous chapter">Writing SELECT statements for Inheritance Mappings</a></li>
+                <li><b>Next:</b>
+                <a href="columns.html" title="next chapter">Column Loading Options</a></li>
+
+            <li><b>Up:</b> <a href="../../index.html">Home</a></li>
+                    <ul><li><a href="../index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                    <ul><li><a href="index.html" title="ORM Querying Guide">ORM Querying Guide</a></li>
+                </ul>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#orm-enabled-insert-update-and-delete-statements">ORM-Enabled INSERT, UPDATE, and DELETE statements</a><ul>
+<li><a class="reference internal" href="#orm-bulk-insert-statements">ORM Bulk INSERT Statements</a><ul>
+<li><a class="reference internal" href="#getting-new-objects-with-returning">Getting new objects with RETURNING</a><ul>
+<li><a class="reference internal" href="#correlating-returning-records-with-input-data-order">Correlating RETURNING records with input data order</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-heterogeneous-parameter-dictionaries">Using Heterogeneous Parameter Dictionaries</a></li>
+<li><a class="reference internal" href="#sending-null-values-in-orm-bulk-insert-statements">Sending NULL values in ORM bulk INSERT statements</a></li>
+<li><a class="reference internal" href="#bulk-insert-for-joined-table-inheritance">Bulk INSERT for Joined Table Inheritance</a></li>
+<li><a class="reference internal" href="#orm-bulk-insert-with-sql-expressions">ORM Bulk Insert with SQL Expressions</a><ul>
+<li><a class="reference internal" href="#orm-bulk-insert-with-per-row-sql-expressions">ORM Bulk Insert with Per Row SQL Expressions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#legacy-session-bulk-insert-methods">Legacy Session Bulk INSERT Methods</a></li>
+<li><a class="reference internal" href="#orm-upsert-statements">ORM “upsert” Statements</a><ul>
+<li><a class="reference internal" href="#using-returning-with-upsert-statements">Using RETURNING with upsert statements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#orm-bulk-update-by-primary-key">ORM Bulk UPDATE by Primary Key</a><ul>
+<li><a class="reference internal" href="#disabling-bulk-orm-update-by-primary-key-for-an-update-statement-with-multiple-parameter-sets">Disabling Bulk ORM Update by Primary Key for an UPDATE statement with multiple parameter sets</a></li>
+<li><a class="reference internal" href="#bulk-update-by-primary-key-for-joined-table-inheritance">Bulk UPDATE by Primary Key for Joined Table Inheritance</a></li>
+<li><a class="reference internal" href="#legacy-session-bulk-update-methods">Legacy Session Bulk UPDATE Methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#orm-update-and-delete-with-custom-where-criteria">ORM UPDATE and DELETE with Custom WHERE Criteria</a><ul>
+<li><a class="reference internal" href="#important-notes-and-caveats-for-orm-enabled-update-and-delete">Important Notes and Caveats for ORM-Enabled Update and Delete</a></li>
+<li><a class="reference internal" href="#selecting-a-synchronization-strategy">Selecting a Synchronization Strategy</a></li>
+<li><a class="reference internal" href="#using-returning-with-update-delete-and-custom-where-criteria">Using RETURNING with UPDATE/DELETE and Custom WHERE Criteria</a></li>
+<li><a class="reference internal" href="#update-delete-with-custom-where-criteria-for-joined-table-inheritance">UPDATE/DELETE with Custom WHERE Criteria for Joined Table Inheritance</a></li>
+<li><a class="reference internal" href="#legacy-query-methods">Legacy Query Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-queryguide-dml" >
+        
+<aside class="topic">
+<p class="topic-title">ORM Querying Guide</p>
+<p>This page is part of the <a class="reference internal" href="index.html"><span class="doc">ORM Querying Guide</span></a>.</p>
+<p>Previous: <a class="reference internal" href="inheritance.html"><span class="doc">Writing SELECT statements for Inheritance Mappings</span></a>   |   Next: <a class="reference internal" href="columns.html"><span class="doc">Column Loading Options</span></a></p>
+</aside>
+<section id="orm-enabled-insert-update-and-delete-statements">
+<span id="orm-expression-update-delete"></span><h1>ORM-Enabled INSERT, UPDATE, and DELETE statements<a class="headerlink" href="#orm-enabled-insert-update-and-delete-statements" title="Link to this heading">¶</a></h1>
+<div class="admonition-about-this-document admonition">
+<p class="admonition-title">About this Document</p>
+<p>This section makes use of ORM mappings first illustrated in the
+<a class="reference internal" href="../../tutorial/index.html#unified-tutorial"><span class="std std-ref">SQLAlchemy Unified Tutorial</span></a>, shown in the section
+<a class="reference internal" href="../../tutorial/metadata.html#tutorial-declaring-mapped-classes"><span class="std std-ref">Declaring Mapped Classes</span></a>, as well as inheritance
+mappings shown in the section <a class="reference internal" href="../inheritance.html"><span class="std std-ref">Mapping Class Inheritance Hierarchies</span></a>.</p>
+<p><a class="reference internal" href="_dml_setup.html"><span class="doc">View the ORM setup for this page</span></a>.</p>
+</div>
+<p>The <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> method, in addition to handling ORM-enabled
+<a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a> objects, can also accommodate ORM-enabled
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a>, <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> and <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Delete" title="sqlalchemy.sql.expression.Delete"><code class="xref py py-class docutils literal notranslate"><span class="pre">Delete</span></code></a> objects,
+in various ways which are each used to INSERT, UPDATE, or DELETE
+many database rows at once.  There is also dialect-specific support
+for ORM-enabled “upserts”, which are INSERT statements that automatically
+make use of UPDATE for rows that already exist.</p>
+<p>The following table summarizes the calling forms that are discussed in this
+document:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ORM Use Case</p></th>
+<th class="head"><p>DML Construct Used</p></th>
+<th class="head"><p>Data is passed using …</p></th>
+<th class="head"><p>Supports RETURNING?</p></th>
+<th class="head"><p>Supports Multi-Table Mappings?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#orm-queryguide-bulk-insert"><span class="std std-ref">ORM Bulk INSERT Statements</span></a></p></td>
+<td><p><a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.insert" title="sqlalchemy.sql.expression.insert"><code class="xref py py-func docutils literal notranslate"><span class="pre">insert()</span></code></a></p></td>
+<td><p>List of dictionaries to <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute.params.params" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.params</span></code></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-bulk-insert-returning"><span class="std std-ref">yes</span></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-insert-joined-table-inheritance"><span class="std std-ref">yes</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#orm-queryguide-bulk-insert-w-sql"><span class="std std-ref">ORM Bulk Insert with SQL Expressions</span></a></p></td>
+<td><p><a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.insert" title="sqlalchemy.sql.expression.insert"><code class="xref py py-func docutils literal notranslate"><span class="pre">insert()</span></code></a></p></td>
+<td><p><a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute.params.params" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.params</span></code></a> with <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-bulk-insert-w-sql"><span class="std std-ref">yes</span></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-insert-joined-table-inheritance"><span class="std std-ref">yes</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#orm-queryguide-insert-values"><span class="std std-ref">ORM Bulk Insert with Per Row SQL Expressions</span></a></p></td>
+<td><p><a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.insert" title="sqlalchemy.sql.expression.insert"><code class="xref py py-func docutils literal notranslate"><span class="pre">insert()</span></code></a></p></td>
+<td><p>List of dictionaries to <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-insert-values"><span class="std std-ref">yes</span></a></p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#orm-queryguide-upsert"><span class="std std-ref">ORM “upsert” Statements</span></a></p></td>
+<td><p><a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.insert" title="sqlalchemy.sql.expression.insert"><code class="xref py py-func docutils literal notranslate"><span class="pre">insert()</span></code></a></p></td>
+<td><p>List of dictionaries to <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-upsert-returning"><span class="std std-ref">yes</span></a></p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#orm-queryguide-bulk-update"><span class="std std-ref">ORM Bulk UPDATE by Primary Key</span></a></p></td>
+<td><p><a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a></p></td>
+<td><p>List of dictionaries to <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute.params.params" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.params</span></code></a></p></td>
+<td><p>no</p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-bulk-update-joined-inh"><span class="std std-ref">yes</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#orm-queryguide-update-delete-where"><span class="std std-ref">ORM UPDATE and DELETE with Custom WHERE Criteria</span></a></p></td>
+<td><p><a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a>, <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.delete" title="sqlalchemy.sql.expression.delete"><code class="xref py py-func docutils literal notranslate"><span class="pre">delete()</span></code></a></p></td>
+<td><p>keywords to <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update.values" title="sqlalchemy.sql.expression.Update.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Update.values()</span></code></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-update-delete-where-returning"><span class="std std-ref">yes</span></a></p></td>
+<td><p><a class="reference internal" href="#orm-queryguide-update-delete-joined-inh"><span class="std std-ref">partial, with manual steps</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="orm-bulk-insert-statements">
+<span id="orm-queryguide-bulk-insert"></span><h2>ORM Bulk INSERT Statements<a class="headerlink" href="#orm-bulk-insert-statements" title="Link to this heading">¶</a></h2>
+<p>A <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.insert" title="sqlalchemy.sql.expression.insert"><code class="xref py py-func docutils literal notranslate"><span class="pre">insert()</span></code></a> construct can be constructed in terms of an ORM class
+and passed to the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> method.   A list of parameter
+dictionaries sent to the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute.params.params" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.params</span></code></a> parameter, separate
+from the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> object itself, will invoke <strong>bulk INSERT mode</strong>
+for the statement, which essentially means the operation will optimize
+as much as possible for many rows:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">insert</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     insert(User),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;name&quot;: &quot;spongebob&quot;, &quot;fullname&quot;: &quot;Spongebob Squarepants&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;sandy&quot;, &quot;fullname&quot;: &quot;Sandy Cheeks&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;patrick&quot;, &quot;fullname&quot;: &quot;Patrick Star&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;squidward&quot;, &quot;fullname&quot;: &quot;Squidward Tentacles&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;ehkrabs&quot;, &quot;fullname&quot;: &quot;Eugene H. Krabs&quot;},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sandy Cheeks&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;patrick&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Patrick Star&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">&#39;squidward&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;ehkrabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">)]</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>The parameter dictionaries contain key/value pairs which may correspond to ORM
+mapped attributes that line up with mapped <a class="reference internal" href="../../core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a>
+or <a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.mapped_column" title="sqlalchemy.orm.mapped_column"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapped_column()</span></code></a> declarations, as well as with
+<a class="reference internal" href="../composites.html#mapper-composite"><span class="std std-ref">composite</span></a> declarations.   The keys should match
+the <strong>ORM mapped attribute name</strong> and <strong>not</strong> the actual database column name,
+if these two names happen to be different.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0: </span>Passing an <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> construct to the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> method now invokes a “bulk insert”, which
+makes use of the same functionality as the legacy
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.bulk_insert_mappings" title="sqlalchemy.orm.Session.bulk_insert_mappings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.bulk_insert_mappings()</span></code></a> method.  This is a behavior change
+compared to the 1.x series where the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> would be interpreted
+in a Core-centric way, using column names for value keys; ORM attribute
+keys are now accepted.   Core-style functionality is available by passing
+the execution option <code class="docutils literal notranslate"><span class="pre">{&quot;dml_strategy&quot;:</span> <span class="pre">&quot;raw&quot;}</span></code> to the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.params.execution_options" title="sqlalchemy.orm.Session"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execution_options</span></code></a> parameter of
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a>.</p>
+</div>
+<section id="getting-new-objects-with-returning">
+<span id="orm-queryguide-bulk-insert-returning"></span><h3>Getting new objects with RETURNING<a class="headerlink" href="#getting-new-objects-with-returning" title="Link to this heading">¶</a></h3>
+<p>The bulk ORM insert feature supports INSERT..RETURNING for selected
+backends, which can return a <a class="reference internal" href="../../core/connections.html#sqlalchemy.engine.Result" title="sqlalchemy.engine.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a> object that may yield individual
+columns back as well as fully constructed ORM objects corresponding
+to the newly generated records.    INSERT..RETURNING requires the use of a backend that
+supports SQL RETURNING syntax as well as support for <a class="reference internal" href="../../glossary.html#term-executemany"><span class="xref std std-term">executemany</span></a>
+with RETURNING; this feature is available with all
+<a class="reference internal" href="../../dialects/index.html#included-dialects"><span class="std std-ref">SQLAlchemy-included</span></a> backends
+with the exception of MySQL (MariaDB is included).</p>
+<p>As an example, we can run the same statement as before, adding use of the
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.UpdateBase.returning" title="sqlalchemy.sql.expression.UpdateBase.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">UpdateBase.returning()</span></code></a> method, passing the full <code class="docutils literal notranslate"><span class="pre">User</span></code> entity
+as what we’d like to return.  <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.scalars" title="sqlalchemy.orm.Session.scalars"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.scalars()</span></code></a> is used to allow
+iteration of <code class="docutils literal notranslate"><span class="pre">User</span></code> objects:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">users</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     insert(User).returning(User),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;name&quot;: &quot;spongebob&quot;, &quot;fullname&quot;: &quot;Spongebob Squarepants&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;sandy&quot;, &quot;fullname&quot;: &quot;Sandy Cheeks&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;patrick&quot;, &quot;fullname&quot;: &quot;Patrick Star&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;squidward&quot;, &quot;fullname&quot;: &quot;Squidward Tentacles&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;ehkrabs&quot;, &quot;fullname&quot;: &quot;Eugene H. Krabs&quot;},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sandy Cheeks&#39;</span><span class="p">,</span>
+<span class="s1">&#39;patrick&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Patrick Star&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;squidward&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">,</span>
+<span class="s1">&#39;ehkrabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">users</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+<span class="go">[User(name=&#39;spongebob&#39;, fullname=&#39;Spongebob Squarepants&#39;),</span>
+<span class="go"> User(name=&#39;sandy&#39;, fullname=&#39;Sandy Cheeks&#39;),</span>
+<span class="go"> User(name=&#39;patrick&#39;, fullname=&#39;Patrick Star&#39;),</span>
+<span class="go"> User(name=&#39;squidward&#39;, fullname=&#39;Squidward Tentacles&#39;),</span>
+<span class="go"> User(name=&#39;ehkrabs&#39;, fullname=&#39;Eugene H. Krabs&#39;)]</span></pre></div>
+</div>
+<p>In the above example, the rendered SQL takes on the form used by the
+<a class="reference internal" href="../../core/connections.html#engine-insertmanyvalues"><span class="std std-ref">insertmanyvalues</span></a> feature as requested by the
+SQLite backend, where individual parameter dictionaries are inlined into a
+single INSERT statement so that RETURNING may be used.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0: </span>The ORM <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> now interprets RETURNING
+clauses from <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a>, <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a>, and
+even <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Delete" title="sqlalchemy.sql.expression.Delete"><code class="xref py py-class docutils literal notranslate"><span class="pre">Delete</span></code></a> constructs in an ORM context, meaning a mixture
+of column expressions and ORM mapped entities may be passed to the
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.returning" title="sqlalchemy.sql.expression.Insert.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.returning()</span></code></a> method which will then be delivered
+in the way that ORM results are delivered from constructs such as
+<a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a>, including that mapped entities will be delivered
+in the result as ORM mapped objects.  Limited support for ORM loader
+options such as <a class="reference internal" href="columns.html#sqlalchemy.orm.load_only" title="sqlalchemy.orm.load_only"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_only()</span></code></a> and <a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload" title="sqlalchemy.orm.selectinload"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectinload()</span></code></a>
+is also present.</p>
+</div>
+<section id="correlating-returning-records-with-input-data-order">
+<span id="orm-queryguide-bulk-insert-returning-ordered"></span><h4>Correlating RETURNING records with input data order<a class="headerlink" href="#correlating-returning-records-with-input-data-order" title="Link to this heading">¶</a></h4>
+<p>When using bulk INSERT with RETURNING, it’s important to note that most
+database backends provide no formal guarantee of the order in which the
+records from RETURNING are returned, including that there is no guarantee that
+their order will correspond to that of the input records.  For applications
+that need to ensure RETURNING records can be correlated with input data,
+the additional parameter <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.returning.params.sort_by_parameter_order" title="sqlalchemy.sql.expression.Insert.returning"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Insert.returning.sort_by_parameter_order</span></code></a>
+may be specified, which depending on backend may use special INSERT forms
+that maintain a token which is used to reorder the returned rows appropriately,
+or in some cases, such as in the example below using the SQLite backend,
+the operation will INSERT one row at a time:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+<span class="go">...     {&quot;name&quot;: &quot;pearl&quot;, &quot;fullname&quot;: &quot;Pearl Krabs&quot;},</span>
+<span class="go">...     {&quot;name&quot;: &quot;plankton&quot;, &quot;fullname&quot;: &quot;Plankton&quot;},</span>
+<span class="go">...     {&quot;name&quot;: &quot;gary&quot;, &quot;fullname&quot;: &quot;Gary&quot;},</span>
+<span class="go">... ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_ids</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     insert(User).returning(User.id, sort_by_parameter_order=True), data</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;pearl&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Pearl Krabs&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[</span><span class="n">insertmanyvalues</span><span class="w"> </span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;plankton&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Plankton&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[</span><span class="n">insertmanyvalues</span><span class="w"> </span><span class="mi">3</span><span class="o">/</span><span class="mi">3</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;gary&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Gary&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">input_record</span> <span class="ow">in</span> <span class="n">zip</span><span class="p">(</span><span class="n">user_ids</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="go">...     input_record[&quot;id&quot;] = user_id</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">[{&#39;name&#39;: &#39;pearl&#39;, &#39;fullname&#39;: &#39;Pearl Krabs&#39;, &#39;id&#39;: 6},</span>
+<span class="go">{&#39;name&#39;: &#39;plankton&#39;, &#39;fullname&#39;: &#39;Plankton&#39;, &#39;id&#39;: 7},</span>
+<span class="go">{&#39;name&#39;: &#39;gary&#39;, &#39;fullname&#39;: &#39;Gary&#39;, &#39;id&#39;: 8}]</span></pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.10: </span>Added <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.returning.params.sort_by_parameter_order" title="sqlalchemy.sql.expression.Insert.returning"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Insert.returning.sort_by_parameter_order</span></code></a>
+which is implemented within the <a class="reference internal" href="../../glossary.html#term-insertmanyvalues"><span class="xref std std-term">insertmanyvalues</span></a> architecture.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../core/connections.html#engine-insertmanyvalues-returning-order"><span class="std std-ref">Correlating RETURNING rows to parameter sets</span></a> - background on approaches
+taken to guarantee correspondence between input data and result rows
+without significant loss of performance</p>
+</div>
+</section>
+</section>
+<section id="using-heterogeneous-parameter-dictionaries">
+<span id="orm-queryguide-insert-heterogeneous-params"></span><h3>Using Heterogeneous Parameter Dictionaries<a class="headerlink" href="#using-heterogeneous-parameter-dictionaries" title="Link to this heading">¶</a></h3>
+<p>The ORM bulk insert feature supports lists of parameter dictionaries that are
+“heterogeneous”, which basically means “individual dictionaries can have different
+keys”.   When this condition is detected,
+the ORM will break up the parameter dictionaries into groups corresponding
+to each set of keys and batch accordingly into separate INSERT statements:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">users</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     insert(User).returning(User),</span>
+<span class="go">...     [</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;spongebob&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Spongebob Squarepants&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Sea Sponge&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...         {&quot;name&quot;: &quot;sandy&quot;, &quot;fullname&quot;: &quot;Sandy Cheeks&quot;, &quot;species&quot;: &quot;Squirrel&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;patrick&quot;, &quot;species&quot;: &quot;Starfish&quot;},</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;squidward&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Squidward Tentacles&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Squid&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...         {&quot;name&quot;: &quot;ehkrabs&quot;, &quot;fullname&quot;: &quot;Eugene H. Krabs&quot;, &quot;species&quot;: &quot;Crab&quot;},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="n">unordered</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sea Sponge&#39;</span><span class="p">,</span>
+<span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sandy Cheeks&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squirrel&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">species</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;patrick&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Starfish&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="n">unordered</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;squidward&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">,</span>
+<span class="s1">&#39;Squid&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ehkrabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Crab&#39;</span><span class="p">)</span>
+</div></pre></div>
+</div>
+<p>In the above example, the five parameter dictionaries passed translated into
+three INSERT statements, grouped along the specific sets of keys
+in each dictionary while still maintaining row order, i.e.
+<code class="docutils literal notranslate"><span class="pre">(&quot;name&quot;,</span> <span class="pre">&quot;fullname&quot;,</span> <span class="pre">&quot;species&quot;)</span></code>, <code class="docutils literal notranslate"><span class="pre">(&quot;name&quot;,</span> <span class="pre">&quot;species&quot;)</span></code>, <code class="docutils literal notranslate"><span class="pre">(&quot;name&quot;,&quot;fullname&quot;,</span> <span class="pre">&quot;species&quot;)</span></code>.</p>
+</section>
+<section id="sending-null-values-in-orm-bulk-insert-statements">
+<span id="orm-queryguide-insert-null-params"></span><h3>Sending NULL values in ORM bulk INSERT statements<a class="headerlink" href="#sending-null-values-in-orm-bulk-insert-statements" title="Link to this heading">¶</a></h3>
+<p>The bulk ORM insert feature draws upon a behavior that is also present
+in the legacy “bulk” insert behavior, as well as in the ORM unit of work
+overall, which is that rows which contain NULL values are INSERTed using
+a statement that does not refer to those columns; the rationale here is so
+that backends and schemas which contain server-side INSERT defaults that may
+be sensitive to the presence of a NULL value vs. no value present will
+produce a server side value as expected.  This default behavior
+has the effect of breaking up the bulk inserted batches into more
+batches of fewer rows:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     insert(User),</span>
+<span class="go">...     [</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_a&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee A&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Squid&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_b&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee B&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Squirrel&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_c&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee C&quot;,</span>
+<span class="go">...             &quot;species&quot;: None,</span>
+<span class="go">...         },</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_d&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee D&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Bluefish&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="s1">&#39;name_a&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee A&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squid&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;name_b&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee B&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squirrel&#39;</span><span class="p">)]</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;name_c&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee C&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;name_d&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee D&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Bluefish&#39;</span><span class="p">)</span>
+<span class="p">...</span>
+</div></pre></div>
+</div>
+<p>Above, the bulk INSERT of four rows is broken into three separate statements,
+the second statement reformatted to not refer to the NULL column for the single
+parameter dictionary that contains a <code class="docutils literal notranslate"><span class="pre">None</span></code> value.    This default
+behavior may be undesirable when many rows in the dataset contain random NULL
+values, as it causes the “executemany” operation to be broken into a larger
+number of smaller operations; particularly when relying upon
+<a class="reference internal" href="../../core/connections.html#engine-insertmanyvalues"><span class="std std-ref">insertmanyvalues</span></a> to reduce the overall number
+of statements, this can have a bigger performance impact.</p>
+<p>To disable the handling of <code class="docutils literal notranslate"><span class="pre">None</span></code> values in the parameters into separate
+batches, pass the execution option <code class="docutils literal notranslate"><span class="pre">render_nulls=True</span></code>; this will cause
+all parameter dictionaries to be treated equivalently, assuming the same
+set of keys in each dictionary:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     insert(User).execution_options(render_nulls=True),</span>
+<span class="go">...     [</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_a&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee A&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Squid&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_b&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee B&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Squirrel&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_c&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee C&quot;,</span>
+<span class="go">...             &quot;species&quot;: None,</span>
+<span class="go">...         },</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;name&quot;: &quot;name_d&quot;,</span>
+<span class="go">...             &quot;fullname&quot;: &quot;Employee D&quot;,</span>
+<span class="go">...             &quot;species&quot;: &quot;Bluefish&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="s1">&#39;name_a&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee A&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squid&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;name_b&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee B&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squirrel&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;name_c&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee C&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">None</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;name_d&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Employee D&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Bluefish&#39;</span><span class="p">)]</span>
+<span class="p">...</span>
+</div></pre></div>
+</div>
+<p>Above, all parameter dictionaries are sent in a single INSERT batch, including
+the <code class="docutils literal notranslate"><span class="pre">None</span></code> value present in the third parameter dictionary.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.23: </span>Added the <code class="docutils literal notranslate"><span class="pre">render_nulls</span></code> execution option which
+mirrors the behavior of the legacy
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.bulk_insert_mappings.params.render_nulls" title="sqlalchemy.orm.Session.bulk_insert_mappings"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.bulk_insert_mappings.render_nulls</span></code></a> parameter.</p>
+</div>
+</section>
+<section id="bulk-insert-for-joined-table-inheritance">
+<span id="orm-queryguide-insert-joined-table-inheritance"></span><h3>Bulk INSERT for Joined Table Inheritance<a class="headerlink" href="#bulk-insert-for-joined-table-inheritance" title="Link to this heading">¶</a></h3>
+<p>ORM bulk insert builds upon the internal system that is used by the
+traditional <a class="reference internal" href="../../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a> system in order to emit INSERT statements.  This means
+that for an ORM entity that is mapped to multiple tables, typically one which
+is mapped using <a class="reference internal" href="../inheritance.html#joined-inheritance"><span class="std std-ref">joined table inheritance</span></a>, the
+bulk INSERT operation will emit an INSERT statement for each table represented
+by the mapping, correctly transferring server-generated primary key values
+to the table rows that depend upon them.  The RETURNING feature is also supported
+here, where the ORM will receive <a class="reference internal" href="../../core/connections.html#sqlalchemy.engine.Result" title="sqlalchemy.engine.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a> objects for each INSERT
+statement executed, and will then “horizontally splice” them together so that
+the returned rows include values for all columns inserted:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">managers</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     insert(Manager).returning(Manager),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;name&quot;: &quot;sandy&quot;, &quot;manager_name&quot;: &quot;Sandy Cheeks&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;ehkrabs&quot;, &quot;manager_name&quot;: &quot;Eugene H. Krabs&quot;},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">type</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">type</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;manager&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">type</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">type</span>
+<span class="p">[</span><span class="n">insertmanyvalues</span><span class="w"> </span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">;</span><span class="w"> </span><span class="n">batch</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">supported</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;ehkrabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;manager&#39;</span><span class="p">)</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">manager_name</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">manager_name</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id__1</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="n">ordered</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sandy Cheeks&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">)</span>
+</div></pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Bulk INSERT of joined inheritance mappings requires that the ORM
+make use of the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.returning.params.sort_by_parameter_order" title="sqlalchemy.sql.expression.Insert.returning"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Insert.returning.sort_by_parameter_order</span></code></a>
+parameter internally, so that it can correlate primary key values from
+RETURNING rows from the base table into the parameter sets being used
+to INSERT into the “sub” table, which is why the SQLite backend
+illustrated above transparently degrades to using non-batched statements.
+Background on this feature is at
+<a class="reference internal" href="../../core/connections.html#engine-insertmanyvalues-returning-order"><span class="std std-ref">Correlating RETURNING rows to parameter sets</span></a>.</p>
+</div>
+</section>
+<section id="orm-bulk-insert-with-sql-expressions">
+<span id="orm-queryguide-bulk-insert-w-sql"></span><h3>ORM Bulk Insert with SQL Expressions<a class="headerlink" href="#orm-bulk-insert-with-sql-expressions" title="Link to this heading">¶</a></h3>
+<p>The ORM bulk insert feature supports the addition of a fixed set of
+parameters which may include SQL expressions to be applied to every target row.
+To achieve this, combine the use of the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a> method,
+passing a dictionary of parameters that will be applied to all rows,
+with the usual bulk calling form by including a list of parameter dictionaries
+that contain individual row values when invoking <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a>.</p>
+<p>As an example, given an ORM mapping that includes a “timestamp” column:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LogRecord</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;log_record&quot;</span>
+    <span class="n">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span>
+    <span class="n">code</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">str</span><span class="p">]</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span></pre><div class="code-annotations-key"></div></div>
+</div>
+<p>If we wanted to INSERT a series of <code class="docutils literal notranslate"><span class="pre">LogRecord</span></code> elements, each with a unique
+<code class="docutils literal notranslate"><span class="pre">message</span></code> field, however we would like to apply the SQL function <code class="docutils literal notranslate"><span class="pre">now()</span></code>
+to all rows, we can pass <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> within <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a>
+and then pass the additional records using “bulk” mode:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">func</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log_record_result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     insert(LogRecord).values(code=&quot;SQLA&quot;, timestamp=func.now()).returning(LogRecord),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;message&quot;: &quot;log message #1&quot;},</span>
+<span class="go">...         {&quot;message&quot;: &quot;log message #2&quot;},</span>
+<span class="go">...         {&quot;message&quot;: &quot;log message #3&quot;},</span>
+<span class="go">...         {&quot;message&quot;: &quot;log message #4&quot;},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">log_record</span><span class="w"> </span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">),</span>
+<span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">)</span>
+<span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="p">[...</span><span class="w"> </span><span class="p">(</span><span class="n">insertmanyvalues</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="n">unordered</span><span class="p">)]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;log message #1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;SQLA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;log message #2&#39;</span><span class="p">,</span>
+<span class="s1">&#39;SQLA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;log message #3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;SQLA&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;log message #4&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;SQLA&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">log_record_result</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+<span class="go">[LogRecord(&#39;log message #1&#39;, &#39;SQLA&#39;, datetime.datetime(...)),</span>
+<span class="go"> LogRecord(&#39;log message #2&#39;, &#39;SQLA&#39;, datetime.datetime(...)),</span>
+<span class="go"> LogRecord(&#39;log message #3&#39;, &#39;SQLA&#39;, datetime.datetime(...)),</span>
+<span class="go"> LogRecord(&#39;log message #4&#39;, &#39;SQLA&#39;, datetime.datetime(...))]</span></pre></div>
+</div>
+<section id="orm-bulk-insert-with-per-row-sql-expressions">
+<span id="orm-queryguide-insert-values"></span><h4>ORM Bulk Insert with Per Row SQL Expressions<a class="headerlink" href="#orm-bulk-insert-with-per-row-sql-expressions" title="Link to this heading">¶</a></h4>
+<p>The <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a> method itself accommodates a list of parameter
+dictionaries directly. When using the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> construct in this
+way, without passing any list of parameter dictionaries to the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute.params.params" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.params</span></code></a> parameter, bulk ORM insert mode is not
+used, and instead the INSERT statement is rendered exactly as given and invoked
+exactly once. This mode of operation may be useful both for the case of passing
+SQL expressions on a per-row basis, and is also used when using “upsert”
+statements with the ORM, documented later in this chapter at
+<a class="reference internal" href="#orm-queryguide-upsert"><span class="std std-ref">ORM “upsert” Statements</span></a>.</p>
+<p>A contrived example of an INSERT that embeds per-row SQL expressions,
+and also demonstrates <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.returning" title="sqlalchemy.sql.expression.Insert.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.returning()</span></code></a> in this form, is below:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">address_result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     insert(Address)</span>
+<span class="go">...     .values(</span>
+<span class="go">...         [</span>
+<span class="go">...             {</span>
+<span class="go">...                 &quot;user_id&quot;: select(User.id).where(User.name == &quot;sandy&quot;),</span>
+<span class="go">...                 &quot;email_address&quot;: &quot;sandy@company.com&quot;,</span>
+<span class="go">...             },</span>
+<span class="go">...             {</span>
+<span class="go">...                 &quot;user_id&quot;: select(User.id).where(User.name == &quot;spongebob&quot;),</span>
+<span class="go">...                 &quot;email_address&quot;: &quot;spongebob@company.com&quot;,</span>
+<span class="go">...             },</span>
+<span class="go">...             {</span>
+<span class="go">...                 &quot;user_id&quot;: select(User.id).where(User.name == &quot;patrick&quot;),</span>
+<span class="go">...                 &quot;email_address&quot;: &quot;patrick@company.com&quot;,</span>
+<span class="go">...             },</span>
+<span class="go">...         ]</span>
+<span class="go">...     )</span>
+<span class="go">...     .returning(Address),</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">email_address</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">email_address</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy@company.com&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;spongebob@company.com&#39;</span><span class="p">,</span>
+<span class="s1">&#39;patrick&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;patrick@company.com&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">address_result</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+<span class="go">[Address(email_address=&#39;sandy@company.com&#39;),</span>
+<span class="go"> Address(email_address=&#39;spongebob@company.com&#39;),</span>
+<span class="go"> Address(email_address=&#39;patrick@company.com&#39;)]</span></pre></div>
+</div>
+<p>Because bulk ORM insert mode is not used above, the following features
+are not present:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#orm-queryguide-insert-joined-table-inheritance"><span class="std std-ref">Joined table inheritance</span></a>
+or other multi-table mappings are not supported, since that would require multiple
+INSERT statements.</p></li>
+<li><p><a class="reference internal" href="#orm-queryguide-insert-heterogeneous-params"><span class="std std-ref">Heterogeneous parameter sets</span></a>
+are not supported - each element in the VALUES set must have the same
+columns.</p></li>
+<li><p>Core-level scale optimizations such as the batching provided by
+<a class="reference internal" href="../../core/connections.html#engine-insertmanyvalues"><span class="std std-ref">insertmanyvalues</span></a> are not available; statements
+will need to ensure the total number of parameters does not exceed limits
+imposed by the backing database.</p></li>
+</ul>
+<p>For the above reasons, it is generally not recommended to use multiple
+parameter sets with <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a> with ORM INSERT statements
+unless there is a clear rationale, which is either that “upsert” is being used
+or there is a need to embed per-row SQL expressions in each parameter set.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#orm-queryguide-upsert"><span class="std std-ref">ORM “upsert” Statements</span></a></p>
+</div>
+</section>
+</section>
+<section id="legacy-session-bulk-insert-methods">
+<span id="orm-queryguide-legacy-bulk-insert"></span><h3>Legacy Session Bulk INSERT Methods<a class="headerlink" href="#legacy-session-bulk-insert-methods" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> includes legacy methods for performing
+“bulk” INSERT and UPDATE statements.  These methods share implementations
+with the SQLAlchemy 2.0 versions of these features, described
+at <a class="reference internal" href="#orm-queryguide-bulk-insert"><span class="std std-ref">ORM Bulk INSERT Statements</span></a> and <a class="reference internal" href="#orm-queryguide-bulk-update"><span class="std std-ref">ORM Bulk UPDATE by Primary Key</span></a>,
+however lack many features, namely RETURNING support as well as support
+for session-synchronization.</p>
+<p>Code which makes use of <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.bulk_insert_mappings" title="sqlalchemy.orm.Session.bulk_insert_mappings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.bulk_insert_mappings()</span></code></a> for example
+can port code as follows, starting with this mappings example:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="go">session.bulk_insert_mappings(User, [{&quot;name&quot;: &quot;u1&quot;}, {&quot;name&quot;: &quot;u2&quot;}, {&quot;name&quot;: &quot;u3&quot;}])</span></pre></div>
+</div>
+<p>The above is expressed using the new API as:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="go">from sqlalchemy import insert</span>
+
+<span class="go">session.execute(insert(User), [{&quot;name&quot;: &quot;u1&quot;}, {&quot;name&quot;: &quot;u2&quot;}, {&quot;name&quot;: &quot;u3&quot;}])</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#orm-queryguide-legacy-bulk-update"><span class="std std-ref">Legacy Session Bulk UPDATE Methods</span></a></p>
+</div>
+</section>
+<section id="orm-upsert-statements">
+<span id="orm-queryguide-upsert"></span><h3>ORM “upsert” Statements<a class="headerlink" href="#orm-upsert-statements" title="Link to this heading">¶</a></h3>
+<p>Selected backends with SQLAlchemy may include dialect-specific <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a>
+constructs which additionally have the ability to perform “upserts”, or INSERTs
+where an existing row in the parameter set is turned into an approximation of
+an UPDATE statement instead. By “existing row” , this may mean rows
+which share the same primary key value, or may refer to other indexed
+columns within the row that are considered to be unique; this is dependent
+on the capabilities of the backend in use.</p>
+<p>The dialects included with SQLAlchemy that include dialect-specific “upsert”
+API features are:</p>
+<ul class="simple">
+<li><p>SQLite - using <a class="reference internal" href="../../dialects/sqlite.html#sqlalchemy.dialects.sqlite.Insert" title="sqlalchemy.dialects.sqlite.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> documented at <a class="reference internal" href="../../dialects/sqlite.html#sqlite-on-conflict-insert"><span class="std std-ref">INSERT…ON CONFLICT (Upsert)</span></a></p></li>
+<li><p>PostgreSQL - using <a class="reference internal" href="../../dialects/postgresql.html#sqlalchemy.dialects.postgresql.Insert" title="sqlalchemy.dialects.postgresql.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> documented at <a class="reference internal" href="../../dialects/postgresql.html#postgresql-insert-on-conflict"><span class="std std-ref">INSERT…ON CONFLICT (Upsert)</span></a></p></li>
+<li><p>MySQL/MariaDB - using <a class="reference internal" href="../../dialects/mysql.html#sqlalchemy.dialects.mysql.Insert" title="sqlalchemy.dialects.mysql.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> documented at <a class="reference internal" href="../../dialects/mysql.html#mysql-insert-on-duplicate-key-update"><span class="std std-ref">INSERT…ON DUPLICATE KEY UPDATE (Upsert)</span></a></p></li>
+</ul>
+<p>Users should review the above sections for background on proper construction
+of these objects; in particular, the “upsert” method typically needs to
+refer back to the original statement, so the statement is usually constructed
+in two separate steps.</p>
+<p>Third party backends such as those mentioned at <a class="reference internal" href="../../dialects/index.html"><span class="std std-ref">External Dialects</span></a> may
+also feature similar constructs.</p>
+<p>While SQLAlchemy does not yet have a backend-agnostic upsert construct, the above
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> variants are nonetheless ORM compatible in that they may be used
+in the same way as the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> construct itself as documented at
+<a class="reference internal" href="#orm-queryguide-insert-values"><span class="std std-ref">ORM Bulk Insert with Per Row SQL Expressions</span></a>, that is, by embedding the desired rows
+to INSERT within the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a> method.   In the example
+below, the SQLite <a class="reference internal" href="../../dialects/sqlite.html#sqlalchemy.dialects.sqlite.insert" title="sqlalchemy.dialects.sqlite.insert"><code class="xref py py-func docutils literal notranslate"><span class="pre">insert()</span></code></a> function is used to generate
+an <a class="reference internal" href="../../dialects/sqlite.html#sqlalchemy.dialects.sqlite.Insert" title="sqlalchemy.dialects.sqlite.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> construct that includes “ON CONFLICT DO UPDATE”
+support.   The statement is then passed to <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> where
+it proceeds normally, with the additional characteristic that the
+parameter dictionaries passed to <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.values" title="sqlalchemy.sql.expression.Insert.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.values()</span></code></a> are interpreted
+as ORM mapped attribute keys, rather than column names:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.dialects.sqlite</span><span class="w"> </span><span class="kn">import</span> <span class="n">insert</span> <span class="k">as</span> <span class="n">sqlite_upsert</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">sqlite_upsert</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;name&quot;: &quot;spongebob&quot;, &quot;fullname&quot;: &quot;Spongebob Squarepants&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;sandy&quot;, &quot;fullname&quot;: &quot;Sandy Cheeks&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;patrick&quot;, &quot;fullname&quot;: &quot;Patrick Star&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;squidward&quot;, &quot;fullname&quot;: &quot;Squidward Tentacles&quot;},</span>
+<span class="go">...         {&quot;name&quot;: &quot;ehkrabs&quot;, &quot;fullname&quot;: &quot;Eugene H. Krabs&quot;},</span>
+<span class="go">...     ]</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="n">on_conflict_do_update</span><span class="p">(</span>
+<span class="go">...     index_elements=[User.name], set_=dict(fullname=stmt.excluded.fullname)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">CONFLICT</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">DO</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">excluded</span><span class="p">.</span><span class="n">fullname</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sandy Cheeks&#39;</span><span class="p">,</span>
+<span class="s1">&#39;patrick&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Patrick Star&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;squidward&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">,</span>
+<span class="s1">&#39;ehkrabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<section id="using-returning-with-upsert-statements">
+<span id="orm-queryguide-upsert-returning"></span><h4>Using RETURNING with upsert statements<a class="headerlink" href="#using-returning-with-upsert-statements" title="Link to this heading">¶</a></h4>
+<p>From the SQLAlchemy ORM’s point of view, upsert statements look like regular
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> constructs, which includes that <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert.returning" title="sqlalchemy.sql.expression.Insert.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Insert.returning()</span></code></a>
+works with upsert statements in the same way as was demonstrated at
+<a class="reference internal" href="#orm-queryguide-insert-values"><span class="std std-ref">ORM Bulk Insert with Per Row SQL Expressions</span></a>, so that any column expression or
+relevant ORM entity class may be passed.  Continuing from the
+example in the previous section:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span>
+<span class="go">...     stmt.returning(User), execution_options={&quot;populate_existing&quot;: True}</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">CONFLICT</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">DO</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">excluded</span><span class="p">.</span><span class="n">fullname</span>
+<span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;spongebob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Sandy Cheeks&#39;</span><span class="p">,</span>
+<span class="s1">&#39;patrick&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Patrick Star&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;squidward&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">,</span>
+<span class="s1">&#39;ehkrabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+<span class="go">[User(name=&#39;spongebob&#39;, fullname=&#39;Spongebob Squarepants&#39;),</span>
+<span class="go">  User(name=&#39;sandy&#39;, fullname=&#39;Sandy Cheeks&#39;),</span>
+<span class="go">  User(name=&#39;patrick&#39;, fullname=&#39;Patrick Star&#39;),</span>
+<span class="go">  User(name=&#39;squidward&#39;, fullname=&#39;Squidward Tentacles&#39;),</span>
+<span class="go">  User(name=&#39;ehkrabs&#39;, fullname=&#39;Eugene H. Krabs&#39;)]</span></pre></div>
+</div>
+<p>The example above uses RETURNING to return ORM objects for each row inserted or
+upserted by the statement. The example also adds use of the
+<a class="reference internal" href="api.html#orm-queryguide-populate-existing"><span class="std std-ref">Populate Existing</span></a> execution option. This option indicates
+that <code class="docutils literal notranslate"><span class="pre">User</span></code> objects which are already present
+in the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> for rows that already exist should be
+<strong>refreshed</strong> with the data from the new row. For a pure <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a>
+statement, this option is not significant, because every row produced is a
+brand new primary key identity. However when the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a> also
+includes “upsert” options, it may also be yielding results from rows that
+already exist and therefore may already have a primary key identity represented
+in the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> object’s <a class="reference internal" href="../../glossary.html#term-identity-map"><span class="xref std std-term">identity map</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#orm-queryguide-populate-existing"><span class="std std-ref">Populate Existing</span></a></p>
+</div>
+</section>
+</section>
+</section>
+<section id="orm-bulk-update-by-primary-key">
+<span id="orm-queryguide-bulk-update"></span><h2>ORM Bulk UPDATE by Primary Key<a class="headerlink" href="#orm-bulk-update-by-primary-key" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> construct may be used with
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> in a similar way as the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Insert" title="sqlalchemy.sql.expression.Insert"><code class="xref py py-class docutils literal notranslate"><span class="pre">Insert</span></code></a>
+statement is used as described at <a class="reference internal" href="#orm-queryguide-bulk-insert"><span class="std std-ref">ORM Bulk INSERT Statements</span></a>, passing a
+list of many parameter dictionaries, each dictionary representing an individual
+row that corresponds to a single primary key value. This use should not be
+confused with a more common way to use <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> statements with the
+ORM, using an explicit WHERE clause, which is documented at
+<a class="reference internal" href="#orm-queryguide-update-delete-where"><span class="std std-ref">ORM UPDATE and DELETE with Custom WHERE Criteria</span></a>.</p>
+<p>For the “bulk” version of UPDATE, a <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a> construct is made in
+terms of an ORM class and passed to the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> method;
+the resulting <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> object should have <strong>no values and typically
+no WHERE criteria</strong>, that is, the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update.values" title="sqlalchemy.sql.expression.Update.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Update.values()</span></code></a> method is not
+used, and the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update.where" title="sqlalchemy.sql.expression.Update.where"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Update.where()</span></code></a> is <strong>usually</strong> not used, but may be
+used in the unusual case that additional filtering criteria would be added.</p>
+<p>Passing the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> construct along with a list of parameter
+dictionaries which each include a full primary key value will invoke <strong>bulk
+UPDATE by primary key mode</strong> for the statement, generating the appropriate
+WHERE criteria to match each row by primary key, and using <a class="reference internal" href="../../glossary.html#term-executemany"><span class="xref std std-term">executemany</span></a>
+to run each parameter set against the UPDATE statement:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     update(User),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;id&quot;: 1, &quot;fullname&quot;: &quot;Spongebob Squarepants&quot;},</span>
+<span class="go">...         {&quot;id&quot;: 3, &quot;fullname&quot;: &quot;Patrick Star&quot;},</span>
+<span class="go">...         {&quot;id&quot;: 5, &quot;fullname&quot;: &quot;Eugene H. Krabs&quot;},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Patrick Star&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)]</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>Note that each parameter dictionary <strong>must include a full primary key for
+each record</strong>, else an error is raised.</p>
+<p>Like the bulk INSERT feature, heterogeneous parameter lists are supported here
+as well, where the parameters will be grouped into sub-batches of UPDATE
+runs.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0.11: </span>Additional WHERE criteria can be combined with
+<a class="reference internal" href="#orm-queryguide-bulk-update"><span class="std std-ref">ORM Bulk UPDATE by Primary Key</span></a> by using the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update.where" title="sqlalchemy.sql.expression.Update.where"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Update.where()</span></code></a>
+method to add additional criteria.  However this criteria is always in
+addition to the WHERE criteria that’s already made present which includes
+primary key values.</p>
+</div>
+<p>The RETURNING feature is not available when using the “bulk UPDATE by primary
+key” feature; the list of multiple parameter dictionaries necessarily makes use
+of DBAPI <a class="reference internal" href="../../glossary.html#term-executemany"><span class="xref std std-term">executemany</span></a>, which in its usual form does not typically
+support result rows.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0: </span>Passing an <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> construct to the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a> method along with a list of parameter
+dictionaries now invokes a “bulk update”, which makes use of the same
+functionality as the legacy <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.bulk_update_mappings" title="sqlalchemy.orm.Session.bulk_update_mappings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.bulk_update_mappings()</span></code></a>
+method.  This is a behavior change compared to the 1.x series where the
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> would only be supported with explicit WHERE criteria
+and inline VALUES.</p>
+</div>
+<section id="disabling-bulk-orm-update-by-primary-key-for-an-update-statement-with-multiple-parameter-sets">
+<span id="orm-queryguide-bulk-update-disabling"></span><h3>Disabling Bulk ORM Update by Primary Key for an UPDATE statement with multiple parameter sets<a class="headerlink" href="#disabling-bulk-orm-update-by-primary-key-for-an-update-statement-with-multiple-parameter-sets" title="Link to this heading">¶</a></h3>
+<p>The ORM Bulk Update by Primary Key feature, which runs an UPDATE statement
+per record which includes WHERE criteria for each primary key value, is
+automatically used when:</p>
+<ol class="arabic simple">
+<li><p>the UPDATE statement given is against an ORM entity</p></li>
+<li><p>the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is used to execute the statement, and not a
+Core <a class="reference internal" href="../../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a></p></li>
+<li><p>The parameters passed are a <strong>list of dictionaries</strong>.</p></li>
+</ol>
+<p>In order to invoke an UPDATE statement without using “ORM Bulk Update by Primary Key”,
+invoke the statement against the <a class="reference internal" href="../../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a> directly using
+the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.connection" title="sqlalchemy.orm.Session.connection"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.connection()</span></code></a> method to acquire the current
+<a class="reference internal" href="../../core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a> for the transaction:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">bindparam</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     update(User).where(User.name == bindparam(&quot;u_name&quot;)),</span>
+<span class="go">...     [</span>
+<span class="go">...         {&quot;u_name&quot;: &quot;spongebob&quot;, &quot;fullname&quot;: &quot;Spongebob Squarepants&quot;},</span>
+<span class="go">...         {&quot;u_name&quot;: &quot;patrick&quot;, &quot;fullname&quot;: &quot;Patrick Star&quot;},</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="s1">&#39;Spongebob Squarepants&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;spongebob&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Patrick Star&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;patrick&#39;</span><span class="p">)]</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../../errors.html#error-bupq"><span class="std std-ref">per-row ORM Bulk Update by Primary Key requires that records contain primary key values</span></a></p>
+</div>
+</section>
+<section id="bulk-update-by-primary-key-for-joined-table-inheritance">
+<span id="orm-queryguide-bulk-update-joined-inh"></span><h3>Bulk UPDATE by Primary Key for Joined Table Inheritance<a class="headerlink" href="#bulk-update-by-primary-key-for-joined-table-inheritance" title="Link to this heading">¶</a></h3>
+<p>ORM bulk update has similar behavior to ORM bulk insert when using mappings
+with joined table inheritance; as described at
+<a class="reference internal" href="#orm-queryguide-insert-joined-table-inheritance"><span class="std std-ref">Bulk INSERT for Joined Table Inheritance</span></a>, the bulk UPDATE
+operation will emit an UPDATE statement for each table represented in the
+mapping, for which the given parameters include values to be updated
+(non-affected tables are skipped).</p>
+<p>Example:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+<span class="go">...     update(Manager),</span>
+<span class="go">...     [</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;id&quot;: 1,</span>
+<span class="go">...             &quot;name&quot;: &quot;scheeks&quot;,</span>
+<span class="go">...             &quot;manager_name&quot;: &quot;Sandy Cheeks, President&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...         {</span>
+<span class="go">...             &quot;id&quot;: 2,</span>
+<span class="go">...             &quot;name&quot;: &quot;eugene&quot;,</span>
+<span class="go">...             &quot;manager_name&quot;: &quot;Eugene H. Krabs, VP Marketing&quot;,</span>
+<span class="go">...         },</span>
+<span class="go">...     ],</span>
+<span class="go">... )</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">name</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="s1">&#39;scheeks&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;eugene&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)]</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">manager_name</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">[(</span><span class="s1">&#39;Sandy Cheeks, President&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Eugene H. Krabs, VP Marketing&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)]</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+</section>
+<section id="legacy-session-bulk-update-methods">
+<span id="orm-queryguide-legacy-bulk-update"></span><h3>Legacy Session Bulk UPDATE Methods<a class="headerlink" href="#legacy-session-bulk-update-methods" title="Link to this heading">¶</a></h3>
+<p>As discussed at <a class="reference internal" href="#orm-queryguide-legacy-bulk-insert"><span class="std std-ref">Legacy Session Bulk INSERT Methods</span></a>, the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.bulk_update_mappings" title="sqlalchemy.orm.Session.bulk_update_mappings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.bulk_update_mappings()</span></code></a> method of <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is
+the legacy form of bulk update, which the ORM makes use of internally when
+interpreting a <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a> statement with primary key parameters given;
+however, when using the legacy version, features such as support for
+session-synchronization are not included.</p>
+<p>The example below:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="go">session.bulk_update_mappings(</span>
+<span class="go">    User,</span>
+<span class="go">    [</span>
+<span class="go">        {&quot;id&quot;: 1, &quot;name&quot;: &quot;scheeks&quot;, &quot;manager_name&quot;: &quot;Sandy Cheeks, President&quot;},</span>
+<span class="go">        {&quot;id&quot;: 2, &quot;name&quot;: &quot;eugene&quot;, &quot;manager_name&quot;: &quot;Eugene H. Krabs, VP Marketing&quot;},</span>
+<span class="go">    ],</span>
+<span class="go">)</span></pre></div>
+</div>
+<p>Is expressed using the new API as:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="go">from sqlalchemy import update</span>
+
+<span class="go">session.execute(</span>
+<span class="go">    update(User),</span>
+<span class="go">    [</span>
+<span class="go">        {&quot;id&quot;: 1, &quot;name&quot;: &quot;scheeks&quot;, &quot;manager_name&quot;: &quot;Sandy Cheeks, President&quot;},</span>
+<span class="go">        {&quot;id&quot;: 2, &quot;name&quot;: &quot;eugene&quot;, &quot;manager_name&quot;: &quot;Eugene H. Krabs, VP Marketing&quot;},</span>
+<span class="go">    ],</span>
+<span class="go">)</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#orm-queryguide-legacy-bulk-insert"><span class="std std-ref">Legacy Session Bulk INSERT Methods</span></a></p>
+</div>
+</section>
+</section>
+<section id="orm-update-and-delete-with-custom-where-criteria">
+<span id="orm-queryguide-update-delete-where"></span><h2>ORM UPDATE and DELETE with Custom WHERE Criteria<a class="headerlink" href="#orm-update-and-delete-with-custom-where-criteria" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a> and <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Delete" title="sqlalchemy.sql.expression.Delete"><code class="xref py py-class docutils literal notranslate"><span class="pre">Delete</span></code></a> constructs, when constructed
+with custom WHERE criteria (that is, using the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update.where" title="sqlalchemy.sql.expression.Update.where"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Update.where()</span></code></a> and
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Delete.where" title="sqlalchemy.sql.expression.Delete.where"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Delete.where()</span></code></a> methods), may be invoked in an ORM context
+by passing them to <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a>, without using
+the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute.params.params" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.params</span></code></a> parameter. For <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-class docutils literal notranslate"><span class="pre">Update</span></code></a>,
+the values to be updated should be passed using <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update.values" title="sqlalchemy.sql.expression.Update.values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Update.values()</span></code></a>.</p>
+<p>This mode of use differs
+from the feature described previously at <a class="reference internal" href="#orm-queryguide-bulk-update"><span class="std std-ref">ORM Bulk UPDATE by Primary Key</span></a>
+in that the ORM uses the given WHERE clause as is, rather than fixing the
+WHERE clause to be by primary key.   This means that the single UPDATE or
+DELETE statement can affect many rows at once.</p>
+<p>As an example, below an UPDATE is emitted that affects the “fullname”
+field of multiple rows</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     update(User)</span>
+<span class="go">...     .where(User.name.in_([&quot;squidward&quot;, &quot;sandy&quot;]))</span>
+<span class="go">...     .values(fullname=&quot;Name starts with S&quot;)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Name starts with S&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;squidward&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>For a DELETE, an example of deleting rows based on criteria:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">delete</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">in_</span><span class="p">([</span><span class="s2">&quot;squidward&quot;</span><span class="p">,</span> <span class="s2">&quot;sandy&quot;</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;squidward&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please read the following section <a class="reference internal" href="#orm-queryguide-update-delete-caveats"><span class="std std-ref">Important Notes and Caveats for ORM-Enabled Update and Delete</span></a>
+for important notes regarding how the functionality of ORM-Enabled UPDATE and DELETE
+diverges from that of ORM <a class="reference internal" href="../../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a> features, such
+as using the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.delete" title="sqlalchemy.orm.Session.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.delete()</span></code></a> method to delete individual objects.</p>
+</div>
+<section id="important-notes-and-caveats-for-orm-enabled-update-and-delete">
+<span id="orm-queryguide-update-delete-caveats"></span><h3>Important Notes and Caveats for ORM-Enabled Update and Delete<a class="headerlink" href="#important-notes-and-caveats-for-orm-enabled-update-and-delete" title="Link to this heading">¶</a></h3>
+<p>The ORM-enabled UPDATE and DELETE features bypass ORM <a class="reference internal" href="../../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a>
+automation in favor of being able to emit a single UPDATE or DELETE statement
+that matches multiple rows at once without complexity.</p>
+<ul class="simple">
+<li><p>The operations do not offer in-Python cascading of relationships - it is
+assumed that ON UPDATE CASCADE and/or ON DELETE CASCADE is configured for any
+foreign key references which require it, otherwise the database may emit an
+integrity violation if foreign key references are being enforced. See the
+notes at <a class="reference internal" href="../cascades.html#passive-deletes"><span class="std std-ref">Using foreign key ON DELETE cascade with ORM relationships</span></a> for some examples.</p></li>
+<li><p>After the UPDATE or DELETE, dependent objects in the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> which
+were impacted by an ON UPDATE CASCADE or ON DELETE CASCADE on related tables,
+particularly objects that refer to rows that have now been deleted, may still
+reference those objects.  This issue is resolved once the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>
+is expired, which normally occurs upon <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.commit" title="sqlalchemy.orm.Session.commit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.commit()</span></code></a> or can be
+forced by using <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.expire_all" title="sqlalchemy.orm.Session.expire_all"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.expire_all()</span></code></a>.</p></li>
+<li><p>ORM-enabled UPDATEs and DELETEs do not handle joined table inheritance
+automatically.   See the section <a class="reference internal" href="#orm-queryguide-update-delete-joined-inh"><span class="std std-ref">UPDATE/DELETE with Custom WHERE Criteria for Joined Table Inheritance</span></a>
+for notes on how to work with joined-inheritance mappings.</p></li>
+<li><p>The WHERE criteria needed in order to limit the polymorphic identity to
+specific subclasses for single-table-inheritance mappings <strong>is included
+automatically</strong> .   This only applies to a subclass mapper that has no table of
+its own.</p></li>
+<li><p>The <a class="reference internal" href="api.html#sqlalchemy.orm.with_loader_criteria" title="sqlalchemy.orm.with_loader_criteria"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_loader_criteria()</span></code></a> option <strong>is supported</strong> by ORM
+update and delete operations; criteria here will be added to that of the UPDATE
+or DELETE statement being emitted, as well as taken into account during the
+“synchronize” process.</p></li>
+<li><p>In order to intercept ORM-enabled UPDATE and DELETE operations with event
+handlers, use the <a class="reference internal" href="../events.html#sqlalchemy.orm.SessionEvents.do_orm_execute" title="sqlalchemy.orm.SessionEvents.do_orm_execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SessionEvents.do_orm_execute()</span></code></a> event.</p></li>
+</ul>
+</section>
+<section id="selecting-a-synchronization-strategy">
+<span id="orm-queryguide-update-delete-sync"></span><h3>Selecting a Synchronization Strategy<a class="headerlink" href="#selecting-a-synchronization-strategy" title="Link to this heading">¶</a></h3>
+<p>When making use of <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a> or <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.delete" title="sqlalchemy.sql.expression.delete"><code class="xref py py-func docutils literal notranslate"><span class="pre">delete()</span></code></a> in conjunction
+with ORM-enabled execution using <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a>, additional
+ORM-specific functionality is present which will <strong>synchronize</strong> the state
+being changed by the statement with that of the objects that are currently
+present within the <a class="reference internal" href="../../glossary.html#term-identity-map"><span class="xref std std-term">identity map</span></a> of the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>.
+By “synchronize” we mean that UPDATEd attributes will be refreshed with the
+new value, or at the very least <a class="reference internal" href="../../glossary.html#term-expired"><span class="xref std std-term">expired</span></a> so that they will re-populate
+with their new value on next access, and DELETEd objects will be
+moved into the <a class="reference internal" href="../../glossary.html#term-deleted"><span class="xref std std-term">deleted</span></a> state.</p>
+<p>This synchronization is controllable as the “synchronization strategy”,
+which is passed as an string ORM execution option, typically by using the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute.params.execution_options" title="sqlalchemy.orm.Session.execute"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Session.execute.execution_options</span></code></a> dictionary:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     update(User).where(User.name == &quot;squidward&quot;).values(fullname=&quot;Squidward Tentacles&quot;)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span> <span class="n">execution_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;synchronize_session&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;squidward&#39;</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>The execution option may also be bundled with the statement itself using the
+<a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.Executable.execution_options" title="sqlalchemy.sql.expression.Executable.execution_options"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Executable.execution_options()</span></code></a> method:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     update(User)</span>
+<span class="go">...     .where(User.name == &quot;squidward&quot;)</span>
+<span class="go">...     .values(fullname=&quot;Squidward Tentacles&quot;)</span>
+<span class="go">...     .execution_options(synchronize_session=False)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;squidward&#39;</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>The following values for <code class="docutils literal notranslate"><span class="pre">synchronize_session</span></code> are supported:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'auto'</span></code> - this is the default.   The <code class="docutils literal notranslate"><span class="pre">'fetch'</span></code> strategy will be used on
+backends that support RETURNING, which includes all SQLAlchemy-native drivers
+except for MySQL.   If RETURNING is not supported, the <code class="docutils literal notranslate"><span class="pre">'evaluate'</span></code>
+strategy will be used instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'fetch'</span></code> - Retrieves the primary key identity of affected rows by either
+performing a SELECT before the UPDATE or DELETE, or by using RETURNING if the
+database supports it, so that in-memory objects which are affected by the
+operation can be refreshed with new values (updates) or expunged from the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> (deletes). This synchronization strategy may be used
+even if the given <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a> or <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.delete" title="sqlalchemy.sql.expression.delete"><code class="xref py py-func docutils literal notranslate"><span class="pre">delete()</span></code></a>
+construct explicitly specifies entities or columns using
+<a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.UpdateBase.returning" title="sqlalchemy.sql.expression.UpdateBase.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">UpdateBase.returning()</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0: </span>Explicit <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.UpdateBase.returning" title="sqlalchemy.sql.expression.UpdateBase.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">UpdateBase.returning()</span></code></a> may be
+combined with the <code class="docutils literal notranslate"><span class="pre">'fetch'</span></code> synchronization strategy when using
+ORM-enabled UPDATE and DELETE with WHERE criteria.  The actual statement
+will contain the union of columns between that which the <code class="docutils literal notranslate"><span class="pre">'fetch'</span></code>
+strategy requires and those which were requested.</p>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'evaluate'</span></code> - This indicates to evaluate the WHERE
+criteria given in the UPDATE or DELETE statement in Python, to locate
+matching objects within the <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>. This approach does not add
+any SQL round trips to the operation, and in the absence of RETURNING
+support, may be more efficient. For UPDATE or DELETE statements with complex
+criteria, the <code class="docutils literal notranslate"><span class="pre">'evaluate'</span></code> strategy may not be able to evaluate the
+expression in Python and will raise an error. If this occurs, use the
+<code class="docutils literal notranslate"><span class="pre">'fetch'</span></code> strategy for the operation instead.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If a SQL expression makes use of custom operators using the
+<a class="reference internal" href="../../core/sqlelement.html#sqlalchemy.sql.expression.Operators.op" title="sqlalchemy.sql.expression.Operators.op"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Operators.op()</span></code></a> or <a class="reference internal" href="../../core/sqlelement.html#sqlalchemy.sql.expression.custom_op" title="sqlalchemy.sql.expression.custom_op"><code class="xref py py-class docutils literal notranslate"><span class="pre">custom_op</span></code></a> feature, the
+<a class="reference internal" href="../../core/sqlelement.html#sqlalchemy.sql.expression.Operators.op.params.python_impl" title="sqlalchemy.sql.expression.Operators.op"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Operators.op.python_impl</span></code></a> parameter may be used to indicate
+a Python function that will be used by the <code class="docutils literal notranslate"><span class="pre">&quot;evaluate&quot;</span></code> synchronization
+strategy.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;evaluate&quot;</span></code> strategy should be avoided if an UPDATE operation is
+to run on a <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> that has many objects which have
+been expired, because it will necessarily need to refresh objects in order
+to test them against the given WHERE criteria, which will emit a SELECT
+for each one.   In this case, and particularly if the backend supports
+RETURNING, the <code class="docutils literal notranslate"><span class="pre">&quot;fetch&quot;</span></code> strategy should be preferred.</p>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code> - don’t synchronize the session. This option may be useful
+for backends that don’t support RETURNING where the <code class="docutils literal notranslate"><span class="pre">&quot;evaluate&quot;</span></code> strategy
+is not able to be used.  In this case, the state of objects in the
+<a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session" title="sqlalchemy.orm.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is unchanged and will not automatically correspond
+to the UPDATE or DELETE statement that was emitted, if such objects
+that would normally correspond to the rows matched are present.</p></li>
+</ul>
+</section>
+<section id="using-returning-with-update-delete-and-custom-where-criteria">
+<span id="orm-queryguide-update-delete-where-returning"></span><h3>Using RETURNING with UPDATE/DELETE and Custom WHERE Criteria<a class="headerlink" href="#using-returning-with-update-delete-and-custom-where-criteria" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.UpdateBase.returning" title="sqlalchemy.sql.expression.UpdateBase.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">UpdateBase.returning()</span></code></a> method is fully compatible with
+ORM-enabled UPDATE and DELETE with WHERE criteria.   Full ORM objects
+and/or columns may be indicated for RETURNING:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     update(User)</span>
+<span class="go">...     .where(User.name == &quot;squidward&quot;)</span>
+<span class="go">...     .values(fullname=&quot;Squidward Tentacles&quot;)</span>
+<span class="go">...     .returning(User)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_account</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">fullname</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_account</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">fullname</span><span class="p">,</span><span class="w"> </span><span class="n">species</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Squidward Tentacles&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;squidward&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+<span class="go">[User(name=&#39;squidward&#39;, fullname=&#39;Squidward Tentacles&#39;)]</span></pre></div>
+</div>
+<p>The support for RETURNING is also compatible with the <code class="docutils literal notranslate"><span class="pre">fetch</span></code> synchronization
+strategy, which also uses RETURNING.  The ORM will organize the columns in
+RETURNING appropriately so that the synchronization proceeds as well as that
+the returned <a class="reference internal" href="../../core/connections.html#sqlalchemy.engine.Result" title="sqlalchemy.engine.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a> will contain the requested entities and SQL
+columns in their requested order.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0: </span><a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.UpdateBase.returning" title="sqlalchemy.sql.expression.UpdateBase.returning"><code class="xref py py-meth docutils literal notranslate"><span class="pre">UpdateBase.returning()</span></code></a> may be used for
+ORM enabled UPDATE and DELETE while still retaining full compatibility
+with the <code class="docutils literal notranslate"><span class="pre">fetch</span></code> synchronization strategy.</p>
+</div>
+</section>
+<section id="update-delete-with-custom-where-criteria-for-joined-table-inheritance">
+<span id="orm-queryguide-update-delete-joined-inh"></span><h3>UPDATE/DELETE with Custom WHERE Criteria for Joined Table Inheritance<a class="headerlink" href="#update-delete-with-custom-where-criteria-for-joined-table-inheritance" title="Link to this heading">¶</a></h3>
+<p>The UPDATE/DELETE with WHERE criteria feature, unlike the
+<a class="reference internal" href="#orm-queryguide-bulk-update"><span class="std std-ref">ORM Bulk UPDATE by Primary Key</span></a>, only emits a single UPDATE or DELETE
+statement per call to <a class="reference internal" href="../session_api.html#sqlalchemy.orm.Session.execute" title="sqlalchemy.orm.Session.execute"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Session.execute()</span></code></a>. This means that when
+running an <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.update" title="sqlalchemy.sql.expression.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">update()</span></code></a> or <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.delete" title="sqlalchemy.sql.expression.delete"><code class="xref py py-func docutils literal notranslate"><span class="pre">delete()</span></code></a> statement against a
+multi-table mapping, such as a subclass in a joined-table inheritance mapping,
+the statement must conform to the backend’s current capabilities, which may
+include that the backend does not support an UPDATE or DELETE statement that
+refers to multiple tables, or may have only limited support for this. This
+means that for mappings such as joined inheritance subclasses, the ORM version
+of the UPDATE/DELETE with WHERE criteria feature can only be used to a limited
+extent or not at all, depending on specifics.</p>
+<p>The most straightforward way to emit a multi-row UPDATE statement
+for a joined-table subclass is to refer to the sub-table alone.
+This means the <a class="reference internal" href="../../core/dml.html#sqlalchemy.sql.expression.Update" title="sqlalchemy.sql.expression.Update"><code class="xref py py-func docutils literal notranslate"><span class="pre">Update()</span></code></a> construct should only refer to attributes
+that are local to the subclass table, as in the example below:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     update(Manager)</span>
+<span class="go">...     .where(Manager.id == 1)</span>
+<span class="go">...     .values(manager_name=&quot;Sandy Cheeks, President&quot;)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">manager_name</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Sandy Cheeks, President&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
+</div></pre></div>
+</div>
+<p>With the above form, a rudimentary way to refer to the base table in order
+to locate rows which will work on any SQL backend is so use a subquery:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     update(Manager)</span>
+<span class="go">...     .where(</span>
+<span class="go">...         Manager.id</span>
+<span class="go">...         == select(Employee.id).where(Employee.name == &quot;sandy&quot;).scalar_subquery()</span>
+<span class="go">...     )</span>
+<span class="go">...     .values(manager_name=&quot;Sandy Cheeks, President&quot;)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">manager_name</span><span class="o">=?</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">RETURNING</span><span class="w"> </span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Sandy Cheeks, President&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>For backends that support UPDATE…FROM, the subquery may be stated instead
+as additional plain WHERE criteria, however the criteria between the two
+tables must be stated explicitly in some way:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     update(Manager)</span>
+<span class="go">...     .where(Manager.id == Employee.id, Employee.name == &quot;sandy&quot;)</span>
+<span class="go">...     .values(manager_name=&quot;Sandy Cheeks, President&quot;)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql'><span class="k">UPDATE</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">manager_name</span><span class="o">=?</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Sandy Cheeks, President&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;sandy&#39;</span><span class="p">)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>For a DELETE, it’s expected that rows in both the base table and the sub-table
+would be DELETEd at the same time.   To DELETE many rows of joined inheritance
+objects <strong>without</strong> using cascading foreign keys, emit DELETE for each
+table individually:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">delete</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">delete</span><span class="p">(</span><span class="n">Manager</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Manager</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+<div class='show_sql'><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+</div><span class="go">&lt;...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">delete</span><span class="p">(</span><span class="n">Employee</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Employee</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+<div class='show_sql'><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+</div><span class="go">&lt;...&gt;</span></pre></div>
+</div>
+<p>Overall, normal <a class="reference internal" href="../../glossary.html#term-unit-of-work"><span class="xref std std-term">unit of work</span></a> processes should be <strong>preferred</strong> for
+updating and deleting rows for joined inheritance and other multi-table
+mappings, unless there is a performance rationale for using custom WHERE
+criteria.</p>
+</section>
+<section id="legacy-query-methods">
+<h3>Legacy Query Methods<a class="headerlink" href="#legacy-query-methods" title="Link to this heading">¶</a></h3>
+<p>The ORM enabled UPDATE/DELETE with WHERE feature was originally part of the
+now-legacy <a class="reference internal" href="query.html#sqlalchemy.orm.Query" title="sqlalchemy.orm.Query"><code class="xref py py-class docutils literal notranslate"><span class="pre">Query</span></code></a> object, in the <a class="reference internal" href="query.html#sqlalchemy.orm.Query.update" title="sqlalchemy.orm.Query.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.update()</span></code></a>
+and <a class="reference internal" href="query.html#sqlalchemy.orm.Query.delete" title="sqlalchemy.orm.Query.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.delete()</span></code></a> methods.  These methods remain available
+and provide a subset of the same functionality as that described at
+<a class="reference internal" href="#orm-queryguide-update-delete-where"><span class="std std-ref">ORM UPDATE and DELETE with Custom WHERE Criteria</span></a>.  The primary difference is that
+the legacy methods don’t provide for explicit RETURNING support.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="query.html#sqlalchemy.orm.Query.update" title="sqlalchemy.orm.Query.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.update()</span></code></a></p>
+<p><a class="reference internal" href="query.html#sqlalchemy.orm.Query.delete" title="sqlalchemy.orm.Query.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Query.delete()</span></code></a></p>
+</div>
+</section>
+</section>
+</section>
+<aside class="topic">
+<p class="topic-title">ORM Querying Guide</p>
+<p>Next Query Guide Section: <a class="reference internal" href="columns.html"><span class="doc">Column Loading Options</span></a></p>
+</aside>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="inheritance.html" title="previous chapter">Writing SELECT statements for Inheritance Mappings</a>
+        Next:
+        <a href="columns.html" title="next chapter">Column Loading Options</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+

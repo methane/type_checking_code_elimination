@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>
+            
+    
+    Writing SELECT statements for Inheritance Mappings
+ &mdash;
+    SQLAlchemy 2.0 Documentation
+
+        </title>
+
+        
+            <!-- begin iterate through site-imported + sphinx environment css_files -->
+                <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/docs.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/changelog.css" type="text/css" />
+                <link rel="stylesheet" href="../../_static/sphinx_paramlinks.css" type="text/css" />
+            <!-- end iterate through site-imported + sphinx environment css_files -->
+        
+
+        
+
+    
+
+    <!-- begin layout.mako headers -->
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+        <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="top" title="SQLAlchemy 2.0 Documentation" href="../../index.html" />
+        <link rel="up" title="ORM Querying Guide" href="index.html" />
+        <link rel="next" title="ORM-Enabled INSERT, UPDATE, and DELETE statements" href="dml.html" />
+        <link rel="prev" title="Writing SELECT statements for ORM Mapped Classes" href="select.html" />
+    <!-- end layout.mako headers -->
+
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+
+
+<div id="docs-top-navigation-container" class="body-background">
+<div id="docs-header">
+    <div id="docs-version-header">
+        Release: <span class="version-num">2.0.39</span>
+
+
+        | Release Date: March 11, 2025
+
+    </div>
+
+    <h1><a href="../../index.html">SQLAlchemy 2.0 Documentation</a></h1>
+
+</div>
+</div>
+
+<div id="docs-body-container">
+
+    <div id="fixed-sidebar" class="withsidebar">
+
+
+
+        <div id="docs-sidebar-popout">
+            <h3><a href="../../index.html">SQLAlchemy 2.0 Documentation</a></h3>
+            <p id="sidebar-topnav">
+                <a href="../../index.html">Home</a>
+            </p>
+
+            <div id="sidebar-search">
+                <form class="search" action="../../search.html" method="get">
+                  <label>
+                  Search terms:
+                  <input type="text" placeholder="search..." name="q" size="12" />
+                  </label>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </div>
+
+        </div>
+
+        <div id="docs-sidebar">
+
+        <div id="sidebar-banner">
+            
+        </div>
+
+        <div id="docs-sidebar-inner">
+
+        
+        <h3>
+            <a href="../index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a>
+        </h3>
+
+        <ul>
+<li><span class="link-container"><a class="reference external" href="../quickstart.html">ORM Quick Start</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../mapper_config.html">ORM Mapped Class Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../relationships.html">Relationship Configuration</a></span></li>
+<li><span class="link-container"><a class="reference external" href="index.html">ORM Querying Guide</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="select.html">Writing SELECT statements for ORM Mapped Classes</a></span></li>
+<li class="selected"><span class="link-container"><strong>Writing SELECT statements for Inheritance Mappings</strong><a class="paramlink headerlink reference internal" href="#">¶</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#selecting-from-the-base-class-vs-specific-sub-classes">SELECTing from the base class vs. specific sub-classes</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-selectin-polymorphic">Using selectin_polymorphic()</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#applying-selectin-polymorphic-to-an-existing-eager-load">Applying selectin_polymorphic() to an existing eager load</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#applying-loader-options-to-the-subclasses-loaded-by-selectin-polymorphic">Applying loader options to the subclasses loaded by selectin_polymorphic</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#applying-loader-options-when-selectin-polymorphic-is-itself-a-sub-option">Applying loader options when selectin_polymorphic is itself a sub-option</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#configuring-selectin-polymorphic-on-mappers">Configuring selectin_polymorphic() on mappers</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#using-with-polymorphic">Using with_polymorphic()</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#filtering-subclass-attributes-with-with-polymorphic">Filtering Subclass Attributes with with_polymorphic()</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#using-aliasing-with-with-polymorphic">Using aliasing with with_polymorphic</a></span></li>
+<li><span class="link-container"><a class="reference external" href="#configuring-with-polymorphic-on-mappers">Configuring with_polymorphic() on mappers</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#joining-to-specific-sub-types-or-with-polymorphic-entities">Joining to specific sub-types or with_polymorphic() entities</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#eager-loading-of-polymorphic-subtypes">Eager Loading of Polymorphic Subtypes</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#select-statements-for-single-inheritance-mappings">SELECT Statements for Single Inheritance Mappings</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#optimizing-attribute-loads-for-single-inheritance">Optimizing Attribute Loads for Single Inheritance</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="#inheritance-loading-api">Inheritance Loading API</a></span><ul>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.with_polymorphic"><code class="docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a></span></li>
+<li><span class="link-container"><a class="reference external" href="#sqlalchemy.orm.selectin_polymorphic"><code class="docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="dml.html">ORM-Enabled INSERT, UPDATE, and DELETE statements</a></span></li>
+<li><span class="link-container"><a class="reference external" href="columns.html">Column Loading Options</a></span></li>
+<li><span class="link-container"><a class="reference external" href="relationships.html">Relationship Loading Techniques</a></span></li>
+<li><span class="link-container"><a class="reference external" href="api.html">ORM API Features for Querying</a></span></li>
+<li><span class="link-container"><a class="reference external" href="query.html">Legacy Query API</a></span></li>
+</ul>
+</li>
+<li><span class="link-container"><a class="reference external" href="../session.html">Using the Session</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../extending.html">Events and Internals</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../extensions/index.html">ORM Extensions</a></span></li>
+<li><span class="link-container"><a class="reference external" href="../examples.html">ORM Examples</a></span></li>
+</ul>
+
+
+
+        </div>
+
+        </div>
+
+    </div>
+
+    <div id="narrow-index-nav">
+        <form class="search" action="../../search.html" method="get">
+            <label>
+                Search terms:
+            <input type="text" placeholder="search..." name="q" size="12" />
+            </label>
+            <input type="submit" value="Search" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+
+        <p>
+        <a href="../../index.html">Home</a>
+        </p>
+
+    </div>
+
+
+        <div id="docs-narrow-top-navigation">
+            <ul>
+                <li><b>Previous:</b>
+                <a href="select.html" title="previous chapter">Writing SELECT statements for ORM Mapped Classes</a></li>
+                <li><b>Next:</b>
+                <a href="dml.html" title="next chapter">ORM-Enabled INSERT, UPDATE, and DELETE statements</a></li>
+
+            <li><b>Up:</b> <a href="../../index.html">Home</a></li>
+                    <ul><li><a href="../index.html" title="SQLAlchemy ORM">SQLAlchemy ORM</a></li>
+                    <ul><li><a href="index.html" title="ORM Querying Guide">ORM Querying Guide</a></li>
+                </ul>
+                </ul>
+
+
+
+            <li><b>On this page:</b></li>
+            <ul>
+<li><a class="reference internal" href="#writing-select-statements-for-inheritance-mappings">Writing SELECT statements for Inheritance Mappings</a><ul>
+<li><a class="reference internal" href="#selecting-from-the-base-class-vs-specific-sub-classes">SELECTing from the base class vs. specific sub-classes</a></li>
+<li><a class="reference internal" href="#using-selectin-polymorphic">Using selectin_polymorphic()</a><ul>
+<li><a class="reference internal" href="#applying-selectin-polymorphic-to-an-existing-eager-load">Applying selectin_polymorphic() to an existing eager load</a></li>
+<li><a class="reference internal" href="#applying-loader-options-to-the-subclasses-loaded-by-selectin-polymorphic">Applying loader options to the subclasses loaded by selectin_polymorphic</a><ul>
+<li><a class="reference internal" href="#applying-loader-options-when-selectin-polymorphic-is-itself-a-sub-option">Applying loader options when selectin_polymorphic is itself a sub-option</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuring-selectin-polymorphic-on-mappers">Configuring selectin_polymorphic() on mappers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-with-polymorphic">Using with_polymorphic()</a><ul>
+<li><a class="reference internal" href="#filtering-subclass-attributes-with-with-polymorphic">Filtering Subclass Attributes with with_polymorphic()</a></li>
+<li><a class="reference internal" href="#using-aliasing-with-with-polymorphic">Using aliasing with with_polymorphic</a></li>
+<li><a class="reference internal" href="#configuring-with-polymorphic-on-mappers">Configuring with_polymorphic() on mappers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#joining-to-specific-sub-types-or-with-polymorphic-entities">Joining to specific sub-types or with_polymorphic() entities</a><ul>
+<li><a class="reference internal" href="#eager-loading-of-polymorphic-subtypes">Eager Loading of Polymorphic Subtypes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#select-statements-for-single-inheritance-mappings">SELECT Statements for Single Inheritance Mappings</a><ul>
+<li><a class="reference internal" href="#optimizing-attribute-loads-for-single-inheritance">Optimizing Attribute Loads for Single Inheritance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inheritance-loading-api">Inheritance Loading API</a><ul>
+<li><a class="reference internal" href="#sqlalchemy.orm.with_polymorphic"><code class="docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic"><code class="docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+            </ul>
+
+        </div>
+
+
+
+    <div id="docs-body" role="main" class="withsidebar orm-queryguide-inheritance" >
+        
+<aside class="topic">
+<p class="topic-title">ORM Querying Guide</p>
+<p>This page is part of the <a class="reference internal" href="index.html"><span class="doc">ORM Querying Guide</span></a>.</p>
+<p>Previous: <a class="reference internal" href="select.html"><span class="doc">Writing SELECT statements for ORM Mapped Classes</span></a>   |   Next: <a class="reference internal" href="dml.html"><span class="doc">ORM-Enabled INSERT, UPDATE, and DELETE statements</span></a></p>
+</aside>
+<section id="writing-select-statements-for-inheritance-mappings">
+<span id="loading-joined-inheritance"></span><span id="inheritance-loading-toplevel"></span><h1>Writing SELECT statements for Inheritance Mappings<a class="headerlink" href="#writing-select-statements-for-inheritance-mappings" title="Link to this heading">¶</a></h1>
+<div class="admonition-about-this-document admonition">
+<p class="admonition-title">About this Document</p>
+<p>This section makes use of ORM mappings configured using
+the <a class="reference internal" href="../inheritance.html"><span class="std std-ref">ORM Inheritance</span></a> feature,
+described at <a class="reference internal" href="../inheritance.html"><span class="std std-ref">Mapping Class Inheritance Hierarchies</span></a>.  The emphasis will be on
+<a class="reference internal" href="../inheritance.html#joined-inheritance"><span class="std std-ref">Joined Table Inheritance</span></a> as this is the most intricate ORM querying
+case.</p>
+<p><a class="reference internal" href="_inheritance_setup.html"><span class="doc">View the ORM setup for this page</span></a>.</p>
+</div>
+<section id="selecting-from-the-base-class-vs-specific-sub-classes">
+<h2>SELECTing from the base class vs. specific sub-classes<a class="headerlink" href="#selecting-from-the-base-class-vs-specific-sub-classes" title="Link to this heading">¶</a></h2>
+<p>A SELECT statement constructed against a class in a joined inheritance
+hierarchy will query against the table to which the class is mapped, as well as
+any super-tables present, using JOIN to link them together. The query would
+then return objects that are of that requested type as well as any sub-types of
+the requested type,  using the <a class="reference internal" href="../../glossary.html#term-discriminator"><span class="xref std std-term">discriminator</span></a> value in each row
+to determine the correct type. The query below is established against the <code class="docutils literal notranslate"><span class="pre">Manager</span></code>
+subclass of <code class="docutils literal notranslate"><span class="pre">Employee</span></code>, which then returns a result that will contain only
+objects of type <code class="docutils literal notranslate"><span class="pre">Manager</span></code>:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Manager</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Manager</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">managers</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_1</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">managers</span><span class="p">)</span>
+<span class="go">[Manager(&#39;Mr. Krabs&#39;)]</span></pre></div>
+</div>
+<p>When the SELECT statement is against the base class in the hierarchy, the
+default behavior is that only that class’ table will be included in the
+rendered SQL and JOIN will not be used. As in all cases, the
+<a class="reference internal" href="../../glossary.html#term-discriminator"><span class="xref std std-term">discriminator</span></a> column is used to distinguish between different requested
+sub-types, which then results in objects of any possible sub-type being
+returned. The objects returned will have attributes corresponding to the base
+table populated, and attributes corresponding to sub-tables will start in an
+un-loaded state, loading automatically when accessed. The loading of
+sub-attributes is configurable to be more “eager” in a variety of ways,
+discussed later in this section.</p>
+<p>The example below creates a query against the <code class="docutils literal notranslate"><span class="pre">Employee</span></code> superclass.
+This indicates that objects of any type, including <code class="docutils literal notranslate"><span class="pre">Manager</span></code>, <code class="docutils literal notranslate"><span class="pre">Engineer</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">Employee</span></code>, may be within the result set:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Employee</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Employee</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
+<span class="go">[Manager(&#39;Mr. Krabs&#39;), Engineer(&#39;SpongeBob&#39;), Engineer(&#39;Squidward&#39;)]</span></pre></div>
+</div>
+<p>Above, the additional tables for <code class="docutils literal notranslate"><span class="pre">Manager</span></code> and <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> were not included
+in the SELECT, which means that the returned objects will not yet contain
+data represented from those tables, in this example the <code class="docutils literal notranslate"><span class="pre">.manager_name</span></code>
+attribute of the <code class="docutils literal notranslate"><span class="pre">Manager</span></code> class as well as the <code class="docutils literal notranslate"><span class="pre">.engineer_info</span></code> attribute
+of the <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> class.  These attributes start out in the
+<a class="reference internal" href="../../glossary.html#term-expired"><span class="xref std std-term">expired</span></a> state, and will automatically populate themselves when first
+accessed using <a class="reference internal" href="../../glossary.html#term-lazy-loading"><span class="xref std std-term">lazy loading</span></a>:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mr_krabs</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">mr_krabs</span><span class="o">.</span><span class="n">manager_name</span><span class="p">)</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">manager</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+</div><span class="go">Eugene H. Krabs</span></pre></div>
+</div>
+<p>This lazy load behavior is not desirable if a large number of objects have been
+loaded, in the case that the consuming application will need to be accessing
+subclass-specific attributes, as this would be an example of the
+<a class="reference internal" href="../../glossary.html#term-N-plus-one"><span class="xref std std-term">N plus one</span></a> problem that emits additional SQL per row.  This additional SQL can
+impact performance and also be incompatible with approaches such as
+using <a class="reference internal" href="../extensions/asyncio.html"><span class="std std-ref">asyncio</span></a>.  Additionally, in our query for
+<code class="docutils literal notranslate"><span class="pre">Employee</span></code> objects, since the query is against the base table only, we did
+not have a way to add SQL criteria involving subclass-specific attributes in
+terms of <code class="docutils literal notranslate"><span class="pre">Manager</span></code> or <code class="docutils literal notranslate"><span class="pre">Engineer</span></code>. The next two sections detail two
+constructs that provide solutions to these two issues in different ways, the
+<a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> loader option and the
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> entity construct.</p>
+</section>
+<section id="using-selectin-polymorphic">
+<span id="polymorphic-selectin"></span><h2>Using selectin_polymorphic()<a class="headerlink" href="#using-selectin-polymorphic" title="Link to this heading">¶</a></h2>
+<p>To address the issue of performance when accessing attributes on subclasses,
+the <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> loader strategy may be used to
+<a class="reference internal" href="../../glossary.html#term-eagerly-load"><span class="xref std std-term">eagerly load</span></a> these additional attributes up front across many
+objects at once.  This loader option works in a similar fashion as the
+<a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload" title="sqlalchemy.orm.selectinload"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectinload()</span></code></a> relationship loader strategy to emit an additional
+SELECT statement against each sub-table for objects loaded in the hierarchy,
+using <code class="docutils literal notranslate"><span class="pre">IN</span></code> to query for additional rows based on primary key.</p>
+<p><a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> accepts as its arguments the base entity that is
+being queried, followed by a sequence of subclasses of that entity for which
+their specific attributes should be loaded for incoming rows:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">selectin_polymorphic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loader_opt</span> <span class="o">=</span> <span class="n">selectin_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Manager</span><span class="p">,</span> <span class="n">Engineer</span><span class="p">])</span></pre></div>
+</div>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> construct is then used as a loader
+option, passing it to the <a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.Select.options" title="sqlalchemy.sql.expression.Select.options"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Select.options()</span></code></a> method of <a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.Select" title="sqlalchemy.sql.expression.Select"><code class="xref py py-class docutils literal notranslate"><span class="pre">Select</span></code></a>.
+The example illustrates the use of <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> to eagerly
+load columns local to both the <code class="docutils literal notranslate"><span class="pre">Manager</span></code> and <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> subclasses:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">selectin_polymorphic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loader_opt</span> <span class="o">=</span> <span class="n">selectin_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Manager</span><span class="p">,</span> <span class="n">Engineer</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Employee</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Employee</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">loader_opt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
+<span class="go">[Manager(&#39;Mr. Krabs&#39;), Engineer(&#39;SpongeBob&#39;), Engineer(&#39;Squidward&#39;)]</span></pre></div>
+</div>
+<p>The above example illustrates two additional SELECT statements being emitted
+in order to eagerly fetch additional attributes such as <code class="docutils literal notranslate"><span class="pre">Engineer.engineer_info</span></code>
+as well as <code class="docutils literal notranslate"><span class="pre">Manager.manager_name</span></code>.   We can now access these sub-attributes on the
+objects that were loaded without any additional SQL statements being emitted:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">manager_name</span><span class="p">)</span>
+<span class="go">Eugene H. Krabs</span></pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> loader option does not yet
+optimize for the fact that the base <code class="docutils literal notranslate"><span class="pre">employee</span></code> table does not need to be
+included in the second two “eager load” queries; hence in the example above
+we see a JOIN from <code class="docutils literal notranslate"><span class="pre">employee</span></code> to <code class="docutils literal notranslate"><span class="pre">manager</span></code> and <code class="docutils literal notranslate"><span class="pre">engineer</span></code>, even though
+columns from <code class="docutils literal notranslate"><span class="pre">employee</span></code> are already loaded.  This is in contrast to
+the <a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload" title="sqlalchemy.orm.selectinload"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectinload()</span></code></a> relationship strategy which is more
+sophisticated in this regard and can factor out the JOIN when not needed.</p>
+</div>
+<section id="applying-selectin-polymorphic-to-an-existing-eager-load">
+<span id="polymorphic-selectin-as-loader-option-target"></span><h3>Applying selectin_polymorphic() to an existing eager load<a class="headerlink" href="#applying-selectin-polymorphic-to-an-existing-eager-load" title="Link to this heading">¶</a></h3>
+<p>In addition to <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> being specified as an option
+for a top-level entity loaded by a statement, we may also indicate
+<a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> on the target of an existing load.
+As our <a class="reference internal" href="_inheritance_setup.html"><span class="doc">setup</span></a> mapping includes a parent
+<code class="docutils literal notranslate"><span class="pre">Company</span></code> entity with a <code class="docutils literal notranslate"><span class="pre">Company.employees</span></code> <a class="reference internal" href="../relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>
+referring to <code class="docutils literal notranslate"><span class="pre">Employee</span></code> entities, we may illustrate a SELECT against
+the <code class="docutils literal notranslate"><span class="pre">Company</span></code> entity that eagerly loads all <code class="docutils literal notranslate"><span class="pre">Employee</span></code> objects as well as
+all attributes on their subtypes as follows, by applying <a class="reference internal" href="relationships.html#sqlalchemy.orm.Load.selectin_polymorphic" title="sqlalchemy.orm.Load.selectin_polymorphic"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Load.selectin_polymorphic()</span></code></a>
+as a chained loader option; in this form, the first argument is implicit from
+the previous loader option (in this case <a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload" title="sqlalchemy.orm.selectinload"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectinload()</span></code></a>), so
+we only indicate the additional target subclasses we wish to load:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">selectinload</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Company</span><span class="p">)</span><span class="o">.</span><span class="n">options</span><span class="p">(</span>
+<span class="go">...     selectinload(Company.employees).selectin_polymorphic([Manager, Engineer])</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">company</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(f&quot;company: {company.name}&quot;)</span>
+<span class="go">...     print(f&quot;employees: {company.employees}&quot;)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">company</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_company_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span>
+<span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span>
+<span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+</div><span class="go">company: Krusty Krab</span>
+<span class="go">employees: [Manager(&#39;Mr. Krabs&#39;), Engineer(&#39;SpongeBob&#39;), Engineer(&#39;Squidward&#39;)]</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#eagerloading-polymorphic-subtypes"><span class="std std-ref">Eager Loading of Polymorphic Subtypes</span></a> - illustrates the equivalent example
+as above using <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> instead</p>
+</div>
+</section>
+<section id="applying-loader-options-to-the-subclasses-loaded-by-selectin-polymorphic">
+<span id="polymorphic-selectin-w-loader-options"></span><h3>Applying loader options to the subclasses loaded by selectin_polymorphic<a class="headerlink" href="#applying-loader-options-to-the-subclasses-loaded-by-selectin-polymorphic" title="Link to this heading">¶</a></h3>
+<p>The SELECT statements emitted by <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> are themselves
+ORM statements, so we may also add other loader options (such as those
+documented at <a class="reference internal" href="relationships.html#orm-queryguide-relationship-loaders"><span class="std std-ref">Relationship Loading Techniques</span></a>) that refer to specific
+subclasses.   These options should be applied as <strong>siblings</strong> to a
+<a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> option, that is, comma separated within
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">select.options()</span></code>.</p>
+<p>For example, if we considered that the <code class="docutils literal notranslate"><span class="pre">Manager</span></code> mapper had
+a <a class="reference internal" href="../basic_relationships.html#relationship-patterns-o2m"><span class="std std-ref">one to many</span></a> relationship to an entity
+called <code class="docutils literal notranslate"><span class="pre">Paperwork</span></code>, we could combine the use of
+<a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> and <a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload" title="sqlalchemy.orm.selectinload"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectinload()</span></code></a> to eagerly load
+this collection on all <code class="docutils literal notranslate"><span class="pre">Manager</span></code> objects, where the sub-attributes of
+<code class="docutils literal notranslate"><span class="pre">Manager</span></code> objects were also themselves eagerly loaded:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">selectin_polymorphic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     select(Employee)</span>
+<span class="go">...     .order_by(Employee.id)</span>
+<span class="go">...     .options(</span>
+<span class="go">...         selectin_polymorphic(Employee, [Manager, Engineer]),</span>
+<span class="go">...         selectinload(Manager.paperwork),</span>
+<span class="go">...     )</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">paperwork_manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">paperwork_id</span><span class="p">,</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">document_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">paperwork_document_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">paperwork</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">Manager(&#39;Mr. Krabs&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">paperwork</span><span class="p">)</span>
+<span class="go">[Paperwork(&#39;Secret Recipes&#39;), Paperwork(&#39;Krabby Patty Orders&#39;)]</span></pre></div>
+</div>
+<section id="applying-loader-options-when-selectin-polymorphic-is-itself-a-sub-option">
+<span id="polymorphic-selectin-as-loader-option-target-plus-opts"></span><h4>Applying loader options when selectin_polymorphic is itself a sub-option<a class="headerlink" href="#applying-loader-options-when-selectin-polymorphic-is-itself-a-sub-option" title="Link to this heading">¶</a></h4>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.21.</span></p>
+</div>
+<p>The previous section illustrated <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> and
+<a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload" title="sqlalchemy.orm.selectinload"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectinload()</span></code></a> used as sibling options, both used within a single
+call to <code class="xref py py-meth docutils literal notranslate"><span class="pre">select.options()</span></code>.   If the target entity is one that is
+already being loaded from a parent relationship, as in the example at
+<a class="reference internal" href="#polymorphic-selectin-as-loader-option-target"><span class="std std-ref">Applying selectin_polymorphic() to an existing eager load</span></a>, we can apply this
+“sibling” pattern using the <a class="reference internal" href="relationships.html#sqlalchemy.orm.Load.options" title="sqlalchemy.orm.Load.options"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Load.options()</span></code></a> method that applies
+sub-options to a parent, as illustrated at
+<a class="reference internal" href="relationships.html#orm-queryguide-relationship-sub-options"><span class="std std-ref">Specifying Sub-Options with Load.options()</span></a>.  Below we combine the two
+examples to load <code class="docutils literal notranslate"><span class="pre">Company.employees</span></code>, also loading the attributes for the
+<code class="docutils literal notranslate"><span class="pre">Manager</span></code> and <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> classes, as well as eagerly loading the
+<code class="docutils literal notranslate"><span class="pre">`Manager.paperwork`</span></code> attribute:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">selectinload</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Company</span><span class="p">)</span><span class="o">.</span><span class="n">options</span><span class="p">(</span>
+<span class="go">...     selectinload(Company.employees).options(</span>
+<span class="go">...         selectin_polymorphic(Employee, [Manager, Engineer]),</span>
+<span class="go">...         selectinload(Manager.paperwork),</span>
+<span class="go">...     )</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">company</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(f&quot;company: {company.name}&quot;)</span>
+<span class="go">...     for employee in company.employees:</span>
+<span class="go">...         if isinstance(employee, Manager):</span>
+<span class="go">...             print(f&quot;manager: {employee.name} paperwork: {employee.paperwork}&quot;)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">company</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_company_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">paperwork_manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">paperwork_id</span><span class="p">,</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">document_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">paperwork_document_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">paperwork</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">paperwork</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+</div><span class="go">company: Krusty Krab</span>
+<span class="go">manager: Mr. Krabs paperwork: [Paperwork(&#39;Secret Recipes&#39;), Paperwork(&#39;Krabby Patty Orders&#39;)]</span></pre></div>
+</div>
+</section>
+</section>
+<section id="configuring-selectin-polymorphic-on-mappers">
+<h3>Configuring selectin_polymorphic() on mappers<a class="headerlink" href="#configuring-selectin-polymorphic-on-mappers" title="Link to this heading">¶</a></h3>
+<p>The behavior of <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> may be configured on specific
+mappers so that it takes place by default, by using the
+<a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.polymorphic_load" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.polymorphic_load</span></code></a> parameter, using the value <code class="docutils literal notranslate"><span class="pre">&quot;selectin&quot;</span></code>
+on a per-subclass basis.  The example below illustrates the use of this
+parameter within <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> and <code class="docutils literal notranslate"><span class="pre">Manager</span></code> subclasses:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Employee</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;employee&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">type</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;employee&quot;</span><span class="p">,</span> <span class="s2">&quot;polymorphic_on&quot;</span><span class="p">:</span> <span class="n">type</span><span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Engineer</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;engineer&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;employee.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">engineer_info</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polymorphic_load&quot;</span><span class="p">:</span> <span class="s2">&quot;selectin&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;engineer&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Manager</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;manager&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;employee.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">manager_name</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polymorphic_load&quot;</span><span class="p">:</span> <span class="s2">&quot;selectin&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;manager&quot;</span><span class="p">,</span>
+    <span class="p">}</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>With the above mapping, SELECT statements against the <code class="docutils literal notranslate"><span class="pre">Employee</span></code> class will
+automatically assume the use of
+<code class="docutils literal notranslate"><span class="pre">selectin_polymorphic(Employee,</span> <span class="pre">[Engineer,</span> <span class="pre">Manager])</span></code> as a loader option when the statement is
+emitted.</p>
+</section>
+</section>
+<section id="using-with-polymorphic">
+<span id="with-polymorphic"></span><h2>Using with_polymorphic()<a class="headerlink" href="#using-with-polymorphic" title="Link to this heading">¶</a></h2>
+<p>In contrast to <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> which affects only the loading
+of objects, the <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> construct affects how the SQL
+query for a polymorphic structure is rendered, most commonly as a series of
+LEFT OUTER JOINs to each of the included sub-tables. This join structure is
+known as the <strong>polymorphic selectable</strong>. By providing for a view of
+several sub-tables at once, <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> offers a means of
+writing a SELECT statement across several inherited classes at once with the
+ability to add filtering criteria based on individual sub-tables.</p>
+<p><a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> is essentially a special form of the
+<a class="reference internal" href="api.html#sqlalchemy.orm.aliased" title="sqlalchemy.orm.aliased"><code class="xref py py-func docutils literal notranslate"><span class="pre">aliased()</span></code></a> construct. It accepts as its arguments a similar form to
+that of <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a>, which is the base entity that is
+being queried, followed by a sequence of subclasses of that entity for which
+their specific attributes should be loaded for incoming rows:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">with_polymorphic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">employee_poly</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Engineer</span><span class="p">,</span> <span class="n">Manager</span><span class="p">])</span></pre></div>
+</div>
+<p>In order to indicate that all subclasses should be part of the entity,
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> will also accept the string <code class="docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code>, which may be
+passed in place of the sequence of classes to indicate all classes (note this
+is not yet supported by <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a>):</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">employee_poly</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span></pre></div>
+</div>
+<p>The example below illustrates the same operation as illustrated in the previous
+section, to load all columns for <code class="docutils literal notranslate"><span class="pre">Manager</span></code> and <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> at once:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">employee_poly</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">employee_poly</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="p">,</span>
+<span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_1</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_2</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
+<span class="go">[Manager(&#39;Mr. Krabs&#39;), Engineer(&#39;SpongeBob&#39;), Engineer(&#39;Squidward&#39;)]</span></pre></div>
+</div>
+<p>As is the case with <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a>, attributes on subclasses
+are already loaded:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">manager_name</span><span class="p">)</span>
+<span class="go">Eugene H. Krabs</span></pre></div>
+</div>
+<p>As the default selectable produced by <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a>
+uses LEFT OUTER JOIN, from a database point of view the query is not as well
+optimized as the approach that <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> takes,
+with simple SELECT statements using only JOINs emitted on a per-table basis.</p>
+<section id="filtering-subclass-attributes-with-with-polymorphic">
+<span id="with-polymorphic-subclass-attributes"></span><h3>Filtering Subclass Attributes with with_polymorphic()<a class="headerlink" href="#filtering-subclass-attributes-with-with-polymorphic" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> construct makes available the attributes
+on the included subclass mappers, by including namespaces that allow
+references to subclasses.   The <code class="docutils literal notranslate"><span class="pre">employee_poly</span></code> construct created in the
+previous section includes attributes named <code class="docutils literal notranslate"><span class="pre">.Engineer</span></code> and <code class="docutils literal notranslate"><span class="pre">.Manager</span></code>
+which provide the namespace for <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> and <code class="docutils literal notranslate"><span class="pre">Manager</span></code> in terms of
+the polymorphic SELECT.   In the example below, we can use the <a class="reference internal" href="../../core/sqlelement.html#sqlalchemy.sql.expression.or_" title="sqlalchemy.sql.expression.or_"><code class="xref py py-func docutils literal notranslate"><span class="pre">or_()</span></code></a>
+construct to create criteria against both classes at once:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">or_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">employee_poly</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Engineer</span><span class="p">,</span> <span class="n">Manager</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     select(employee_poly)</span>
+<span class="go">...     .where(</span>
+<span class="go">...         or_(</span>
+<span class="go">...             employee_poly.Manager.manager_name == &quot;Eugene H. Krabs&quot;,</span>
+<span class="go">...             employee_poly.Engineer.engineer_info</span>
+<span class="go">...             == &quot;Senior Customer Engagement Engineer&quot;,</span>
+<span class="go">...         )</span>
+<span class="go">...     )</span>
+<span class="go">...     .order_by(employee_poly.id)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_1</span><span class="p">,</span>
+<span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_2</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Senior Customer Engagement Engineer&#39;</span><span class="p">)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
+<span class="go">[Manager(&#39;Mr. Krabs&#39;), Engineer(&#39;Squidward&#39;)]</span></pre></div>
+</div>
+</section>
+<section id="using-aliasing-with-with-polymorphic">
+<span id="with-polymorphic-aliasing"></span><h3>Using aliasing with with_polymorphic<a class="headerlink" href="#using-aliasing-with-with-polymorphic" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> construct, as a special case of
+<a class="reference internal" href="api.html#sqlalchemy.orm.aliased" title="sqlalchemy.orm.aliased"><code class="xref py py-func docutils literal notranslate"><span class="pre">aliased()</span></code></a>, also provides the basic feature that <a class="reference internal" href="api.html#sqlalchemy.orm.aliased" title="sqlalchemy.orm.aliased"><code class="xref py py-func docutils literal notranslate"><span class="pre">aliased()</span></code></a>
+does, which is that of “aliasing” of the polymorphic selectable itself.
+Specifically this means two or more <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> entities,
+referring to the same class hierarchy, can be used at once in a single
+statement.</p>
+<p>To use this feature with a joined inheritance mapping, we typically want to
+pass two parameters, <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic.params.aliased" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">with_polymorphic.aliased</span></code></a> as well as
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic.params.flat" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">with_polymorphic.flat</span></code></a>.  The <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic.params.aliased" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">with_polymorphic.aliased</span></code></a>
+parameter indicates that the polymorphic selectable should be referenced
+by an alias name that is unique to this construct.   The
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic.params.flat" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">with_polymorphic.flat</span></code></a> parameter is specific to the default
+LEFT OUTER JOIN polymorphic selectable and indicates that a more optimized
+form of aliasing should be used in the statement.</p>
+<p>To illustrate this feature, the example below emits a SELECT for two
+separate polymorphic entities, <code class="docutils literal notranslate"><span class="pre">Employee</span></code> joined with <code class="docutils literal notranslate"><span class="pre">Engineer</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">Employee</span></code> joined with <code class="docutils literal notranslate"><span class="pre">Manager</span></code>.  Since these two polymorphic entities
+will both be including the base <code class="docutils literal notranslate"><span class="pre">employee</span></code> table in their polymorphic selectable, aliasing must
+be applied in order to differentiate this table in its two different contexts.
+The two polymorphic entities are treated like two individual tables,
+and as such typically need to be joined with each other in some way,
+as illustrated below where the entities are joined on the <code class="docutils literal notranslate"><span class="pre">company_id</span></code>
+column along with some additional limiting criteria against the
+<code class="docutils literal notranslate"><span class="pre">Employee</span></code> / <code class="docutils literal notranslate"><span class="pre">Manager</span></code> entity:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager_employee</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Manager</span><span class="p">],</span> <span class="n">aliased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engineer_employee</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Engineer</span><span class="p">],</span> <span class="n">aliased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     select(manager_employee, engineer_employee)</span>
+<span class="go">...     .join(</span>
+<span class="go">...         engineer_employee,</span>
+<span class="go">...         engineer_employee.company_id == manager_employee.company_id,</span>
+<span class="go">...     )</span>
+<span class="go">...     .where(</span>
+<span class="go">...         or_(</span>
+<span class="go">...             manager_employee.name == &quot;Mr. Krabs&quot;,</span>
+<span class="go">...             manager_employee.Manager.manager_name == &quot;Eugene H. Krabs&quot;,</span>
+<span class="go">...         )</span>
+<span class="go">...     )</span>
+<span class="go">...     .order_by(engineer_employee.name, manager_employee.name)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">manager</span><span class="p">,</span> <span class="n">engineer</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(f&quot;{manager} {engineer}&quot;)</span>
+<div class='show_sql'><span class="k">SELECT</span>
+<span class="n">employee_1</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee_1</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee_1</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee_1</span><span class="p">.</span><span class="n">company_id</span><span class="p">,</span>
+<span class="n">manager_1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_1</span><span class="p">,</span><span class="w"> </span><span class="n">manager_1</span><span class="p">.</span><span class="n">manager_name</span><span class="p">,</span>
+<span class="n">employee_2</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_2</span><span class="p">,</span><span class="w"> </span><span class="n">employee_2</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name_1</span><span class="p">,</span><span class="w"> </span><span class="n">employee_2</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">type_1</span><span class="p">,</span>
+<span class="n">employee_2</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">company_id_1</span><span class="p">,</span><span class="w"> </span><span class="n">engineer_1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_3</span><span class="p">,</span><span class="w"> </span><span class="n">engineer_1</span><span class="p">.</span><span class="n">engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_1</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_1</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee_1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager_1</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span>
+<span class="w">   </span><span class="p">(</span><span class="n">employee</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_2</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_1</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee_2</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer_1</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">employee_2</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">employee_1</span><span class="p">.</span><span class="n">company_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee_1</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">manager_1</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee_2</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee_1</span><span class="p">.</span><span class="n">name</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Mr. Krabs&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Eugene H. Krabs&#39;</span><span class="p">)</span>
+</div><span class="go">Manager(&#39;Mr. Krabs&#39;) Manager(&#39;Mr. Krabs&#39;)</span>
+<span class="go">Manager(&#39;Mr. Krabs&#39;) Engineer(&#39;SpongeBob&#39;)</span>
+<span class="go">Manager(&#39;Mr. Krabs&#39;) Engineer(&#39;Squidward&#39;)</span></pre></div>
+</div>
+<p>In the above example, the behavior of <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic.params.flat" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">with_polymorphic.flat</span></code></a>
+is that the polymorphic selectables remain as a LEFT OUTER JOIN of their
+individual tables, which themselves are given anonymous alias names.  There
+is also a right-nested JOIN produced.</p>
+<p>When omitting the <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic.params.flat" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">with_polymorphic.flat</span></code></a> parameter, the
+usual behavior is that each polymorphic selectable is enclosed within a
+subquery, producing a more verbose form:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager_employee</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Manager</span><span class="p">],</span> <span class="n">aliased</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engineer_employee</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Engineer</span><span class="p">],</span> <span class="n">aliased</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     select(manager_employee, engineer_employee)</span>
+<span class="go">...     .join(</span>
+<span class="go">...         engineer_employee,</span>
+<span class="go">...         engineer_employee.company_id == manager_employee.company_id,</span>
+<span class="go">...     )</span>
+<span class="go">...     .where(</span>
+<span class="go">...         or_(</span>
+<span class="go">...             manager_employee.name == &quot;Mr. Krabs&quot;,</span>
+<span class="go">...             manager_employee.Manager.manager_name == &quot;Eugene H. Krabs&quot;,</span>
+<span class="go">...         )</span>
+<span class="go">...     )</span>
+<span class="go">...     .order_by(engineer_employee.name, manager_employee.name)</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<div class='show_sql_print'><span class="k">SELECT</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">employee_type</span><span class="p">,</span>
+<span class="n">anon_1</span><span class="p">.</span><span class="n">employee_company_id</span><span class="p">,</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">manager_manager_name</span><span class="p">,</span><span class="w"> </span><span class="n">anon_2</span><span class="p">.</span><span class="n">employee_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id_1</span><span class="p">,</span>
+<span class="n">anon_2</span><span class="p">.</span><span class="n">employee_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_name_1</span><span class="p">,</span><span class="w"> </span><span class="n">anon_2</span><span class="p">.</span><span class="n">employee_type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type_1</span><span class="p">,</span>
+<span class="n">anon_2</span><span class="p">.</span><span class="n">employee_company_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_company_id_1</span><span class="p">,</span><span class="w"> </span><span class="n">anon_2</span><span class="p">.</span><span class="n">engineer_id</span><span class="p">,</span><span class="w"> </span><span class="n">anon_2</span><span class="p">.</span><span class="n">engineer_engineer_info</span>
+<span class="k">FROM</span>
+<span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_company_id</span><span class="p">,</span>
+<span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">anon_1</span>
+<span class="k">JOIN</span>
+<span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_company_id</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_id</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">anon_2</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">anon_2</span><span class="p">.</span><span class="n">employee_company_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">employee_company_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">employee_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">:</span><span class="n">employee_name_2</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">manager_manager_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">:</span><span class="n">manager_manager_name_1</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">anon_2</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span><span class="w"> </span><span class="n">anon_1</span><span class="p">.</span><span class="n">employee_name</span>
+</div></pre></div>
+</div>
+<p>The above form historically has been more portable to backends that didn’t necessarily
+have support for right-nested JOINs, and it additionally may be appropriate when
+the “polymorphic selectable” used by <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> is not
+a simple LEFT OUTER JOIN of tables, as is the case when using mappings such as
+<a class="reference internal" href="../inheritance.html#concrete-inheritance"><span class="std std-ref">concrete table inheritance</span></a> mappings as well as when
+using alternative polymorphic selectables in general.</p>
+</section>
+<section id="configuring-with-polymorphic-on-mappers">
+<span id="with-polymorphic-mapper-config"></span><h3>Configuring with_polymorphic() on mappers<a class="headerlink" href="#configuring-with-polymorphic-on-mappers" title="Link to this heading">¶</a></h3>
+<p>As is the case with <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a>, the
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> construct also supports a mapper-configured
+version which may be configured in two different ways, either on the base class
+using the <code class="xref py py-paramref docutils literal notranslate"><span class="pre">mapper.with_polymorphic</span></code> parameter, or in a more modern
+form using the <a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.polymorphic_load" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.polymorphic_load</span></code></a> parameter on a
+per-subclass basis, passing the value <code class="docutils literal notranslate"><span class="pre">&quot;inline&quot;</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For joined inheritance mappings, prefer explicit use of
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> within queries, or for implicit eager subclass
+loading use <a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.polymorphic_load" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.polymorphic_load</span></code></a> with <code class="docutils literal notranslate"><span class="pre">&quot;selectin&quot;</span></code>,
+instead of using the mapper-level <code class="xref py py-paramref docutils literal notranslate"><span class="pre">mapper.with_polymorphic</span></code>
+parameter described in this section. This parameter invokes complex
+heuristics intended to rewrite the FROM clauses within SELECT statements
+that can interfere with construction of more complex statements,
+particularly those with nested subqueries that refer to the same mapped
+entity.</p>
+</div>
+<p>For example, we may state our <code class="docutils literal notranslate"><span class="pre">Employee</span></code> mapping using
+<a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.polymorphic_load" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.polymorphic_load</span></code></a> as <code class="docutils literal notranslate"><span class="pre">&quot;inline&quot;</span></code> as below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Employee</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;employee&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">type</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;employee&quot;</span><span class="p">,</span> <span class="s2">&quot;polymorphic_on&quot;</span><span class="p">:</span> <span class="n">type</span><span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Engineer</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;engineer&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;employee.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">engineer_info</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polymorphic_load&quot;</span><span class="p">:</span> <span class="s2">&quot;inline&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;engineer&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Manager</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;manager&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;employee.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">manager_name</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polymorphic_load&quot;</span><span class="p">:</span> <span class="s2">&quot;inline&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;manager&quot;</span><span class="p">,</span>
+    <span class="p">}</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>With the above mapping, SELECT statements against the <code class="docutils literal notranslate"><span class="pre">Employee</span></code> class will
+automatically assume the use of
+<code class="docutils literal notranslate"><span class="pre">with_polymorphic(Employee,</span> <span class="pre">[Engineer,</span> <span class="pre">Manager])</span></code> as the primary entity
+when the statement is emitted:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="go">print(select(Employee))</span>
+<div class='show_sql_print'><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_1</span><span class="p">,</span>
+<span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_2</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+</div></pre></div>
+</div>
+<p>When using mapper-level “with polymorphic”, queries can also refer to the
+subclass entities directly, where they implicitly represent the joined tables
+in the polymorphic query.  Above, we can freely refer to
+<code class="docutils literal notranslate"><span class="pre">Manager</span></code> and <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> directly against the default <code class="docutils literal notranslate"><span class="pre">Employee</span></code>
+entity:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="go">print(</span>
+<span class="go">    select(Employee).where(</span>
+<span class="go">        or_(Manager.manager_name == &quot;x&quot;, Engineer.engineer_info == &quot;y&quot;)</span>
+<span class="go">    )</span>
+<span class="go">)</span>
+<div class='show_sql_print'><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_1</span><span class="p">,</span>
+<span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id_2</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">:</span><span class="n">manager_name_1</span>
+<span class="k">OR</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">:</span><span class="n">engineer_info_1</span>
+</div></pre></div>
+</div>
+<p>However, if we needed to refer to the <code class="docutils literal notranslate"><span class="pre">Employee</span></code> entity or its sub
+entities in separate, aliased contexts, we would again make direct use of
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> to define these aliased entities as illustrated
+in <a class="reference internal" href="#with-polymorphic-aliasing"><span class="std std-ref">Using aliasing with with_polymorphic</span></a>.</p>
+<p>For more centralized control over the polymorphic selectable, the more legacy
+form of mapper-level polymorphic control may be used which is the
+<a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.with_polymorphic" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.with_polymorphic</span></code></a> parameter, configured on the base
+class. This parameter accepts arguments that are comparable to the
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> construct, however common use with a joined
+inheritance mapping is the plain asterisk, indicating all sub-tables should be
+LEFT OUTER JOINED, as in:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Employee</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;employee&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">type</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;employee&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;with_polymorphic&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;polymorphic_on&quot;</span><span class="p">:</span> <span class="n">type</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Engineer</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;engineer&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;employee.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">engineer_info</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;engineer&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Manager</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;manager&quot;</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;employee.id&quot;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">manager_name</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+
+    <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polymorphic_identity&quot;</span><span class="p">:</span> <span class="s2">&quot;manager&quot;</span><span class="p">,</span>
+    <span class="p">}</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>Overall, the LEFT OUTER JOIN format used by <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> and
+by options such as <a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.with_polymorphic" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.with_polymorphic</span></code></a> may be cumbersome
+from a SQL and database optimizer point of view; for general loading of
+subclass attributes in joined inheritance mappings, the
+<a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> approach, or its mapper level equivalent of
+setting <a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.polymorphic_load" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.polymorphic_load</span></code></a> to <code class="docutils literal notranslate"><span class="pre">&quot;selectin&quot;</span></code> should
+likely be preferred, making use of <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> on a per-query
+basis only as needed.</p>
+</section>
+</section>
+<section id="joining-to-specific-sub-types-or-with-polymorphic-entities">
+<span id="inheritance-of-type"></span><h2>Joining to specific sub-types or with_polymorphic() entities<a class="headerlink" href="#joining-to-specific-sub-types-or-with-polymorphic-entities" title="Link to this heading">¶</a></h2>
+<p>As a <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> entity is a special case of <a class="reference internal" href="api.html#sqlalchemy.orm.aliased" title="sqlalchemy.orm.aliased"><code class="xref py py-func docutils literal notranslate"><span class="pre">aliased()</span></code></a>,
+in order to treat a polymorphic entity as the target of a join, specifically
+when using a <a class="reference internal" href="../relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> construct as the ON clause,
+we use the same technique for regular aliases as detailed at
+<a class="reference internal" href="select.html#orm-queryguide-joining-relationships-aliased"><span class="std std-ref">Using Relationship to join between aliased targets</span></a>, most succinctly
+using <a class="reference internal" href="../internals.html#sqlalchemy.orm.PropComparator.of_type" title="sqlalchemy.orm.PropComparator.of_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PropComparator.of_type()</span></code></a>.   In the example below we illustrate
+a join from the parent <code class="docutils literal notranslate"><span class="pre">Company</span></code> entity along the one-to-many relationship
+<code class="docutils literal notranslate"><span class="pre">Company.employees</span></code>, which is configured in the
+<a class="reference internal" href="_inheritance_setup.html"><span class="doc">setup</span></a> to link to <code class="docutils literal notranslate"><span class="pre">Employee</span></code> objects,
+using a <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> entity as the target:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">employee_plus_engineer</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="p">[</span><span class="n">Engineer</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     select(Company.name, employee_plus_engineer.name)</span>
+<span class="go">...     .join(Company.employees.of_type(employee_plus_engineer))</span>
+<span class="go">...     .where(</span>
+<span class="go">...         or_(</span>
+<span class="go">...             employee_plus_engineer.name == &quot;SpongeBob&quot;,</span>
+<span class="go">...             employee_plus_engineer.Engineer.engineer_info</span>
+<span class="go">...             == &quot;Senior Customer Engagement Engineer&quot;,</span>
+<span class="go">...         )</span>
+<span class="go">...     )</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">company_name</span><span class="p">,</span> <span class="n">emp_name</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(f&quot;{company_name} {emp_name}&quot;)</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name_1</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">company</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">(</span><span class="n">employee</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;SpongeBob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Senior Customer Engagement Engineer&#39;</span><span class="p">)</span>
+</div><span class="go">Krusty Krab SpongeBob</span>
+<span class="go">Krusty Krab Squidward</span></pre></div>
+</div>
+<p>More directly, <a class="reference internal" href="../internals.html#sqlalchemy.orm.PropComparator.of_type" title="sqlalchemy.orm.PropComparator.of_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PropComparator.of_type()</span></code></a> is also used with inheritance
+mappings of any kind to limit a join along a <a class="reference internal" href="../relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a> to a
+particular sub-type of the <a class="reference internal" href="../relationship_api.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><code class="xref py py-func docutils literal notranslate"><span class="pre">relationship()</span></code></a>’s target.  The above
+query could be written strictly in terms of <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> targets as follows:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="p">(</span>
+<span class="go">...     select(Company.name, Engineer.name)</span>
+<span class="go">...     .join(Company.employees.of_type(Engineer))</span>
+<span class="go">...     .where(</span>
+<span class="go">...         or_(</span>
+<span class="go">...             Engineer.name == &quot;SpongeBob&quot;,</span>
+<span class="go">...             Engineer.engineer_info == &quot;Senior Customer Engagement Engineer&quot;,</span>
+<span class="go">...         )</span>
+<span class="go">...     )</span>
+<span class="go">... )</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">company_name</span><span class="p">,</span> <span class="n">emp_name</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(f&quot;{company_name} {emp_name}&quot;)</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name_1</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">company</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">(</span><span class="n">employee</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;SpongeBob&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Senior Customer Engagement Engineer&#39;</span><span class="p">)</span>
+</div><span class="go">Krusty Krab SpongeBob</span>
+<span class="go">Krusty Krab Squidward</span></pre></div>
+</div>
+<p>It can be observed above that joining to the <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> target directly,
+rather than the “polymorphic selectable” of <code class="docutils literal notranslate"><span class="pre">with_polymorphic(Employee,</span> <span class="pre">[Engineer])</span></code>
+has the useful characteristic of using an inner JOIN rather than a
+LEFT OUTER JOIN, which is generally more performant from a SQL optimizer
+point of view.</p>
+<section id="eager-loading-of-polymorphic-subtypes">
+<span id="eagerloading-polymorphic-subtypes"></span><h3>Eager Loading of Polymorphic Subtypes<a class="headerlink" href="#eager-loading-of-polymorphic-subtypes" title="Link to this heading">¶</a></h3>
+<p>The use of <a class="reference internal" href="../internals.html#sqlalchemy.orm.PropComparator.of_type" title="sqlalchemy.orm.PropComparator.of_type"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PropComparator.of_type()</span></code></a> illustrated with the
+<a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.Select.join" title="sqlalchemy.sql.expression.Select.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Select.join()</span></code></a> method in the previous section may also be applied
+equivalently to <a class="reference internal" href="relationships.html#orm-queryguide-relationship-loaders"><span class="std std-ref">relationship loader options</span></a>,
+such as <a class="reference internal" href="relationships.html#sqlalchemy.orm.selectinload" title="sqlalchemy.orm.selectinload"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectinload()</span></code></a> and <a class="reference internal" href="relationships.html#sqlalchemy.orm.joinedload" title="sqlalchemy.orm.joinedload"><code class="xref py py-func docutils literal notranslate"><span class="pre">joinedload()</span></code></a>.</p>
+<p>As a basic example, if we wished to load <code class="docutils literal notranslate"><span class="pre">Company</span></code> objects, and additionally
+eagerly load all elements of <code class="docutils literal notranslate"><span class="pre">Company.employees</span></code> using the
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> construct against the full hierarchy, we may write:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">all_employees</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Company</span><span class="p">)</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">selectinload</span><span class="p">(</span><span class="n">Company</span><span class="o">.</span><span class="n">employees</span><span class="o">.</span><span class="n">of_type</span><span class="p">(</span><span class="n">all_employees</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">company</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(f&quot;company: {company.name}&quot;)</span>
+<span class="go">...     print(f&quot;employees: {company.employees}&quot;)</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">company</span><span class="p">.</span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">company</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_company_id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_type</span><span class="p">,</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span>
+<span class="n">manager</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_manager_name</span><span class="p">,</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_id</span><span class="p">,</span>
+<span class="n">engineer</span><span class="p">.</span><span class="n">engineer_info</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">engineer_engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="n">id</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">engineer</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engineer</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">company_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+<span class="n">company</span><span class="p">:</span><span class="w"> </span><span class="n">Krusty</span><span class="w"> </span><span class="n">Krab</span>
+<span class="n">employees</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">Manager</span><span class="p">(</span><span class="s1">&#39;Mr. Krabs&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">Engineer</span><span class="p">(</span><span class="s1">&#39;SpongeBob&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">Engineer</span><span class="p">(</span><span class="s1">&#39;Squidward&#39;</span><span class="p">)]</span>
+</div></pre></div>
+</div>
+<p>The above query may be compared directly to the
+<a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> version illustrated in the previous
+section <a class="reference internal" href="#polymorphic-selectin-as-loader-option-target"><span class="std std-ref">Applying selectin_polymorphic() to an existing eager load</span></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#polymorphic-selectin-as-loader-option-target"><span class="std std-ref">Applying selectin_polymorphic() to an existing eager load</span></a> - illustrates the equivalent example
+as above using <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a> instead</p>
+</div>
+</section>
+</section>
+<section id="select-statements-for-single-inheritance-mappings">
+<span id="loading-single-inheritance"></span><h2>SELECT Statements for Single Inheritance Mappings<a class="headerlink" href="#select-statements-for-single-inheritance-mappings" title="Link to this heading">¶</a></h2>
+<div class="admonition-single-table-inheritance-setup admonition">
+<p class="admonition-title">Single Table Inheritance Setup</p>
+<p>This section discusses single table inheritance,
+described at <a class="reference internal" href="../inheritance.html#single-inheritance"><span class="std std-ref">Single Table Inheritance</span></a>, which uses a single table to
+represent multiple classes in a hierarchy.</p>
+<p><a class="reference internal" href="_single_inheritance.html"><span class="doc">View the ORM setup for this section</span></a>.</p>
+</div>
+<p>In contrast to joined inheritance mappings, the construction of SELECT
+statements for single inheritance mappings tends to be simpler since for
+an all-single-inheritance hierarchy, there’s only one table.</p>
+<p>Regardless of whether or not the inheritance hierarchy is all single-inheritance
+or has a mixture of joined and single inheritance, SELECT statements for
+single inheritance differentiate queries against the base class vs. a subclass
+by limiting the SELECT statement with additional WHERE criteria.</p>
+<p>As an example, a query for the single-inheritance example mapping of
+<code class="docutils literal notranslate"><span class="pre">Employee</span></code> will load objects of type <code class="docutils literal notranslate"><span class="pre">Manager</span></code>, <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Employee</span></code> using a simple SELECT of the table:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Employee</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Employee</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">):</span>
+<span class="go">...     print(f&quot;{obj}&quot;)</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+</div><span class="go">Manager(&#39;Mr. Krabs&#39;)</span>
+<span class="go">Engineer(&#39;SpongeBob&#39;)</span>
+<span class="go">Engineer(&#39;Squidward&#39;)</span></pre></div>
+</div>
+<p>When a load is emitted for a specific subclass, additional criteria is
+added to the SELECT that limits the rows, such as below where a SELECT against
+the <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> entity is performed:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">Engineer</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Engineer</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;engineer&#39;</span><span class="p">,)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+<span class="go">...     print(f&quot;{obj}&quot;)</span>
+<span class="go">Engineer(&#39;SpongeBob&#39;)</span>
+<span class="go">Engineer(&#39;Squidward&#39;)</span></pre></div>
+</div>
+<section id="optimizing-attribute-loads-for-single-inheritance">
+<h3>Optimizing Attribute Loads for Single Inheritance<a class="headerlink" href="#optimizing-attribute-loads-for-single-inheritance" title="Link to this heading">¶</a></h3>
+<p>The default behavior of single inheritance mappings regarding how attributes on
+subclasses are SELECTed is similar to that of joined inheritance, in that
+subclass-specific attributes still emit a second SELECT by default.  In
+the example below, a single <code class="docutils literal notranslate"><span class="pre">Employee</span></code> of type <code class="docutils literal notranslate"><span class="pre">Manager</span></code> is loaded,
+however since the requested class is <code class="docutils literal notranslate"><span class="pre">Employee</span></code>, the <code class="docutils literal notranslate"><span class="pre">Manager.manager_name</span></code>
+attribute is not present by default, and an additional SELECT is emitted
+when it’s accessed:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mr_krabs</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">Employee</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Employee</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Mr. Krabs&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Mr. Krabs&#39;</span><span class="p">,)</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="n">mr_krabs</span><span class="o">.</span><span class="n">manager_name</span>
+<div class='show_sql'><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">manager_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_manager_name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">)</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;manager&#39;</span><span class="p">)</span>
+</div><span class="go">&#39;Eugene H. Krabs&#39;</span></pre></div>
+</div>
+<p>To alter this behavior, the same general concepts used to eagerly load these
+additional attributes used in joined inheritance loading apply to single
+inheritance as well, including use of the <a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic" title="sqlalchemy.orm.selectin_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">selectin_polymorphic()</span></code></a>
+option as well as the <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a> option, the latter of which
+simply includes the additional columns and from a SQL perspective is more
+efficient for single-inheritance mappers:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">employees</span> <span class="o">=</span> <span class="n">with_polymorphic</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">employees</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">employees</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class='show_sql'><span class="k">BEGIN</span><span class="w"> </span><span class="p">(</span><span class="k">implicit</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="n">manager_name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span>
+<span class="p">[...]</span><span class="w"> </span><span class="p">()</span>
+</div><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+<span class="go">...     print(f&quot;{obj}&quot;)</span>
+<span class="go">Manager(&#39;Mr. Krabs&#39;)</span>
+<span class="go">Engineer(&#39;SpongeBob&#39;)</span>
+<span class="go">Engineer(&#39;Squidward&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">manager_name</span>
+<span class="go">&#39;Eugene H. Krabs&#39;</span></pre></div>
+</div>
+<p>Since the overhead of loading single-inheritance subclass mappings is
+usually minimal, it’s therefore recommended that single inheritance mappings
+include the <a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper.params.polymorphic_load" title="sqlalchemy.orm.Mapper"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">Mapper.polymorphic_load</span></code></a> parameter with a
+setting of <code class="docutils literal notranslate"><span class="pre">&quot;inline&quot;</span></code> for those subclasses where loading of their specific
+subclass attributes is expected to be common.   An example illustrating the
+<a class="reference internal" href="_single_inheritance.html"><span class="doc">setup</span></a>, modified to include this option,
+is below:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+<span class="go">...     pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Employee</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="go">...     __tablename__ = &quot;employee&quot;</span>
+<span class="go">...     id: Mapped[int] = mapped_column(primary_key=True)</span>
+<span class="go">...     name: Mapped[str]</span>
+<span class="go">...     type: Mapped[str]</span>
+<span class="go">...</span>
+<span class="go">...     def __repr__(self):</span>
+<span class="go">...         return f&quot;{self.__class__.__name__}({self.name!r})&quot;</span>
+<span class="go">...</span>
+<span class="go">...     __mapper_args__ = {</span>
+<span class="go">...         &quot;polymorphic_identity&quot;: &quot;employee&quot;,</span>
+<span class="go">...         &quot;polymorphic_on&quot;: &quot;type&quot;,</span>
+<span class="go">...     }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Manager</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+<span class="go">...     manager_name: Mapped[str] = mapped_column(nullable=True)</span>
+<span class="go">...     __mapper_args__ = {</span>
+<span class="go">...         &quot;polymorphic_identity&quot;: &quot;manager&quot;,</span>
+<span class="go">...         &quot;polymorphic_load&quot;: &quot;inline&quot;,</span>
+<span class="go">...     }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Engineer</span><span class="p">(</span><span class="n">Employee</span><span class="p">):</span>
+<span class="go">...     engineer_info: Mapped[str] = mapped_column(nullable=True)</span>
+<span class="go">...     __mapper_args__ = {</span>
+<span class="go">...         &quot;polymorphic_identity&quot;: &quot;engineer&quot;,</span>
+<span class="go">...         &quot;polymorphic_load&quot;: &quot;inline&quot;,</span>
+<span class="go">...     }</span></pre><div class="code-non-annotations-key"></div></div>
+</div>
+<p>With the above mapping, the <code class="docutils literal notranslate"><span class="pre">Manager</span></code> and <code class="docutils literal notranslate"><span class="pre">Engineer</span></code> classes will have
+their columns included in SELECT statements against the <code class="docutils literal notranslate"><span class="pre">Employee</span></code>
+entity automatically:</p>
+<div class="highlight-pycon+sql notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">print</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">Employee</span><span class="p">))</span>
+<div class='show_sql_print'><span class="k">SELECT</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="k">type</span><span class="p">,</span>
+<span class="n">employee</span><span class="p">.</span><span class="n">manager_name</span><span class="p">,</span><span class="w"> </span><span class="n">employee</span><span class="p">.</span><span class="n">engineer_info</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+</div></pre></div>
+</div>
+</section>
+</section>
+<section id="inheritance-loading-api">
+<h2>Inheritance Loading API<a class="headerlink" href="#inheritance-loading-api" title="Link to this heading">¶</a></h2>
+<table class="longtable docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head">Object Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.orm.selectin_polymorphic"><span class="sig-name descname">selectin_polymorphic</span></a>(base_cls, classes)</p></td>
+<td><p>Indicate an eager load should take place for all attributes
+specific to a subclass.</p></td>
+</tr>
+<tr class="row-odd"><td class="autosummary-name"><p><a class="reference internal" href="#sqlalchemy.orm.with_polymorphic"><span class="sig-name descname">with_polymorphic</span></a>(base, classes[, selectable, flat, ...])</p></td>
+<td><p>Produce an <a class="reference internal" href="api.html#sqlalchemy.orm.util.AliasedClass" title="sqlalchemy.orm.util.AliasedClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">AliasedClass</span></code></a> construct which specifies
+columns for descendant mappers of the given base.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy.orm.with_polymorphic">
+<em class="property"><span class="pre">function</span> </em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.orm.</span></span><span class="sig-name descname"><span class="pre">with_polymorphic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">_O</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../mapping_api.html#sqlalchemy.orm.Mapper" title="sqlalchemy.orm.Mapper"><span class="pre">Mapper</span></a><span class="p"><span class="pre">[</span></span><span class="pre">_O</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'*'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="k"><span class="pre">False</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.FromClause" title="sqlalchemy.sql.expression.FromClause"><span class="pre">FromClause</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polymorphic_on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../core/sqlelement.html#sqlalchemy.sql.expression.ColumnElement" title="sqlalchemy.sql.expression.ColumnElement"><span class="pre">ColumnElement</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliased</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">innerjoin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapt_on_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_use_mapper_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="api.html#sqlalchemy.orm.util.AliasedClass" title="sqlalchemy.orm.util.AliasedClass"><span class="pre">AliasedClass</span></a><span class="p"><span class="pre">[</span></span><span class="pre">_O</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sqlalchemy.orm.with_polymorphic" title="Link to this definition">¶</a></dt>
+<dd><p>Produce an <a class="reference internal" href="api.html#sqlalchemy.orm.util.AliasedClass" title="sqlalchemy.orm.util.AliasedClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">AliasedClass</span></code></a> construct which specifies
+columns for descendant mappers of the given base.</p>
+<p>Using this method will ensure that each descendant mapper’s
+tables are included in the FROM clause, and will allow filter()
+criterion to be used against those tables.  The resulting
+instances will also have those columns already loaded so that
+no “post fetch” of those columns will be required.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#with-polymorphic"><span class="std std-ref">Using with_polymorphic()</span></a> - full discussion of
+<a class="reference internal" href="#sqlalchemy.orm.with_polymorphic" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-func docutils literal notranslate"><span class="pre">with_polymorphic()</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.base"></span><strong>base</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.base">¶</a> – Base class to be aliased.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.classes"></span><strong>classes</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.classes">¶</a> – a single class or mapper, or list of
+class/mappers, which inherit from the base class.
+Alternatively, it may also be the string <code class="docutils literal notranslate"><span class="pre">'*'</span></code>, in which case
+all descending mapped classes will be added to the FROM clause.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.aliased"></span><strong>aliased</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.aliased">¶</a> – when True, the selectable will be aliased.   For a
+JOIN, this means the JOIN will be SELECTed from inside of a subquery
+unless the <a class="reference internal" href="#sqlalchemy.orm.with_polymorphic.params.flat" title="sqlalchemy.orm.with_polymorphic"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">with_polymorphic.flat</span></code></a> flag is set to
+True, which is recommended for simpler use cases.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.flat"></span><strong>flat</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.flat">¶</a> – Boolean, will be passed through to the
+<a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.FromClause.alias" title="sqlalchemy.sql.expression.FromClause.alias"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FromClause.alias()</span></code></a> call so that aliases of
+<a class="reference internal" href="../../core/selectable.html#sqlalchemy.sql.expression.Join" title="sqlalchemy.sql.expression.Join"><code class="xref py py-class docutils literal notranslate"><span class="pre">Join</span></code></a> objects will alias the individual tables
+inside the join, rather than creating a subquery.  This is generally
+supported by all modern databases with regards to right-nested joins
+and generally produces more efficient queries.  Setting this flag is
+recommended as long as the resulting SQL is functional.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.selectable"></span><strong>selectable</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.selectable">¶</a> – <p>a table or subquery that will
+be used in place of the generated FROM clause. This argument is
+required if any of the desired classes use concrete table
+inheritance, since SQLAlchemy currently cannot generate UNIONs
+among tables automatically. If used, the <code class="docutils literal notranslate"><span class="pre">selectable</span></code> argument
+must represent the full set of tables and columns mapped by every
+mapped class. Otherwise, the unaccounted mapped columns will
+result in their table being appended directly to the FROM clause
+which will usually lead to incorrect results.</p>
+<p>When left at its default value of <code class="docutils literal notranslate"><span class="pre">False</span></code>, the polymorphic
+selectable assigned to the base mapper is used for selecting rows.
+However, it may also be passed as <code class="docutils literal notranslate"><span class="pre">None</span></code>, which will bypass the
+configured polymorphic selectable and instead construct an ad-hoc
+selectable for the target classes given; for joined table inheritance
+this will be a join that includes all target mappers and their
+subclasses.</p>
+</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.polymorphic_on"></span><strong>polymorphic_on</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.polymorphic_on">¶</a> – a column to be used as the “discriminator”
+column for the given selectable. If not given, the polymorphic_on
+attribute of the base classes’ mapper will be used, if any. This
+is useful for mappings that don’t have polymorphic loading
+behavior by default.</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.innerjoin"></span><strong>innerjoin</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.innerjoin">¶</a> – if True, an INNER JOIN will be used.  This should
+only be specified if querying for one specific subtype only</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.adapt_on_names"></span><strong>adapt_on_names</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.adapt_on_names">¶</a> – <p>Passes through the
+<a class="reference internal" href="api.html#sqlalchemy.orm.aliased.params.adapt_on_names" title="sqlalchemy.orm.aliased"><code class="xref py py-paramref docutils literal notranslate"><span class="pre">aliased.adapt_on_names</span></code></a>
+parameter to the aliased object.  This may be useful in situations where
+the given selectable is not directly related to the existing mapped
+selectable.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4.33.</span></p>
+</div>
+</p></li>
+<li><p><span class="target" id="sqlalchemy.orm.with_polymorphic.params.name"></span><strong>name</strong><a class="paramlink headerlink reference internal" href="#sqlalchemy.orm.with_polymorphic.params.name">¶</a> – <p>Name given to the generated <a class="reference internal" href="api.html#sqlalchemy.orm.util.AliasedClass" title="sqlalchemy.orm.util.AliasedClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">AliasedClass</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.31.</span></p>
+</div>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy.orm.selectin_polymorphic">
+<em class="property"><span class="pre">function</span> </em><span class="sig-prename descclassname"><span class="pre">sqlalchemy.orm.</span></span><span class="sig-name descname"><span class="pre">selectin_polymorphic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_EntityType</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_AbstractLoad</span></span></span><a class="headerlink" href="#sqlalchemy.orm.selectin_polymorphic" title="Link to this definition">¶</a></dt>
+<dd><p>Indicate an eager load should take place for all attributes
+specific to a subclass.</p>
+<p>This uses an additional SELECT with IN against all matched primary
+key values, and is the per-query analogue to the <code class="docutils literal notranslate"><span class="pre">&quot;selectin&quot;</span></code>
+setting on the <code class="xref py py-paramref docutils literal notranslate"><span class="pre">mapper.polymorphic_load</span></code> parameter.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#polymorphic-selectin"><span class="std std-ref">Using selectin_polymorphic()</span></a></p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+<aside class="topic">
+<p class="topic-title">ORM Querying Guide</p>
+<p>Next Query Guide Section: <a class="reference internal" href="dml.html"><span class="doc">ORM-Enabled INSERT, UPDATE, and DELETE statements</span></a></p>
+</aside>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links, withsidebar">
+        Previous:
+        <a href="select.html" title="previous chapter">Writing SELECT statements for ORM Mapped Classes</a>
+        Next:
+        <a href="dml.html" title="next chapter">ORM-Enabled INSERT, UPDATE, and DELETE statements</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../../copyright.html">Copyright</a> 2007-2025, the SQLAlchemy authors and contributors.
+
+
+    <p><b>flambé!</b> the dragon and <b><i>The Alchemist</i></b> image designs created and generously donated by <a href="https://github.com/vmalloc">Rotem Yaari</a>.</p>
+
+        Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 7.2.6.
+
+    Documentation last generated: Tue 11 Mar 2025 02:19:12 PM  EDT
+
+    </div>
+</div>
+
+</div>
+
+
+
+        
+        
+
+    <script type="text/javascript">
+      document.documentElement.dataset.content_root = '../../';
+
+    </script>
+
+    <!-- begin iterate through sphinx environment script_files -->
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/sphinx_highlight.js"></script>
+        <script type="text/javascript" src="../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <!-- end iterate through sphinx environment script_files -->
+
+    <script type="text/javascript" src="../../_static/init.js"></script>
+
+
+    </body>
+</html>
+
+
