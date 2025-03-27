@@ -3227,7 +3227,7 @@ class PGDialect(default.DefaultDialect):
                     if host_port_match:
                         integrated_multihost = True
                         h, p = host_port_match.group(1, 2)
-                        if TYPE_CHECKING:
+                        if False:
                             assert isinstance(h, str)
                             assert isinstance(p, str)
                         hosts = (h,)

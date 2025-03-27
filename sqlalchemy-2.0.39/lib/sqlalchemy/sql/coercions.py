@@ -41,7 +41,7 @@ from .. import inspection
 from .. import util
 from ..util.typing import Literal
 
-if typing.TYPE_CHECKING:
+if False:
     # elements lambdas schema selectable are set by __init__
     from . import elements
     from . import lambdas
@@ -159,7 +159,7 @@ def _expression_collection_was_a_list(
     return cast("Sequence[_T]", args)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def expect(
         role: Type[roles.TruncatedLabelRole],
@@ -404,7 +404,7 @@ def expect(
         resolved = element
 
     if apply_propagate_attrs is not None:
-        if typing.TYPE_CHECKING:
+        if False:
             assert isinstance(resolved, (SQLCoreOperations, ClauseElement))
 
         if not apply_propagate_attrs._propagate_attrs and getattr(

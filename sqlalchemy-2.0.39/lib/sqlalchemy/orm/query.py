@@ -95,7 +95,7 @@ from ..util.typing import Literal
 from ..util.typing import Self
 
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _ExternalEntityType
     from ._typing import _InternalEntityType
@@ -643,7 +643,7 @@ class Query(
 
         stmt = q._get_select_statement_only()
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(stmt, Select)
 
         if reduce_columns:
@@ -730,7 +730,7 @@ class Query(
             .label(name)
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def as_scalar(  # type: ignore[overload-overlap]
             self: Query[Tuple[_MAYBE_ENTITY]],
@@ -757,7 +757,7 @@ class Query(
         """
         return self.scalar_subquery()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalar_subquery(
             self: Query[Tuple[_MAYBE_ENTITY]],
@@ -816,7 +816,7 @@ class Query(
             .statement
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def only_return_tuples(
             self: Query[_O], value: Literal[True]
@@ -1467,7 +1467,7 @@ class Query(
         except StopIteration:
             return None
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def with_entities(self, _entity: _EntityType[_O]) -> Query[_O]: ...
 
@@ -1703,7 +1703,7 @@ class Query(
         """
         return self._execution_options
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execution_options(
             self,
@@ -3453,7 +3453,7 @@ class BulkDelete(BulkUD):
 
 
 class RowReturningQuery(Query[Row[_TP]]):
-    if TYPE_CHECKING:
+    if False:
 
         def tuples(self) -> Query[_TP]:  # type: ignore
             ...

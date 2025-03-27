@@ -134,7 +134,7 @@ from ..sql.base import NO_ARG
 from ..util.compat import inspect_getfullargspec
 from ..util.typing import Protocol
 
-if typing.TYPE_CHECKING:
+if False:
     from .attributes import AttributeEventToken
     from .attributes import CollectionAttributeImpl
     from .mapped_collection import attribute_keyed_dict
@@ -451,7 +451,7 @@ class collection:
         return decorator
 
 
-if TYPE_CHECKING:
+if False:
 
     def collection_adapter(collection: Collection[Any]) -> CollectionAdapter:
         """Fetch the :class:`.CollectionAdapter` for a collection."""

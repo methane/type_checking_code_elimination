@@ -118,7 +118,7 @@ from ...sql import sqltypes
 from ...util.concurrency import await_fallback
 from ...util.concurrency import await_only
 
-if TYPE_CHECKING:
+if False:
     from typing import Iterable
 
     from psycopg import AsyncConnection

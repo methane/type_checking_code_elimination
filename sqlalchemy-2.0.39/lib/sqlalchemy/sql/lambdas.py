@@ -45,7 +45,7 @@ from .. import util
 from ..util.typing import Literal
 
 
-if TYPE_CHECKING:
+if False:
     from .elements import BindParameter
     from .elements import ClauseElement
     from .roles import SQLRole
@@ -526,7 +526,7 @@ class StatementLambdaElement(
 
     """
 
-    if TYPE_CHECKING:
+    if False:
 
         def __init__(
             self,
@@ -591,7 +591,7 @@ class StatementLambdaElement(
     def _execute_on_connection(
         self, connection, distilled_params, execution_options
     ):
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self._rec.expected_expr, ClauseElement)
         if self._rec.expected_expr.supports_execution:
             return connection._execute_clauseelement(

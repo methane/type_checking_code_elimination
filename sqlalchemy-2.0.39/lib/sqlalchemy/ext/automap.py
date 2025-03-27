@@ -742,7 +742,7 @@ from ..sql import and_
 from ..util import Properties
 from ..util.typing import Protocol
 
-if TYPE_CHECKING:
+if False:
     from ..engine.base import Engine
     from ..orm.base import RelationshipDirection
     from ..orm.relationships import ORMBackrefArgument
@@ -882,7 +882,7 @@ def name_for_collection_relationship(
 
 
 class GenerateRelationshipType(Protocol):
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __call__(
             self,
@@ -921,7 +921,7 @@ class GenerateRelationshipType(Protocol):
     ) -> Union[ORMBackrefArgument, Relationship[Any]]: ...
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def generate_relationship(
         base: Type[Any],

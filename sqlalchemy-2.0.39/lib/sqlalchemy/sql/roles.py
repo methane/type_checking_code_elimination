@@ -15,7 +15,7 @@ from typing import TypeVar
 from .. import util
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _PropagateAttrsType
     from .elements import Label
     from .selectable import _SelectIterable
@@ -223,7 +223,7 @@ class StrictFromClauseRole(FromClauseRole):
 class AnonymizedFromClauseRole(StrictFromClauseRole):
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if False:
 
         def _anonymous_fromclause(
             self, *, name: Optional[str] = None, flat: bool = False
@@ -242,7 +242,7 @@ class StatementRole(SQLRole):
     __slots__ = ()
     _role_name = "Executable SQL or text() construct"
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.memoized_property
         def _propagate_attrs(self) -> _PropagateAttrsType: ...

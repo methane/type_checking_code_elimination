@@ -42,7 +42,7 @@ from .. import util
 
 _T = typing.TypeVar("_T", bound=Any)
 
-if typing.TYPE_CHECKING:
+if False:
     from .elements import ColumnElement
     from .operators import custom_op
     from .type_api import TypeEngine

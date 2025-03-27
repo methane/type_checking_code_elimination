@@ -42,7 +42,7 @@ _current = None
 ident = "main"
 options: Namespace = None  # type: ignore
 
-if typing.TYPE_CHECKING:
+if False:
     from .plugin.plugin_base import FixtureFunctions
 
     _fixture_functions: FixtureFunctions
@@ -177,7 +177,7 @@ class Variation:
         for casename in case_names:
             setattr(self, casename, casename == case)
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def __getattr__(self, key: str) -> bool: ...
 

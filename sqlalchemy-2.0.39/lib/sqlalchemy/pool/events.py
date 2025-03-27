@@ -19,7 +19,7 @@ from .base import PoolResetState
 from .. import event
 from .. import util
 
-if typing.TYPE_CHECKING:
+if False:
     from ..engine import Engine
     from ..engine.interfaces import DBAPIConnection
 

@@ -106,7 +106,7 @@ from ..util.typing import Self
 and_ = BooleanClauseList.and_
 
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _ColumnExpressionArgument
     from ._typing import _ColumnExpressionOrStrLabelArgument
     from ._typing import _FromClauseArgument
@@ -1042,7 +1042,7 @@ class FromClause(roles.AnonymizedFromClauseRole, Selectable):
     ) -> FromClause:
         return self.alias(name=name)
 
-    if TYPE_CHECKING:
+    if False:
 
         def self_group(
             self, against: Optional[OperatorType] = None
@@ -2384,13 +2384,13 @@ class SelectsRows(ReturnsRows):
                     None
                 )
             elif label_style_none:
-                if TYPE_CHECKING:
+                if False:
                     assert is_column_element(c)
 
                 effective_name = required_label_name = None
                 fallback_label_name = c._non_anon_label or c._anon_name_label
             else:
-                if TYPE_CHECKING:
+                if False:
                     assert is_column_element(c)
 
                 if table_qualified:
@@ -2432,7 +2432,7 @@ class SelectsRows(ReturnsRows):
                         ) = expr_label
 
             if effective_name is not None:
-                if TYPE_CHECKING:
+                if False:
                     assert is_column_element(c)
 
                 if effective_name in names:
@@ -3042,7 +3042,7 @@ class FromGrouping(GroupedElement, FromClause):
     def __setstate__(self, state: Dict[str, FromClause]) -> None:
         self.element = state["element"]
 
-    if TYPE_CHECKING:
+    if False:
 
         def self_group(
             self, against: Optional[OperatorType] = None
@@ -3058,7 +3058,7 @@ class NamedFromGrouping(FromGrouping, NamedFromClause):
 
     inherit_cache = True
 
-    if TYPE_CHECKING:
+    if False:
 
         def self_group(
             self, against: Optional[OperatorType] = None
@@ -3140,7 +3140,7 @@ class TableClause(roles.DMLTableRole, Immutable, NamedFromClause):
         if kw:
             raise exc.ArgumentError("Unsupported argument(s): %s" % list(kw))
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.ro_non_memoized_property
         def columns(
@@ -3483,7 +3483,7 @@ class ScalarValues(roles.InElementRole, GroupedElement, ColumnElement[Any]):
     def __clause_element__(self) -> ScalarValues:
         return self
 
-    if TYPE_CHECKING:
+    if False:
 
         def self_group(
             self, against: Optional[OperatorType] = None
@@ -3870,7 +3870,7 @@ class SelectStatementGrouping(GroupedElement, SelectBase, Generic[_SB]):
     def self_group(self, against: Optional[OperatorType] = None) -> Self:
         return self
 
-    if TYPE_CHECKING:
+    if False:
 
         def _ungroup(self) -> _SB: ...
 
@@ -4104,7 +4104,7 @@ class GenerativeSelect(SelectBase, Generative):
             roles.LimitOffsetRole, element, name=name, type_=type_
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _offset_or_limit_clause_asint(
             self, clause: ColumnElement[Any], attrname: str
@@ -4678,14 +4678,14 @@ class SelectState(util.MemoizedSlots, CompileState):
         "_label_resolve_dict",
     )
 
-    if TYPE_CHECKING:
+    if False:
         default_select_compile_options: CacheableOptions
     else:
 
         class default_select_compile_options(CacheableOptions):
             _cache_key_traversal = []
 
-    if TYPE_CHECKING:
+    if False:
 
         @classmethod
         def get_plugin_class(
@@ -4768,7 +4768,7 @@ class SelectState(util.MemoizedSlots, CompileState):
         ) -> Optional[str]:
             if is_text_clause(c):
                 return None
-            elif TYPE_CHECKING:
+            elif False:
                 assert is_column_element(c)
 
             if not dedupe:
@@ -4989,7 +4989,7 @@ class SelectState(util.MemoizedSlots, CompileState):
         raw_columns: List[_ColumnsClauseElement],
     ) -> None:
         for right, onclause, left, flags in args:
-            if TYPE_CHECKING:
+            if False:
                 if onclause is not None:
                     assert isinstance(onclause, ColumnElement)
 
@@ -5013,7 +5013,7 @@ class SelectState(util.MemoizedSlots, CompileState):
             # upgraded to an ORM select, and this method would not be called;
             # orm.context.ORMSelectCompileState._join() would be
             # used instead.
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(right, FromClause)
                 if onclause is not None:
                     assert isinstance(onclause, ColumnElement)
@@ -5377,7 +5377,7 @@ class Select(
 
         return self._raw_columns[0]
 
-    if TYPE_CHECKING:
+    if False:
 
         @overload
         def scalar_subquery(
@@ -5974,7 +5974,7 @@ class Select(
         )
         return woc
 
-    if TYPE_CHECKING:
+    if False:
         # START OVERLOADED FUNCTIONS self.with_only_columns Select 1-8 ", *, maintain_column_froms: bool =..." # noqa: E501
 
         # code within this block is **programmatically,
@@ -6768,7 +6768,7 @@ class ScalarSelect(
     def self_group(self, against: Optional[OperatorType] = None) -> Self:
         return self
 
-    if TYPE_CHECKING:
+    if False:
 
         def _ungroup(self) -> Select[Any]: ...
 
@@ -7124,7 +7124,7 @@ class TextualSelect(SelectBase, ExecutableReturnsRows, Generative):
             Iterable[Sequence[ColumnElement[Any]]]
         ] = None,
     ) -> None:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(fromclause, Subquery)
 
         if proxy_compound_columns:

@@ -61,7 +61,7 @@ from ..util.typing import Protocol
 from ..util.typing import Self
 from ..util.typing import TypeGuard
 
-if TYPE_CHECKING:
+if False:
     from . import coercions
     from . import elements
     from . import type_api
@@ -798,7 +798,7 @@ class _MetaOptions(type):
         o1.__dict__.update(other)
         return o1
 
-    if TYPE_CHECKING:
+    if False:
 
         def __getattr__(self, key: str) -> Any: ...
 
@@ -956,7 +956,7 @@ class Options(metaclass=_MetaOptions):
         else:
             return existing_options, exec_options
 
-    if TYPE_CHECKING:
+    if False:
 
         def __getattr__(self, key: str) -> Any: ...
 
@@ -1034,7 +1034,7 @@ class Executable(roles.StatementRole):
     is_delete = False
     is_dml = False
 
-    if TYPE_CHECKING:
+    if False:
         __visit_name__: str
 
         def _compile_w_cache(
@@ -1146,7 +1146,7 @@ class Executable(roles.StatementRole):
         self._with_context_options += ((callable_, cache_args),)
         return self
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execution_options(
             self,
@@ -1578,7 +1578,7 @@ class ColumnCollection(Generic[_COLKEY, _COL_co]):
         # turn to a list first to maintain over a course of changes
         return iter([col for _, col, _ in self._collection])
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __getitem__(self, key: Union[str, int]) -> _COL_co: ...
 
@@ -1643,7 +1643,7 @@ class ColumnCollection(Generic[_COLKEY, _COL_co]):
     def __eq__(self, other: Any) -> bool:
         return self.compare(other)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def get(self, key: str, default: None = None) -> Optional[_COL_co]: ...
 

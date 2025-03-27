@@ -31,7 +31,7 @@ from ..util.typing import TypeGuard
 
 _T = TypeVar("_T")
 
-if typing.TYPE_CHECKING:
+if False:
 
     class greenlet(Protocol):
         dead: bool
@@ -84,7 +84,7 @@ class _AsyncIoGreenlet(greenlet):
 
 _T_co = TypeVar("_T_co", covariant=True)
 
-if TYPE_CHECKING:
+if False:
 
     def iscoroutine(
         awaitable: Awaitable[_T_co],

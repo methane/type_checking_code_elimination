@@ -423,7 +423,7 @@ def is_fwd_ref(
         return False
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def de_optionalize_union_types(type_: str) -> str: ...
 
@@ -479,7 +479,7 @@ def de_optionalize_union_types(
         return type_
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _de_optionalize_fwd_ref_union_types(
         type_: ForwardRef, return_has_none: Literal[True]
@@ -641,7 +641,7 @@ class DescriptorReference(Generic[_DESC]):
 
     """
 
-    if TYPE_CHECKING:
+    if False:
 
         def __get__(self, instance: object, owner: Any) -> _DESC: ...
 
@@ -661,7 +661,7 @@ class RODescriptorReference(Generic[_DESC_co]):
 
     """
 
-    if TYPE_CHECKING:
+    if False:
 
         def __get__(self, instance: object, owner: Any) -> _DESC_co: ...
 
@@ -682,7 +682,7 @@ class CallableReference(Generic[_FN]):
 
     """
 
-    if TYPE_CHECKING:
+    if False:
 
         def __get__(self, instance: object, owner: Any) -> _FN: ...
 

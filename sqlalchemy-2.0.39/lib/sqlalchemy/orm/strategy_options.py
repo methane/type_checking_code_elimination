@@ -63,7 +63,7 @@ _COLUMN_TOKEN: Final[Literal["column"]] = "column"
 
 _FN = TypeVar("_FN", bound="Callable[..., Any]")
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _InternalEntityType
     from .context import _MapperEntity
@@ -778,7 +778,7 @@ class _AbstractLoad(traversals.GenerativeOnTraversal, LoaderOption):
         )
         return self
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _coerce_strat(self, strategy: _StrategySpec) -> _StrategyKey: ...
 

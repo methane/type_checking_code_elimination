@@ -69,7 +69,7 @@ from ..sql.selectable import SelectState
 from ..sql.selectable import TypedReturnsRows
 from ..sql.visitors import InternalTraversal
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _InternalEntityType
     from ._typing import OrmExecuteOptionsParameter
     from .loading import PostLoad

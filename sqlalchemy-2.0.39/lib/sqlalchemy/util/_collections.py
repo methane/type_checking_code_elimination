@@ -228,7 +228,7 @@ class Properties(Generic[_T]):
     def update(self, value: Dict[str, _T]) -> None:
         self._data.update(value)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def get(self, key: str) -> Optional[_T]: ...
 
@@ -519,7 +519,7 @@ class LRUCache(typing.MutableMapping[_KT, _VT]):
         self._counter += 1
         return self._counter
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def get(self, key: _KT) -> Optional[_VT]: ...
 

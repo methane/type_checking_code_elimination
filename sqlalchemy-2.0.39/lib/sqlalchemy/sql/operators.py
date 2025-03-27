@@ -53,7 +53,7 @@ from .. import util
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import ColumnExpressionArgument
     from .cache_key import CacheConst
     from .elements import ColumnElement
@@ -70,7 +70,7 @@ class OperatorType(Protocol):
 
     __name__: str
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __call__(
             self,
@@ -459,7 +459,7 @@ class custom_op(OperatorType, Generic[_T]):
             self.return_type._static_cache_key if self.return_type else None,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __call__(
             self,
@@ -540,7 +540,7 @@ class ColumnOperators(Operators):
     timetuple: Literal[None] = None
     """Hack, allows datetime objects to be compared on the LHS."""
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def operate(
             self, op: OperatorType, *other: Any, **kwargs: Any
@@ -569,7 +569,7 @@ class ColumnOperators(Operators):
     # ColumnOperators defines an __eq__ so it must explicitly declare also
     # an hash or it's set to None by python:
     # https://docs.python.org/3/reference/datamodel.html#object.__hash__
-    if TYPE_CHECKING:
+    if False:
 
         def __hash__(self) -> int: ...
 
@@ -617,7 +617,7 @@ class ColumnOperators(Operators):
         return self.operate(is_not_distinct_from, other)
 
     # deprecated 1.4; see #5435
-    if TYPE_CHECKING:
+    if False:
 
         def isnot_distinct_from(self, other: Any) -> ColumnOperators: ...
 
@@ -973,7 +973,7 @@ class ColumnOperators(Operators):
         return self.operate(not_in_op, other)
 
     # deprecated 1.4; see #5429
-    if TYPE_CHECKING:
+    if False:
 
         def notin_(self, other: Any) -> ColumnOperators: ...
 
@@ -1000,7 +1000,7 @@ class ColumnOperators(Operators):
         return self.operate(not_like_op, other, escape=escape)
 
     # deprecated 1.4; see #5435
-    if TYPE_CHECKING:
+    if False:
 
         def notlike(
             self, other: Any, escape: Optional[str] = None
@@ -1029,7 +1029,7 @@ class ColumnOperators(Operators):
         return self.operate(not_ilike_op, other, escape=escape)
 
     # deprecated 1.4; see #5435
-    if TYPE_CHECKING:
+    if False:
 
         def notilike(
             self, other: Any, escape: Optional[str] = None
@@ -1069,7 +1069,7 @@ class ColumnOperators(Operators):
         return self.operate(is_not, other)
 
     # deprecated 1.4; see #5429
-    if TYPE_CHECKING:
+    if False:
 
         def isnot(self, other: Any) -> ColumnOperators: ...
 
@@ -1759,7 +1759,7 @@ class ColumnOperators(Operators):
         return self.operate(nulls_first_op)
 
     # deprecated 1.4; see #5435
-    if TYPE_CHECKING:
+    if False:
 
         def nullsfirst(self) -> ColumnOperators: ...
 
@@ -1777,7 +1777,7 @@ class ColumnOperators(Operators):
         return self.operate(nulls_last_op)
 
     # deprecated 1.4; see #5429
-    if TYPE_CHECKING:
+    if False:
 
         def nullslast(self) -> ColumnOperators: ...
 
@@ -1996,7 +1996,7 @@ def is_true(a: Any) -> Any:
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def istrue(a: Any) -> Any: ...
@@ -2011,7 +2011,7 @@ def is_false(a: Any) -> Any:
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def isfalse(a: Any) -> Any: ...
@@ -2033,7 +2033,7 @@ def is_not_distinct_from(a: Any, b: Any) -> Any:
 
 
 # deprecated 1.4; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def isnot_distinct_from(a: Any, b: Any) -> Any: ...
@@ -2055,7 +2055,7 @@ def is_not(a: Any, b: Any) -> Any:
 
 
 # 1.4 deprecated; see #5429
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def isnot(a: Any, b: Any) -> Any: ...
@@ -2087,7 +2087,7 @@ def not_like_op(a: Any, b: Any, escape: Optional[str] = None) -> Any:
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notlike_op(a: Any, b: Any, escape: Optional[str] = None) -> Any: ...
@@ -2109,7 +2109,7 @@ def not_ilike_op(a: Any, b: Any, escape: Optional[str] = None) -> Any:
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notilike_op(a: Any, b: Any, escape: Optional[str] = None) -> Any: ...
@@ -2131,7 +2131,7 @@ def not_between_op(a: Any, b: Any, c: Any, symmetric: bool = False) -> Any:
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notbetween_op(
@@ -2155,7 +2155,7 @@ def not_in_op(a: Any, b: Any) -> Any:
 
 
 # 1.4 deprecated; see #5429
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notin_op(a: Any, b: Any) -> Any: ...
@@ -2218,7 +2218,7 @@ def not_startswith_op(
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notstartswith_op(
@@ -2262,7 +2262,7 @@ def not_endswith_op(
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notendswith_op(
@@ -2306,7 +2306,7 @@ def not_contains_op(
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notcontains_op(
@@ -2365,7 +2365,7 @@ def not_match_op(a: Any, b: Any, **kw: Any) -> Any:
 
 
 # 1.4 deprecated; see #5429
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def notmatch_op(a: Any, b: Any, **kw: Any) -> Any: ...
@@ -2410,7 +2410,7 @@ def nulls_first_op(a: Any) -> Any:
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def nullsfirst_op(a: Any) -> Any: ...
@@ -2425,7 +2425,7 @@ def nulls_last_op(a: Any) -> Any:
 
 
 # 1.4 deprecated; see #5435
-if TYPE_CHECKING:
+if False:
 
     @_operator_fn
     def nullslast_op(a: Any) -> Any: ...

@@ -26,7 +26,7 @@ from .. import event
 from .. import exc
 from ..util.typing import Literal
 
-if typing.TYPE_CHECKING:
+if False:
     from .interfaces import _CoreMultiExecuteParams
     from .interfaces import _CoreSingleExecuteParams
     from .interfaces import _DBAPIAnyExecuteParams

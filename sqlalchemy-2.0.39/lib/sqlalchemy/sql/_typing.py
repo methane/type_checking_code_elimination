@@ -32,7 +32,7 @@ from ..util.typing import Literal
 from ..util.typing import Protocol
 from ..util.typing import TypeAlias
 
-if TYPE_CHECKING:
+if False:
     from datetime import date
     from datetime import datetime
     from datetime import time
@@ -301,7 +301,7 @@ _LimitOffsetType = Union[int, _ColumnExpressionArgument[int], None]
 
 _AutoIncrementType = Union[bool, Literal["auto", "ignore_fk"]]
 
-if TYPE_CHECKING:
+if False:
 
     def is_sql_compiler(c: Compiled) -> TypeGuard[SQLCompiler]: ...
 
@@ -391,7 +391,7 @@ def _unexpected_kw(methname: str, kw: Dict[str, Any]) -> NoReturn:
     raise TypeError(f"{methname} got an unexpected keyword argument '{k}'")
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def Nullable(
         val: "SQLCoreOperations[_T]",
@@ -426,7 +426,7 @@ def Nullable(
     return val
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def NotNullable(
         val: "SQLCoreOperations[Optional[_T]]",

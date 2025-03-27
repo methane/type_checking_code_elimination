@@ -34,7 +34,7 @@ from ..util import HasMemoized
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if typing.TYPE_CHECKING:
+if False:
     from .elements import BindParameter
     from .elements import ClauseElement
     from .elements import ColumnElement

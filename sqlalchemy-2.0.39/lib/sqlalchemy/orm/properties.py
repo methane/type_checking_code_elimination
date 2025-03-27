@@ -61,7 +61,7 @@ from ..util.typing import is_pep593
 from ..util.typing import is_pep695
 from ..util.typing import Self
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _IdentityKeyType
     from ._typing import _InstanceDict
     from ._typing import _ORMColumnExprArgument
@@ -426,7 +426,7 @@ class ColumnProperty(
                 {"compile_state_plugin": "orm", "plugin_subject": pe}
             )
 
-        if TYPE_CHECKING:
+        if False:
 
             def __clause_element__(self) -> NamedColumn[_PT]: ...
 

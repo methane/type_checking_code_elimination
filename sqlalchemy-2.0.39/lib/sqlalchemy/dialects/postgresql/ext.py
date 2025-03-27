@@ -25,7 +25,7 @@ from ...sql.visitors import InternalTraversal
 
 _T = TypeVar("_T", bound=Any)
 
-if TYPE_CHECKING:
+if False:
     from ...sql.visitors import _TraverseInternalsType
 
 

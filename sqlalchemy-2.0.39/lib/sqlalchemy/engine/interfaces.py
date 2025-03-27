@@ -46,7 +46,7 @@ from ..util.typing import NotRequired
 from ..util.typing import Protocol
 from ..util.typing import TypedDict
 
-if TYPE_CHECKING:
+if False:
     from .base import Connection
     from .base import Engine
     from .cursor import CursorResult
@@ -1284,7 +1284,7 @@ class Dialect(EventTarget):
 
         pass
 
-    if TYPE_CHECKING:
+    if False:
 
         def _overrides_default(self, method_name: str) -> bool: ...
 

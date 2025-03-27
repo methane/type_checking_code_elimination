@@ -95,7 +95,7 @@ from ..util.typing import de_optionalize_union_types
 from ..util.typing import Literal
 from ..util.typing import resolve_name_to_real_class_name
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _ExternalEntityType
     from ._typing import _IdentityKeyType

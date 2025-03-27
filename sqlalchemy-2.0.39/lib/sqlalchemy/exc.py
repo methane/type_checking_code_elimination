@@ -26,14 +26,14 @@ from typing import Union
 from .util import compat
 from .util import preloaded as _preloaded
 
-if typing.TYPE_CHECKING:
+if False:
     from .engine.interfaces import _AnyExecuteParams
     from .engine.interfaces import Dialect
     from .sql.compiler import Compiled
     from .sql.compiler import TypeCompiler
     from .sql.elements import ClauseElement
 
-if typing.TYPE_CHECKING:
+if False:
     _version_token: str
 else:
     # set by __init__.py
@@ -561,7 +561,7 @@ class DBAPIError(StatementError):
 
     code = "dbapi"
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         @classmethod
         def instance(

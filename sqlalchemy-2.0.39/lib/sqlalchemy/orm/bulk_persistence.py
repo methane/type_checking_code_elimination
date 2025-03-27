@@ -54,7 +54,7 @@ from ..sql.dml import UpdateDMLState
 from ..util import EMPTY_DICT
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ._typing import DMLStrategyArgument
     from ._typing import OrmExecuteOptionsParameter
     from ._typing import SynchronizeSessionArgument
@@ -71,7 +71,7 @@ if TYPE_CHECKING:
 _O = TypeVar("_O", bound=object)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _bulk_insert(
         mapper: Mapper[_O],
@@ -120,7 +120,7 @@ def _bulk_insert(
         )
 
     if isstates:
-        if TYPE_CHECKING:
+        if False:
             mappings = cast(Iterable[InstanceState[_O]], mappings)
 
         if return_defaults:
@@ -130,7 +130,7 @@ def _bulk_insert(
         else:
             mappings = [state.dict for state in mappings]
     else:
-        if TYPE_CHECKING:
+        if False:
             mappings = cast(Iterable[Dict[str, Any]], mappings)
 
         if return_defaults:
@@ -252,7 +252,7 @@ def _bulk_insert(
         return return_result
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _bulk_update(
         mapper: Mapper[Any],

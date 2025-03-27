@@ -611,7 +611,7 @@ from ...util import asbool
 from ...util import await_fallback
 from ...util import await_only
 
-if TYPE_CHECKING:
+if False:
     from oracledb import AsyncConnection
     from oracledb import AsyncCursor
 

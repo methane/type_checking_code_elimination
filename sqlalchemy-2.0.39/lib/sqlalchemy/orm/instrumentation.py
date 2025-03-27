@@ -63,7 +63,7 @@ from ..util import HasMemoized
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _RegistryType
     from .attributes import AttributeImpl
     from .attributes import QueryableAttribute

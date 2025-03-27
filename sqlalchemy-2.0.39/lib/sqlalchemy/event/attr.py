@@ -66,7 +66,7 @@ from ..util.typing import Protocol
 
 _T = TypeVar("_T", bound=Any)
 
-if typing.TYPE_CHECKING:
+if False:
     from .base import _Dispatch
     from .base import _DispatchCommon
     from .base import _HasEventsDispatch

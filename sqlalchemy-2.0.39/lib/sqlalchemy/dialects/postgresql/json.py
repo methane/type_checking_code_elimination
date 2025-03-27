@@ -30,7 +30,7 @@ from ... import types as sqltypes
 from ...sql import cast
 from ...sql._typing import _T
 
-if TYPE_CHECKING:
+if False:
     from ...engine.interfaces import Dialect
     from ...sql.elements import ColumnElement
     from ...sql.type_api import _BindProcessorType

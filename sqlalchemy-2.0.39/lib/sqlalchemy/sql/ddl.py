@@ -34,7 +34,7 @@ from ..util import topological
 from ..util.typing import Protocol
 from ..util.typing import Self
 
-if typing.TYPE_CHECKING:
+if False:
     from .compiler import Compiled
     from .compiler import DDLCompiler
     from .elements import BindParameter

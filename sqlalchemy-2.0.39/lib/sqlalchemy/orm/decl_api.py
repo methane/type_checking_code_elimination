@@ -83,7 +83,7 @@ from ..util.typing import Literal
 from ..util.typing import LITERAL_TYPES
 from ..util.typing import Self
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _O
     from ._typing import _RegistryType
     from .decl_base import _DataclassArguments
@@ -309,7 +309,7 @@ class _declared_attr_common:
 class _declared_directive(_declared_attr_common, Generic[_T]):
     # see mapping_api.rst for docstring
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def __init__(
             self,
@@ -421,7 +421,7 @@ class declared_attr(interfaces._MappedAttribute[_T], _declared_attr_common):
 
     """  # noqa: E501
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def __init__(
             self,
@@ -747,7 +747,7 @@ class DeclarativeBase(
 
     """
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def _sa_inspect_type(self) -> Mapper[Self]: ...
 
@@ -915,7 +915,7 @@ class DeclarativeBaseNoMeta(
 
     """
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def _sa_inspect_type(self) -> Mapper[Self]: ...
 
@@ -1601,7 +1601,7 @@ class registry:
             deferred,
         ),
     )
-    if TYPE_CHECKING:
+    if False:
         @overload
         def mapped_as_dataclass(self, __cls: Type[_O]) -> Type[_O]: ...
 

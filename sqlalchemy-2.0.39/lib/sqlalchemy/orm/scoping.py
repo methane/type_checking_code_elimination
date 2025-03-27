@@ -33,7 +33,7 @@ from ..util import warn
 from ..util import warn_deprecated
 from ..util.typing import Protocol
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _IdentityKeyType
     from ._typing import OrmExecuteOptionsParameter
@@ -673,7 +673,7 @@ class scoped_session(Generic[_S]):
 
         return self._proxied.delete(instance)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execute(
             self,
@@ -1568,7 +1568,7 @@ class scoped_session(Generic[_S]):
 
         return self._proxied.merge(instance, load=load, options=options)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def query(self, _entity: _EntityType[_O]) -> Query[_O]: ...
 
@@ -1795,7 +1795,7 @@ class scoped_session(Generic[_S]):
 
         return self._proxied.rollback()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalar(
             self,
@@ -1849,7 +1849,7 @@ class scoped_session(Generic[_S]):
             **kw,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalars(
             self,

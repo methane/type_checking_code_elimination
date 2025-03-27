@@ -48,7 +48,7 @@ from ..sql.selectable import FromClause
 from ..util.typing import Annotated
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _ORMColumnExprArgument
     from .descriptor_props import _CC
@@ -606,7 +606,7 @@ def column_property(
     )
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def composite(
         _class_or_attr: _CompositeAttrType[Any],
@@ -2265,7 +2265,7 @@ def clear_mappers() -> None:
 AliasedType = Annotated[Type[_O], "aliased"]
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def aliased(
         element: Type[_O],

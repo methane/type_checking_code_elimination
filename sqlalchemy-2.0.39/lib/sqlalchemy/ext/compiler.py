@@ -493,7 +493,7 @@ from typing import TypeVar
 from .. import exc
 from ..sql import sqltypes
 
-if TYPE_CHECKING:
+if False:
     from ..sql.compiler import SQLCompiler
 
 _F = TypeVar("_F", bound=Callable[..., Any])

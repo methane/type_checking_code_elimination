@@ -24,7 +24,7 @@ import weakref
 from . import util as orm_util
 from .. import exc as sa_exc
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _IdentityKeyType
     from .state import InstanceState
 
@@ -147,7 +147,7 @@ class WeakInstanceDict(IdentityMap):
 
     def contains_state(self, state: InstanceState[Any]) -> bool:
         if state.key in self._dict:
-            if TYPE_CHECKING:
+            if False:
                 assert state.key is not None
             try:
                 return self._dict[state.key] is state

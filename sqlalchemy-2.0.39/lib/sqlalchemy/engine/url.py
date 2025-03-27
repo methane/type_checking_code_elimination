@@ -253,7 +253,7 @@ class URL(NamedTuple):
         if dict_ is None:
             return util.EMPTY_DICT
 
-        if TYPE_CHECKING:
+        if False:
             @overload
             def _assert_value(
                 val: str,

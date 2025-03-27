@@ -70,7 +70,7 @@ from .. import util
 from ..util.typing import Self
 from ..util.typing import TypeGuard
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _ColumnExpressionArgument
     from ._typing import _ColumnsClauseArgument
     from ._typing import _DMLColumnArgument
@@ -161,7 +161,7 @@ class DMLState(CompileState):
     def dml_table(self) -> _DMLTableElement:
         return self.statement.table
 
-    if TYPE_CHECKING:
+    if False:
 
         @classmethod
         def get_plugin_class(cls, statement: Executable) -> Type[DMLState]: ...
@@ -1153,7 +1153,7 @@ class ValuesBase(UpdateBase):
                     self._multi_values += (arg,)
                     return self
 
-                if TYPE_CHECKING:
+                if False:
                     # crud.py raises during compilation if this is not the
                     # case
                     assert isinstance(self, Insert)
@@ -1310,7 +1310,7 @@ class Insert(ValuesBase):
         self.select = coercions.expect(roles.DMLSelectRole, select)
         return self
 
-    if TYPE_CHECKING:
+    if False:
         # START OVERLOADED FUNCTIONS self.returning ReturningInsert 1-8 ", *, sort_by_parameter_order: bool = False"  # noqa: E501
 
         # code within this block is **programmatically,
@@ -1603,7 +1603,7 @@ class Update(DMLWhereBase, ValuesBase):
         self._inline = True
         return self
 
-    if TYPE_CHECKING:
+    if False:
         # START OVERLOADED FUNCTIONS self.returning ReturningUpdate 1-8
 
         # code within this block is **programmatically,
@@ -1735,7 +1735,7 @@ class Delete(DMLWhereBase, UpdateBase):
             roles.DMLTableRole, table, apply_propagate_attrs=self
         )
 
-    if TYPE_CHECKING:
+    if False:
         # START OVERLOADED FUNCTIONS self.returning ReturningDelete 1-8
 
         # code within this block is **programmatically,

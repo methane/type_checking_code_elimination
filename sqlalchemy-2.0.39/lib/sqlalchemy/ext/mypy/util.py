@@ -210,7 +210,7 @@ def add_global(
         module_globals[asname] = lookup_sym
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def get_callexpr_kwarg(
         callexpr: CallExpr, name: str, *, expr_types: None = ...

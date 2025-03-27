@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 from .base import SchemaEventTarget
 from .. import event
 
-if TYPE_CHECKING:
+if False:
     from .schema import Column
     from .schema import Constraint
     from .schema import SchemaItem

@@ -55,7 +55,7 @@ from ..util.typing import Literal
 from ..util.typing import Self
 
 
-if typing.TYPE_CHECKING:
+if False:
     from .base import Connection
     from .default import DefaultExecutionContext
     from .interfaces import _DBAPICursorDescription
@@ -297,7 +297,7 @@ class CursorResultMetaData(ResultMetaData):
         compiled_statement = context.compiled.statement
         invoked_statement = context.invoked_statement
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(invoked_statement, elements.ClauseElement)
 
         if compiled_statement is invoked_statement:

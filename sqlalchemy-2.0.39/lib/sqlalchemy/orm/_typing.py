@@ -29,7 +29,7 @@ from ..sql.elements import ColumnElement
 from ..util.typing import Protocol
 from ..util.typing import TypeGuard
 
-if TYPE_CHECKING:
+if False:
     from .attributes import AttributeImpl
     from .attributes import CollectionAttributeImpl
     from .attributes import HasCollectionAdapter
@@ -59,7 +59,7 @@ _O = TypeVar("_O", bound=object)
 """
 
 
-if TYPE_CHECKING:
+if False:
     _RegistryType = _registry_type
 
 _InternalEntityType = Union["Mapper[_T]", "AliasedInsp[_T]"]
@@ -136,7 +136,7 @@ def is_composite_class(obj: Any) -> bool:
     )
 
 
-if TYPE_CHECKING:
+if False:
 
     def insp_is_mapper_property(
         obj: Any,

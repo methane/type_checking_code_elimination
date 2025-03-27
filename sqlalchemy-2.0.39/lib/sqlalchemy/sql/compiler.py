@@ -90,7 +90,7 @@ from ..util.typing import Literal
 from ..util.typing import Protocol
 from ..util.typing import TypedDict
 
-if typing.TYPE_CHECKING:
+if False:
     from .annotation import _AnnotationDict
     from .base import _AmbiguousTableNameMap
     from .base import CompileState
@@ -864,7 +864,7 @@ class Compiled:
             self.can_execute = statement.supports_execution
             self._annotations = statement._annotations
             if self.can_execute:
-                if TYPE_CHECKING:
+                if False:
                     assert isinstance(statement, Executable)
                 self.execution_options = statement._execution_options
             self.string = self.process(self.statement, **compile_kwargs)
@@ -1429,11 +1429,11 @@ class SQLCompiler(Compiled):
         Compiled.__init__(self, dialect, statement, **kwargs)
 
         if self.isinsert or self.isupdate or self.isdelete:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(statement, UpdateBase)
 
             if self.isinsert or self.isupdate:
-                if TYPE_CHECKING:
+                if False:
                     assert isinstance(statement, ValuesBase)
                 if statement._inline:
                     self.inline = True
@@ -2220,7 +2220,7 @@ class SQLCompiler(Compiled):
         assert self.compile_state is not None
         statement = self.compile_state.statement
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(statement, Insert)
 
         table = statement.table
@@ -2297,7 +2297,7 @@ class SQLCompiler(Compiled):
     @util.memoized_property
     @util.preload_module("sqlalchemy.engine.result")
     def _inserted_primary_key_from_returning_getter(self):
-        if typing.TYPE_CHECKING:
+        if False:
             from ..engine import result
         else:
             result = util.preloaded.engine_result
@@ -2305,7 +2305,7 @@ class SQLCompiler(Compiled):
         assert self.compile_state is not None
         statement = self.compile_state.statement
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(statement, Insert)
 
         param_key_getter = self._within_exec_param_key_getter
@@ -2615,7 +2615,7 @@ class SQLCompiler(Compiled):
             else:
                 schema_prefix = ""
 
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(table, NamedFromClause)
             tablename = table.name
 
@@ -6576,7 +6576,7 @@ class StrSQLCompiler(SQLCompiler):
 class DDLCompiler(Compiled):
     is_ddl = True
 
-    if TYPE_CHECKING:
+    if False:
 
         def __init__(
             self,

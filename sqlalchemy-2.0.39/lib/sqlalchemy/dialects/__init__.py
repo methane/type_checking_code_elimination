@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 from .. import util
 
-if TYPE_CHECKING:
+if False:
     from ..engine.interfaces import Dialect
 
 __all__ = ("mssql", "mysql", "oracle", "postgresql", "sqlite")

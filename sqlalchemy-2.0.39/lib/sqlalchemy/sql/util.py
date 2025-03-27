@@ -71,7 +71,7 @@ from .. import util
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _EquivalentColumnMap
     from ._typing import _LimitOffsetType
     from ._typing import _TypeEngineArgument
@@ -870,7 +870,7 @@ def splice_joins(
     return ret
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def reduce_columns(
         columns: Iterable[ColumnElement[Any]],
@@ -1096,7 +1096,7 @@ class ClauseAdapter(visitors.ReplacingExternalTraversal):
         self.adapt_on_names = adapt_on_names
         self.adapt_from_selectables = adapt_from_selectables
 
-    if TYPE_CHECKING:
+    if False:
 
         @overload
         def traverse(self, obj: Literal[None]) -> None: ...
@@ -1196,7 +1196,7 @@ class ClauseAdapter(visitors.ReplacingExternalTraversal):
         if "adapt_column" in col._annotations:
             col = col._annotations["adapt_column"]
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(col, KeyedColumnElement)
 
         if self.adapt_from_selectables and col not in self.equivalents:
@@ -1206,7 +1206,7 @@ class ClauseAdapter(visitors.ReplacingExternalTraversal):
             else:
                 return None
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(col, KeyedColumnElement)
 
         return self._corresponding_column(  # type: ignore
@@ -1215,7 +1215,7 @@ class ClauseAdapter(visitors.ReplacingExternalTraversal):
 
 
 class _ColumnLookup(Protocol):
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __getitem__(self, key: None) -> None: ...
 
@@ -1325,7 +1325,7 @@ class ColumnAdapter(ClauseAdapter):
 
         return ac
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def traverse(self, obj: Literal[None]) -> None: ...
 
@@ -1342,7 +1342,7 @@ class ColumnAdapter(ClauseAdapter):
 
         return super().chain(visitor)
 
-    if TYPE_CHECKING:
+    if False:
 
         @property
         def visitor_iterator(self) -> Iterator[ColumnAdapter]: ...

@@ -42,7 +42,7 @@ from ...util.typing import Concatenate
 from ...util.typing import ParamSpec
 
 
-if TYPE_CHECKING:
+if False:
     from .engine import AsyncConnection
     from .engine import AsyncEngine
     from ...engine import Connection
@@ -399,7 +399,7 @@ class AsyncSession(ReversibleProxy[Session]):
             fn, self.sync_session, *arg, _require_await=False, **kw
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def execute(
             self,
@@ -471,7 +471,7 @@ class AsyncSession(ReversibleProxy[Session]):
         )
         return await _ensure_sync_result(result, self.execute)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalar(
             self,
@@ -527,7 +527,7 @@ class AsyncSession(ReversibleProxy[Session]):
             **kw,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalars(
             self,
@@ -653,7 +653,7 @@ class AsyncSession(ReversibleProxy[Session]):
             execution_options=execution_options,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def stream(
             self,
@@ -707,7 +707,7 @@ class AsyncSession(ReversibleProxy[Session]):
         )
         return AsyncResult(result)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def stream_scalars(
             self,
@@ -1687,7 +1687,7 @@ class async_sessionmaker(Generic[_AS]):
 
     class_: Type[_AS]
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self,

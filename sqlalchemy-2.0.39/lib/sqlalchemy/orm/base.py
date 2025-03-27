@@ -39,7 +39,7 @@ from ..util import FastIntFlag
 from ..util.langhelpers import TypingOnly
 from ..util.typing import Literal
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _ExternalEntityType
     from ._typing import _InternalEntityType
@@ -309,7 +309,7 @@ def _assertions(
     return generate
 
 
-if TYPE_CHECKING:
+if False:
 
     def manager_of_class(cls: Type[_O]) -> ClassManager[_O]: ...
 
@@ -507,7 +507,7 @@ def _entity_descriptor(entity: _EntityType[Any], key: str) -> Any:
         ) from err
 
 
-if TYPE_CHECKING:
+if False:
 
     def _state_mapper(state: InstanceState[_O]) -> Mapper[_O]: ...
 
@@ -678,7 +678,7 @@ class InspectionAttrInfo(InspectionAttr):
 class SQLORMOperations(SQLCoreOperations[_T_co], TypingOnly):
     __slots__ = ()
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def of_type(
             self, class_: _EntityType[Any]
@@ -707,7 +707,7 @@ class ORMDescriptor(Generic[_T_co], TypingOnly):
 
     __slots__ = ()
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         @overload
         def __get__(
@@ -805,7 +805,7 @@ class Mapped(
 
     __slots__ = ()
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         @overload
         def __get__(
@@ -898,7 +898,7 @@ class DynamicMapped(_MappedAnnotationBase[_T_co]):
 
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if False:
 
         @overload
         def __get__(
@@ -950,7 +950,7 @@ class WriteOnlyMapped(_MappedAnnotationBase[_T_co]):
 
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if False:
 
         @overload
         def __get__(

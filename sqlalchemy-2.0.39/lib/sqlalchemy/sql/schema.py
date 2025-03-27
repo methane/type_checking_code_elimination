@@ -89,7 +89,7 @@ from ..util.typing import Self
 from ..util.typing import TypedDict
 from ..util.typing import TypeGuard
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _AutoIncrementType
     from ._typing import _DDLColumnArgument
     from ._typing import _InfoType
@@ -345,7 +345,7 @@ class Table(
 
     __visit_name__ = "table"
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.ro_non_memoized_property
         def primary_key(self) -> PrimaryKeyConstraint: ...
@@ -395,7 +395,7 @@ class Table(
 
     """
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.ro_non_memoized_property
         def columns(self) -> ReadOnlyColumnCollection[str, Column[Any]]: ...
@@ -3190,7 +3190,7 @@ class ForeignKey(DialectKWArgs, SchemaItem):
 
         return self._resolve_column()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _resolve_column(
             self, *, raiseerr: Literal[True] = ...
@@ -3312,7 +3312,7 @@ class ForeignKey(DialectKWArgs, SchemaItem):
             self._set_target_column(_column)
 
 
-if TYPE_CHECKING:
+if False:
 
     def default_is_sequence(
         obj: Optional[DefaultGenerator],
@@ -3359,7 +3359,7 @@ class DefaultGenerator(Executable, SchemaItem):
         self.for_update = for_update
 
     def _set_parent(self, parent: SchemaEventTarget, **kw: Any) -> None:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(parent, Column)
         self.column = parent
         if self.for_update:
@@ -3420,7 +3420,7 @@ class ColumnDefault(DefaultGenerator, ABC):
 
     arg: Any
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __new__(
             cls, arg: Callable[..., Any], for_update: bool = ...
@@ -4211,7 +4211,7 @@ class ColumnCollectionMixin:
 
     _pending_colargs: List[Optional[Union[str, Column[Any]]]]
 
-    if TYPE_CHECKING:
+    if False:
 
         def _set_parent_with_dispatch(
             self, parent: SchemaEventTarget, **kw: Any
@@ -5668,7 +5668,7 @@ class MetaData(HasSchemaAttr):
             sorted(self.tables.values(), key=lambda t: t.key)  # type: ignore
         )
 
-    if TYPE_CHECKING:
+    if False:
         # overload needed to work around mypy this mypy
         # https://github.com/python/mypy/issues/17093
         @overload

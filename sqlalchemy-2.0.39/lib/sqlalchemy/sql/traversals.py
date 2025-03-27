@@ -78,7 +78,7 @@ class HasShallowCopy(HasTraverseInternals):
 
     __slots__ = ()
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def _generated_shallow_copy_traversal(self, other: Self) -> None: ...
 

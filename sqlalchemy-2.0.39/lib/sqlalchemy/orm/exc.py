@@ -22,7 +22,7 @@ from .. import util
 from ..exc import MultipleResultsFound  # noqa
 from ..exc import NoResultFound  # noqa
 
-if TYPE_CHECKING:
+if False:
     from .interfaces import LoaderStrategy
     from .interfaces import MapperProperty
     from .state import InstanceState

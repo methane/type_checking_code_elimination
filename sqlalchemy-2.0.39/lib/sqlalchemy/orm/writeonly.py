@@ -56,7 +56,7 @@ from ..sql.dml import Insert
 from ..sql.dml import Update
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from . import QueryableAttribute
     from ._typing import _InstanceDict
     from .attributes import AttributeEventToken
@@ -189,7 +189,7 @@ class WriteOnlyAttributeImpl(
         else:
             return self.query_class(self, state)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def get_collection(
             self,
@@ -504,7 +504,7 @@ class AbstractCollectionWriter(Generic[_T]):
 
     def __init__(self, attr: WriteOnlyAttributeImpl, state: InstanceState[_T]):
         instance = state.obj()
-        if TYPE_CHECKING:
+        if False:
             assert instance
         self.instance = instance
         self.attr = attr

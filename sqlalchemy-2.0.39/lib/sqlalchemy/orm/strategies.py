@@ -61,7 +61,7 @@ from ..sql.selectable import LABEL_STYLE_TABLENAME_PLUS_COL
 from ..sql.selectable import Select
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from .mapper import Mapper
     from .relationships import RelationshipProperty
     from ..sql.elements import ColumnElement

@@ -816,7 +816,7 @@ class MutableDict(Mutable, Dict[_KT, _VT]):
         super().__setitem__(key, value)
         self.changed()
 
-    if TYPE_CHECKING:
+    if False:
         # from https://github.com/python/mypy/issues/14858
 
         @overload
@@ -845,7 +845,7 @@ class MutableDict(Mutable, Dict[_KT, _VT]):
         super().update(*a, **kw)
         self.changed()
 
-    if TYPE_CHECKING:
+    if False:
 
         @overload
         def pop(self, __key: _KT) -> _VT: ...

@@ -65,7 +65,7 @@ from ..util.typing import is_literal
 from ..util.typing import is_pep695
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _ColumnExpressionArgument
     from ._typing import _TypeEngineArgument
     from .operators import OperatorType
@@ -105,7 +105,7 @@ class HasExpressionLookup(TypeEngineMixin):
             other_comparator: TypeEngine.Comparator[Any],
         ) -> Tuple[OperatorType, TypeEngine[Any]]:
             othertype = other_comparator.type._type_affinity
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(self.type, HasExpressionLookup)
             lookup = self.type._expression_adaptations.get(
                 op, self._blank_dict
@@ -334,7 +334,7 @@ class Integer(HasExpressionLookup, TypeEngine[int]):
 
     __visit_name__ = "integer"
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.ro_memoized_property
         def _type_affinity(self) -> Type[Integer]: ...
@@ -436,14 +436,14 @@ class Numeric(HasExpressionLookup, TypeEngine[_N]):
 
     __visit_name__ = "numeric"
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.ro_memoized_property
         def _type_affinity(self) -> Type[Numeric[_N]]: ...
 
     _default_decimal_return_scale = 10
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self: Numeric[decimal.Decimal],
@@ -607,7 +607,7 @@ class Float(Numeric[_N]):
 
     scale = None
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self: Float[float],
@@ -1102,7 +1102,7 @@ class SchemaType(SchemaEventTarget, TypeEngineMixin):
             ),
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
 
@@ -2128,7 +2128,7 @@ class Interval(Emulated, _AbstractInterval, TypeDecorator[dt.timedelta]):
     def bind_processor(
         self, dialect: Dialect
     ) -> _BindProcessorType[dt.timedelta]:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self.impl_instance, DateTime)
         impl_processor = self.impl_instance.bind_processor(dialect)
         epoch = self.epoch
@@ -2160,7 +2160,7 @@ class Interval(Emulated, _AbstractInterval, TypeDecorator[dt.timedelta]):
     def result_processor(
         self, dialect: Dialect, coltype: Any
     ) -> _ResultProcessorType[dt.timedelta]:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self.impl_instance, DateTime)
         impl_processor = self.impl_instance.result_processor(dialect, coltype)
         epoch = self.epoch
@@ -3589,7 +3589,7 @@ class Uuid(Emulated, TypeEngine[_UUID_RETURN]):
 
     collation: Optional[str] = None
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self: Uuid[_python_UUID],
@@ -3747,7 +3747,7 @@ class UUID(Uuid[_UUID_RETURN], type_api.NativeForEmulated):
 
     __visit_name__ = "UUID"
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(self: UUID[_python_UUID], as_uuid: Literal[True] = ...): ...
 

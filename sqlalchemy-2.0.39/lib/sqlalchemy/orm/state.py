@@ -47,7 +47,7 @@ from .. import util
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _IdentityKeyType
     from ._typing import _InstanceDict
     from ._typing import _LoaderCallable
@@ -64,7 +64,7 @@ if TYPE_CHECKING:
     from ..ext.asyncio.session import async_session as _async_provider
     from ..ext.asyncio.session import AsyncSession
 
-if TYPE_CHECKING:
+if False:
     _sessions: weakref.WeakValueDictionary[int, Session]
 else:
     # late-populated by session.py
@@ -880,7 +880,7 @@ class InstanceState(interfaces.InspectionAttrInfo, Generic[_O]):
                 )
             if attr.key not in self.committed_state or is_userland:
                 if collection:
-                    if TYPE_CHECKING:
+                    if False:
                         assert is_collection_impl(attr)
                     if previous is NEVER_SET:
                         if attr.key in dict_:

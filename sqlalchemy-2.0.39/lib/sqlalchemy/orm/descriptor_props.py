@@ -58,7 +58,7 @@ from ..util.typing import is_fwd_ref
 from ..util.typing import is_pep593
 
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _InstanceDict
     from ._typing import _RegistryType
     from .attributes import History

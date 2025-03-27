@@ -31,7 +31,7 @@ from ..pool import ConnectionPoolEntry
 from ..sql import compiler
 from ..util import immutabledict
 
-if typing.TYPE_CHECKING:
+if False:
     from .base import Engine
     from .interfaces import _ExecuteOptions
     from .interfaces import _ParamStyle
@@ -822,7 +822,7 @@ def engine_from_config(
     url = options.pop("url")
     return create_engine(url, **options)
 
-if typing.TYPE_CHECKING:
+if False:
     @overload
     def create_pool_from_url(
         url: Union[str, URL],

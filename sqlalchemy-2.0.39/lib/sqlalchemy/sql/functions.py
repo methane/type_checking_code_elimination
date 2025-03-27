@@ -64,7 +64,7 @@ from .visitors import InternalTraversal
 from .. import util
 
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _ByArgument
     from ._typing import _ColumnExpressionArgument
     from ._typing import _ColumnExpressionOrLiteralArgument
@@ -488,7 +488,7 @@ class FunctionElement(Executable, ColumnElement[_T], FromClause, Generative):
         """
         return WithinGroup(self, *order_by)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def filter(self) -> Self: ...
 
@@ -949,7 +949,7 @@ class _FunctionGenerator:
         f.__names = list(self.__names) + [name]
         return f
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __call__(
             self, *c: Any, type_: _TypeEngineArgument[_T], **kwargs: Any
@@ -980,7 +980,7 @@ class _FunctionGenerator:
             self.__names[-1], packagenames=tuple(self.__names[0:-1]), *c, **o
         )
 
-    if TYPE_CHECKING:
+    if False:
         # START GENERATED FUNCTION ACCESSORS
 
         # code within this block is **programmatically,
@@ -1294,7 +1294,7 @@ class Function(FunctionElement[_T]):
 
     """
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self,
@@ -1587,7 +1587,7 @@ class ReturnTypeFromArgs(GenericFunction[_T]):
     # all non-generic types are removed from it, so reasons remain unclear for
     # why this does not work
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self,

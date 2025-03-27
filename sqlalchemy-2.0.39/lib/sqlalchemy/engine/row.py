@@ -38,7 +38,7 @@ if TYPE_CHECKING or not HAS_CYEXTENSION:
 else:
     from sqlalchemy.cyextension.resultproxy import BaseRow as BaseRow
 
-if TYPE_CHECKING:
+if False:
     from .result import _KeyType
     from .result import _ProcessorsType
     from .result import RMKeyView
@@ -210,7 +210,7 @@ class Row(BaseRow, Sequence[Any], Generic[_TP]):
 
     __hash__ = BaseRow.__hash__
 
-    if TYPE_CHECKING:
+    if False:
 
         @overload
         def __getitem__(self, index: int) -> Any: ...
@@ -353,7 +353,7 @@ class RowMapping(BaseRow, typing.Mapping["_KeyType", Any]):
 
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if False:
 
         def __getitem__(self, key: _KeyType) -> Any: ...
 

@@ -92,7 +92,7 @@ from ..util import IdentitySet
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _IdentityKeyType
     from ._typing import _InstanceDict
@@ -2109,7 +2109,7 @@ class Session(_SessionClassMethods, EventTarget):
             trans = self._autobegin_t()
         return trans._connection_for_bind(engine, execution_options)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _execute_internal(
             self,
@@ -2161,7 +2161,7 @@ class Session(_SessionClassMethods, EventTarget):
             compile_state_cls = CompileState._get_plugin_class_for_plugin(
                 statement, "orm"
             )
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(
                     compile_state_cls, context.AbstractORMCompileState
                 )
@@ -2242,7 +2242,7 @@ class Session(_SessionClassMethods, EventTarget):
         conn = self._connection_for_bind(bind)
 
         if _scalar_result and not compile_state_cls:
-            if TYPE_CHECKING:
+            if False:
                 params = cast(_CoreSingleExecuteParams, params)
             return conn.scalar(
                 statement, params or {}, execution_options=execution_options
@@ -2267,7 +2267,7 @@ class Session(_SessionClassMethods, EventTarget):
         else:
             return result
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execute(
             self,
@@ -2373,7 +2373,7 @@ class Session(_SessionClassMethods, EventTarget):
             _add_event=_add_event,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalar(
             self,
@@ -2422,7 +2422,7 @@ class Session(_SessionClassMethods, EventTarget):
             **kw,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalars(
             self,
@@ -2620,7 +2620,7 @@ class Session(_SessionClassMethods, EventTarget):
             else:
                 self.__binds[key] = bind
         else:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(insp, Inspectable)
 
             if isinstance(insp, TableClause):
@@ -2831,7 +2831,7 @@ class Session(_SessionClassMethods, EventTarget):
 
                 for obj in visitors.iterate(clause):
                     if obj in self.__binds:
-                        if TYPE_CHECKING:
+                        if False:
                             assert isinstance(obj, Table)
                         return self.__binds[obj]
 
@@ -2851,7 +2851,7 @@ class Session(_SessionClassMethods, EventTarget):
             f'{", ".join(context)} or this Session.'
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def query(self, _entity: _EntityType[_O]) -> Query[_O]: ...
 
@@ -3580,7 +3580,7 @@ class Session(_SessionClassMethods, EventTarget):
         self._deleted[state] = obj
 
         if head:
-            if TYPE_CHECKING:
+            if False:
                 assert cascade_states is not None
             for o, m, st_, dct_ in cascade_states:
                 self._delete_impl(st_, o, False)
@@ -5031,7 +5031,7 @@ class sessionmaker(_SessionClassMethods, Generic[_S]):
 
     class_: Type[_S]
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self,

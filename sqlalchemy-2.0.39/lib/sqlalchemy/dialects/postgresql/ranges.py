@@ -39,7 +39,7 @@ from ...sql.type_api import TypeEngine
 from ...util import py310
 from ...util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ...sql.elements import ColumnElement
     from ...sql.type_api import _TE
     from ...sql.type_api import TypeEngineMixin
@@ -85,7 +85,7 @@ class Range(Generic[_T]):
     upper: Optional[_T] = None
     """the upper bound"""
 
-    if TYPE_CHECKING:
+    if False:
         bounds: _BoundsType = dataclasses.field(default="[)")
         empty: bool = dataclasses.field(default=False)
     else:
@@ -745,7 +745,7 @@ class AbstractRange(sqltypes.TypeEngine[_T]):
 
     __abstract__ = True
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
 

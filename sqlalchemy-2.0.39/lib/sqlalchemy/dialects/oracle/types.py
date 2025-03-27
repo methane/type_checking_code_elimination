@@ -17,7 +17,7 @@ from ...sql import sqltypes
 from ...types import NVARCHAR
 from ...types import VARCHAR
 
-if TYPE_CHECKING:
+if False:
     from ...engine.interfaces import Dialect
     from ...sql.type_api import _LiteralProcessorType
 

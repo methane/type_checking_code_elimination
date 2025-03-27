@@ -18,7 +18,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Type
 
-if typing.TYPE_CHECKING:
+if False:
     from .result import _KeyType
     from .result import _ProcessorsType
     from .result import _RawRowType

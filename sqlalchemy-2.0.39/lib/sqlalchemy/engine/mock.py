@@ -20,7 +20,7 @@ from . import url as _url
 from .. import util
 
 
-if typing.TYPE_CHECKING:
+if False:
     from .base import Engine
     from .interfaces import _CoreAnyExecuteParams
     from .interfaces import CoreExecuteOptionsParameter

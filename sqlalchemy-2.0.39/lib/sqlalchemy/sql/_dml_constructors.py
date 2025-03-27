@@ -13,7 +13,7 @@ from .dml import Delete
 from .dml import Insert
 from .dml import Update
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _DMLTableArgument
 
 

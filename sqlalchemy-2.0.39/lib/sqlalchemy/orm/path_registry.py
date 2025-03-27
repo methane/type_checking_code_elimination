@@ -33,7 +33,7 @@ from .. import util
 from ..sql import visitors
 from ..sql.cache_key import HasCacheKey
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _InternalEntityType
     from .interfaces import StrategizedProperty
     from .mapper import Mapper
@@ -182,7 +182,7 @@ class PathRegistry(HasCacheKey):
     def __hash__(self) -> int:
         return id(self)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __getitem__(self, entity: _StrPathToken) -> TokenRegistry: ...
 
@@ -314,7 +314,7 @@ class PathRegistry(HasCacheKey):
         p = cls._deserialize_path(path)
         return cls.coerce(p)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         @classmethod
         def per_mapper(cls, mapper: Mapper[Any]) -> CachingEntityRegistry: ...
@@ -388,7 +388,7 @@ class RootRegistry(CreatesToken):
         self, entity: Any
     ) -> Union[TokenRegistry, AbstractEntityRegistry]:
         if entity in PathToken._intern:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(entity, _StrPathToken)
             return TokenRegistry(self, PathToken._intern[entity])
         else:
@@ -459,7 +459,7 @@ class TokenRegistry(PathRegistry):
             yield self
             return
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(parent, AbstractEntityRegistry)
         if not parent.is_aliased_class:
             for mp_ent in parent.mapper.iterate_to_root():
@@ -487,7 +487,7 @@ class TokenRegistry(PathRegistry):
             yield self.natural_path
             return
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(parent, AbstractEntityRegistry)
         for mp_ent in parent.mapper.iterate_to_root():
             yield TokenRegistry(parent.parent[mp_ent], self.token).natural_path
@@ -614,7 +614,7 @@ class PropRegistry(PathRegistry):
 
         self.has_entity = prop._links_to_entity
         if prop._is_relationship:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(prop, RelationshipProperty)
             self.entity = prop.entity
             self.mapper = prop.mapper
@@ -800,7 +800,7 @@ class CachingEntityRegistry(AbstractEntityRegistry):
         __getitem__ = _getitem
 
 
-if TYPE_CHECKING:
+if False:
 
     def path_is_entity(
         path: PathRegistry,

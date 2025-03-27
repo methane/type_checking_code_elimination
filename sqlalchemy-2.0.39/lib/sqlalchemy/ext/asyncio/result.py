@@ -32,7 +32,7 @@ from ...util.concurrency import greenlet_spawn
 from ...util.typing import Literal
 from ...util.typing import Self
 
-if TYPE_CHECKING:
+if False:
     from ...engine import CursorResult
     from ...engine.result import _KeyIndexType
     from ...engine.result import _UniqueFilterType
@@ -324,7 +324,7 @@ class AsyncResult(_WithKeys, AsyncCommon[Row[_TP]]):
         """
         return await greenlet_spawn(self._only_one_row, True, False, False)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalar_one(self: AsyncResult[Tuple[_T]]) -> _T: ...
 
@@ -346,7 +346,7 @@ class AsyncResult(_WithKeys, AsyncCommon[Row[_TP]]):
         """
         return await greenlet_spawn(self._only_one_row, True, True, True)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalar_one_or_none(
             self: AsyncResult[Tuple[_T]],
@@ -401,7 +401,7 @@ class AsyncResult(_WithKeys, AsyncCommon[Row[_TP]]):
         """
         return await greenlet_spawn(self._only_one_row, True, True, False)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalar(self: AsyncResult[Tuple[_T]]) -> Optional[_T]: ...
 
@@ -447,7 +447,7 @@ class AsyncResult(_WithKeys, AsyncCommon[Row[_TP]]):
 
         return await greenlet_spawn(FrozenResult, self)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalars(
             self: AsyncResult[Tuple[_T]], index: Literal[0]
@@ -781,7 +781,7 @@ class AsyncTupleResult(AsyncCommon[_R], util.TypingOnly):
 
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if False:
 
         async def partitions(
             self, size: Optional[int] = None

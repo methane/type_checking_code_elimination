@@ -28,7 +28,7 @@ from ..engine import interfaces
 from ..engine import URL
 from ..sql.type_api import TypeEngine
 
-if typing.TYPE_CHECKING:
+if False:
     from ..engine.interfaces import IsolationLevel
 
 

@@ -18,7 +18,7 @@ from ...sql import sqltypes
 from ...sql import type_api
 from ...util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ...engine.interfaces import Dialect
     from ...sql.operators import OperatorType
     from ...sql.type_api import _LiteralProcessorType
@@ -33,7 +33,7 @@ class PGUuid(sqltypes.UUID[sqltypes._UUID_RETURN]):
     render_bind_cast = True
     render_literal_cast = True
 
-    if TYPE_CHECKING:
+    if False:
 
         @overload
         def __init__(
@@ -57,7 +57,7 @@ class _NetworkAddressTypeMixin:
     def coerce_compared_value(
         self, op: Optional[OperatorType], value: Any
     ) -> TypeEngine[Any]:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self, TypeEngine)
         return self
 

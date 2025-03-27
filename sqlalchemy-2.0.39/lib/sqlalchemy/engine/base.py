@@ -45,7 +45,7 @@ from .. import util
 from ..sql import compiler
 from ..sql import util as sql_util
 
-if typing.TYPE_CHECKING:
+if False:
     from . import CursorResult
     from . import ScalarResult
     from .interfaces import _AnyExecuteParams
@@ -235,7 +235,7 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
     def __exit__(self, type_: Any, value: Any, traceback: Any) -> None:
         self.close()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execution_options(
             self,
@@ -1263,7 +1263,7 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
             self._dbapi_connection = None
         self.__can_reconnect = False
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalar(
             self,
@@ -1311,7 +1311,7 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
                 execution_options or NO_OPTIONS,
             )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalars(
             self,
@@ -1355,7 +1355,7 @@ class Connection(ConnectionEventsTarget, inspection.Inspectable["Inspector"]):
             statement, parameters, execution_options=execution_options
         ).scalars()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execute(
             self,
@@ -3034,7 +3034,7 @@ class Engine(
         self._execution_options = self._execution_options.union(opt)
         self.dialect.set_engine_execution_options(self, opt)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execution_options(
             self,

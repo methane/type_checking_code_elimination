@@ -234,7 +234,7 @@ class _HasEventsDispatch(Generic[_ET]):
 
     """
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def __getattr__(self, name: str) -> _InstanceLevelDispatch[_ET]: ...
 
@@ -437,7 +437,7 @@ class dispatcher(Generic[_ET]):
         self.dispatch = events.dispatch
         self.events = events
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __get__(
             self, obj: Literal[None], cls: Type[Any]

@@ -37,7 +37,7 @@ from .. import util
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if TYPE_CHECKING:
+if False:
     from ..engine.interfaces import DBAPIConnection
     from ..engine.interfaces import DBAPICursor
     from ..engine.interfaces import Dialect
@@ -707,7 +707,7 @@ class _ConnectionRecord(ConnectionPoolEntry):
 
     @classmethod
     def checkout(cls, pool: Pool) -> _ConnectionFairy:
-        if TYPE_CHECKING:
+        if False:
             rec = cast(_ConnectionRecord, pool._do_get())
         else:
             rec = pool._do_get()
@@ -1071,7 +1071,7 @@ class PoolProxiedConnection(ManagesConnection):
 
     __slots__ = ()
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def commit(self) -> None: ...
 

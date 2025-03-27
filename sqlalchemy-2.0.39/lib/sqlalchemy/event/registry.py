@@ -35,7 +35,7 @@ import weakref
 from .. import exc
 from .. import util
 
-if typing.TYPE_CHECKING:
+if False:
     from .attr import RefCollection
     from .base import dispatcher
 

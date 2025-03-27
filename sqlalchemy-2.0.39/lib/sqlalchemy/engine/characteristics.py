@@ -11,7 +11,7 @@ import typing
 from typing import Any
 from typing import ClassVar
 
-if typing.TYPE_CHECKING:
+if False:
     from .base import Connection
     from .interfaces import DBAPIConnection
     from .interfaces import Dialect

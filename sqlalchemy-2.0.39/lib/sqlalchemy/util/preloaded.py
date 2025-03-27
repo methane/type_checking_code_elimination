@@ -21,7 +21,7 @@ from typing import TypeVar
 _FN = TypeVar("_FN", bound=Callable[..., Any])
 
 
-if TYPE_CHECKING:
+if False:
     from sqlalchemy import dialects as _dialects
     from sqlalchemy import orm as _orm
     from sqlalchemy.engine import cursor as _engine_cursor
@@ -145,6 +145,6 @@ preload_module = _reg.preload_module
 import_prefix = _reg.import_prefix
 
 # this appears to do absolutely nothing for any version of mypy
-# if TYPE_CHECKING:
+# if False:
 #    def __getattr__(key: str) -> ModuleType:
 #        ...

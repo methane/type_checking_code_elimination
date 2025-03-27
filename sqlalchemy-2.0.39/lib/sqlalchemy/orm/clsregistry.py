@@ -45,7 +45,7 @@ from .. import util
 from ..sql.schema import _get_table_key
 from ..util.typing import CallableReference
 
-if TYPE_CHECKING:
+if False:
     from .relationships import RelationshipProperty
     from ..sql.schema import MetaData
     from ..sql.schema import Table
@@ -524,7 +524,7 @@ class _class_resolver:
             if isinstance(rval, _GetColumns):
                 return rval.cls
             else:
-                if TYPE_CHECKING:
+                if False:
                     assert isinstance(rval, (type, Table, _ModNS))
                 return rval
 

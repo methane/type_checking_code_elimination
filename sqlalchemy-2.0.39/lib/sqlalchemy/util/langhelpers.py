@@ -406,7 +406,7 @@ def _inspect_func_args(fn):
         )
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def get_cls_kwargs(
         cls: type,
@@ -1095,7 +1095,7 @@ class generic_fn_descriptor(Generic[_T_co]):
         self.__doc__ = doc or fget.__doc__
         self.__name__ = fget.__name__
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __get__(self: _GFD, obj: None, cls: Any) -> _GFD: ...
 
@@ -1105,7 +1105,7 @@ class generic_fn_descriptor(Generic[_T_co]):
     def __get__(self: _GFD, obj: Any, cls: Any) -> Union[_GFD, _T_co]:
         raise NotImplementedError()
 
-    if TYPE_CHECKING:
+    if False:
 
         def __set__(self, instance: Any, value: Any) -> None: ...
 
@@ -1166,7 +1166,7 @@ class _memoized_property(generic_fn_descriptor[_T_co]):
 # way to achieve this.
 # additional issues, RO properties:
 # https://github.com/python/mypy/issues/12440
-if TYPE_CHECKING:
+if False:
     # allow memoized and non-memoized to be freely mixed by having them
     # be the same class
     memoized_property = generic_fn_descriptor
@@ -1247,7 +1247,7 @@ class HasMemoized:
             self.__doc__ = doc or fget.__doc__
             self.__name__ = fget.__name__
 
-        if TYPE_CHECKING:
+        if False:
             @overload
             def __get__(self: _MA, obj: None, cls: Any) -> _MA: ...
 
@@ -1284,7 +1284,7 @@ class HasMemoized:
         return update_wrapper(oneshot, fn)  # type: ignore
 
 
-if TYPE_CHECKING:
+if False:
     HasMemoized_ro_memoized_attribute = property
 else:
     HasMemoized_ro_memoized_attribute = HasMemoized.memoized_attribute
@@ -1699,7 +1699,7 @@ class _FastIntFlag(metaclass=_IntFlagMeta):
     """
 
 
-if TYPE_CHECKING:
+if False:
     from enum import IntFlag
 
     FastIntFlag = IntFlag

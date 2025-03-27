@@ -32,7 +32,7 @@ from .selectable import TableClause
 from .selectable import TableSample
 from .selectable import Values
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _FromClauseArgument
     from ._typing import _OnClauseArgument
     from ._typing import _SelectStatementForCompoundArgument
@@ -110,7 +110,7 @@ def cte(
 _TypedSelectable = Union["Select[_TP]", "CompoundSelect[_TP]"]
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def except_(
         *selects: _TypedSelectable[_TP],
@@ -138,7 +138,7 @@ def except_(
     return CompoundSelect._create_except(*selects)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def except_all(
         *selects: _TypedSelectable[_TP],
@@ -211,7 +211,7 @@ def exists(
     return Exists(__argument)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def intersect(
         *selects: _TypedSelectable[_TP],
@@ -239,7 +239,7 @@ def intersect(
     return CompoundSelect._create_intersect(*selects)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def intersect_all(
         *selects: _TypedSelectable[_TP],
@@ -382,7 +382,7 @@ def outerjoin(
     return Join(left, right, onclause, isouter=True, full=full)
 
 
-if TYPE_CHECKING:
+if False:
     # START OVERLOADED FUNCTIONS select Select 1-10
 
     # code within this block is **programmatically,
@@ -614,7 +614,7 @@ def tablesample(
     return TableSample._factory(selectable, sampling, name=name, seed=seed)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def union(
         *selects: _TypedSelectable[_TP],
@@ -649,7 +649,7 @@ def union(
     return CompoundSelect._create_union(*selects)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def union_all(
         *selects: _TypedSelectable[_TP],

@@ -93,7 +93,7 @@ from ..util.typing import is_origin_of_cls
 from ..util.typing import Literal
 from ..util.typing import Protocol
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _IdentityKeyType
     from ._typing import _InternalEntityType
@@ -1201,7 +1201,7 @@ class AliasedInsp(
             )
         )
 
-    if TYPE_CHECKING:
+    if False:
         # establish compatibility with the _ORMAdapterProto protocol,
         # which in turn is compatible with _CoreAdapterProto.
 
@@ -1808,7 +1808,7 @@ class _ORMJoin(expression.Join):
         self._right_memo = _right_memo
 
         if isinstance(onclause, attributes.QueryableAttribute):
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(
                     onclause.comparator, RelationshipProperty.Comparator
                 )

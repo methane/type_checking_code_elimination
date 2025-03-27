@@ -238,7 +238,7 @@ class Queue(QueueCommon[_T]):
 
 
 class AsyncAdaptedQueue(QueueCommon[_T]):
-    if typing.TYPE_CHECKING:
+    if False:
 
         @staticmethod
         def await_(coroutine: Awaitable[Any]) -> _T: ...

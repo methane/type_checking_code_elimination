@@ -68,7 +68,7 @@ from ..sql.elements import quoted_name
 from ..util.typing import Final
 from ..util.typing import Literal
 
-if typing.TYPE_CHECKING:
+if False:
     from types import ModuleType
 
     from .base import Engine
@@ -1332,7 +1332,7 @@ class DefaultExecutionContext(ExecutionContext):
 
         if ii or iu or id_:
             dml_statement = compiled.compile_state.statement  # type: ignore
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(dml_statement, UpdateBase)
             self.is_crud = True
             self._is_explicit_returning = ier = bool(dml_statement._returning)
@@ -1641,13 +1641,13 @@ class DefaultExecutionContext(ExecutionContext):
 
     @util.memoized_property
     def postfetch_cols(self) -> Optional[Sequence[Column[Any]]]:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self.compiled, SQLCompiler)
         return self.compiled.postfetch
 
     @util.memoized_property
     def prefetch_cols(self) -> Optional[Sequence[Column[Any]]]:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self.compiled, SQLCompiler)
         if self.isinsert:
             return self.compiled.insert_prefetch

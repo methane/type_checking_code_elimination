@@ -44,7 +44,7 @@ class ReversibleProxy(Generic[_PT]):
     ] = {}
     __slots__ = ("__weakref__",)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _assign_proxied(self, target: _PT) -> _PT: ...
 
@@ -76,7 +76,7 @@ class ReversibleProxy(Generic[_PT]):
     def _regenerate_proxy_for_target(cls, target: _PT) -> Self:
         raise NotImplementedError()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         @classmethod
         def _retrieve_proxy_for_target(

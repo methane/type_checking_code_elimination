@@ -54,7 +54,7 @@ from ..sql.selectable import LABEL_STYLE_TABLENAME_PLUS_COL
 from ..sql.selectable import SelectState
 from ..util import EMPTY_DICT
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _IdentityKeyType
     from .base import LoaderCallableStatus
     from .interfaces import ORMOption

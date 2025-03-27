@@ -71,7 +71,7 @@ from ..util.typing import is_literal
 from ..util.typing import Protocol
 from ..util.typing import TypedDict
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _ClassDict
     from ._typing import _RegistryType
     from .base import Mapped
@@ -1880,7 +1880,7 @@ class _ClassScanMapperConfig(_MapperConfig):
                             "class with no table."
                         )
 
-                    if TYPE_CHECKING:
+                    if False:
                         assert isinstance(inherited_table, Table)
 
                     inherited_table.append_column(col)

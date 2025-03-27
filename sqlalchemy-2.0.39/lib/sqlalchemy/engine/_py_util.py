@@ -14,7 +14,7 @@ from typing import Tuple
 
 from .. import exc
 
-if typing.TYPE_CHECKING:
+if False:
     from .interfaces import _CoreAnyExecuteParams
     from .interfaces import _CoreMultiExecuteParams
     from .interfaces import _DBAPIAnyExecuteParams

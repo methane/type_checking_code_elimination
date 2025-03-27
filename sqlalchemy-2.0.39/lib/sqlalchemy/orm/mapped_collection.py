@@ -33,7 +33,7 @@ from ..util.langhelpers import Missing
 from ..util.langhelpers import MissingOr
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from . import AttributeEventToken
     from . import Mapper
     from .collections import CollectionAdapter

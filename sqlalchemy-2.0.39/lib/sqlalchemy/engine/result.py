@@ -51,7 +51,7 @@ if typing.TYPE_CHECKING or not HAS_CYEXTENSION:
 else:
     from sqlalchemy.cyextension.resultproxy import tuplegetter as tuplegetter
 
-if typing.TYPE_CHECKING:
+if False:
     from ..sql.elements import SQLCoreOperations
     from ..sql.type_api import _ResultProcessorType
 
@@ -113,7 +113,7 @@ class ResultMetaData:
     def _for_freeze(self) -> ResultMetaData:
         raise NotImplementedError()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _key_fallback(
             self, key: Any, err: Optional[Exception], raiseerr: Literal[True] = ...
@@ -723,7 +723,7 @@ class ResultInternal(InPlaceGenerative, Generic[_R]):
 
         return manyrows
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _only_one_row(
             self,
@@ -1123,7 +1123,7 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
         """
         return self._column_slices(col_expressions)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalars(self: Result[Tuple[_T]]) -> ScalarResult[_T]: ...
 
@@ -1443,7 +1443,7 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
             raise_for_second_row=True, raise_for_none=False, scalar=False
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalar_one(self: Result[Tuple[_T]]) -> _T: ...
 
@@ -1467,7 +1467,7 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
             raise_for_second_row=True, raise_for_none=True, scalar=True
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalar_one_or_none(self: Result[Tuple[_T]]) -> Optional[_T]: ...
 
@@ -1524,7 +1524,7 @@ class Result(_WithKeys, ResultInternal[Row[_TP]]):
             raise_for_second_row=True, raise_for_none=True, scalar=False
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def scalar(self: Result[Tuple[_T]]) -> Optional[_T]: ...
 
@@ -1828,7 +1828,7 @@ class TupleResult(FilterResult[_R], util.TypingOnly):
 
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if False:
 
         def partitions(
             self, size: Optional[int] = None

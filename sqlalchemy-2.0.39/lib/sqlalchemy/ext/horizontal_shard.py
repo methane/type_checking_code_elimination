@@ -51,7 +51,7 @@ from ..orm.session import Session
 from ..util.typing import Protocol
 from ..util.typing import Self
 
-if TYPE_CHECKING:
+if False:
     from ..engine.base import Connection
     from ..engine.base import Engine
     from ..engine.base import OptionEngine

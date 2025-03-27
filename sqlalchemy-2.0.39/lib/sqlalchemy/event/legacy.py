@@ -24,7 +24,7 @@ from .registry import _ListenerFnType
 from .. import util
 from ..util.compat import FullArgSpec
 
-if typing.TYPE_CHECKING:
+if False:
     from .attr import _ClsLevelDispatch
     from .base import _HasEventsDispatch
 

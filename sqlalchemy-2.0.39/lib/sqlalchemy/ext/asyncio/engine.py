@@ -44,7 +44,7 @@ from ...util.concurrency import greenlet_spawn
 from ...util.typing import Concatenate
 from ...util.typing import ParamSpec
 
-if TYPE_CHECKING:
+if False:
     from ...engine.cursor import CursorResult
     from ...engine.interfaces import _CoreAnyExecuteParams
     from ...engine.interfaces import _CoreSingleExecuteParams
@@ -405,7 +405,7 @@ class AsyncConnection(
         else:
             return None
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def execution_options(
             self,
@@ -515,7 +515,7 @@ class AsyncConnection(
 
         return await _ensure_sync_result(result, self.exec_driver_sql)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def stream(
             self,
@@ -601,7 +601,7 @@ class AsyncConnection(
             task = asyncio.create_task(ar.close())
             await asyncio.shield(task)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def execute(
             self,
@@ -667,7 +667,7 @@ class AsyncConnection(
         )
         return await _ensure_sync_result(result, self.execute)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalar(
             self,
@@ -708,7 +708,7 @@ class AsyncConnection(
         )
         return result.scalar()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalars(
             self,
@@ -750,7 +750,7 @@ class AsyncConnection(
         )
         return result.scalars()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def stream_scalars(
             self,
@@ -1099,7 +1099,7 @@ class AsyncEngine(ProxyComparable[Engine], AsyncConnectable):
         """
         return await greenlet_spawn(self.sync_engine.raw_connection)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def execution_options(
             self,
@@ -1425,7 +1425,7 @@ class AsyncTransaction(
         await greenlet_spawn(self._proxied.__exit__, type_, value, traceback)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _get_sync_engine_or_connection(async_engine: AsyncEngine) -> Engine: ...
 

@@ -93,7 +93,7 @@ from ..util.typing import Literal
 from ..util.typing import Self
 from ..util.typing import TypeGuard
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _ExternalEntityType
     from ._typing import _InstanceDict
@@ -346,7 +346,7 @@ class QueryableAttribute(
 
         ce = self.comparator.__clause_element__()
         try:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(ce, ColumnElement)
             anno = ce._annotate
         except AttributeError as ae:
@@ -415,7 +415,7 @@ class QueryableAttribute(
     def and_(
         self, *clauses: _ColumnExpressionArgument[bool]
     ) -> QueryableAttribute[bool]:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self.comparator, RelationshipProperty.Comparator)
 
         exprs = tuple(
@@ -541,7 +541,7 @@ class InstrumentedAttribute(QueryableAttribute[_T_co]):
     def __delete__(self, instance: object) -> None:
         self.impl.delete(instance_state(instance), instance_dict(instance))
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __get__(
             self, instance: None, owner: Any
@@ -1532,7 +1532,7 @@ class HasCollectionAdapter:
     ) -> None:
         raise NotImplementedError()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def get_collection(
             self,
@@ -1587,7 +1587,7 @@ class HasCollectionAdapter:
         raise NotImplementedError()
 
 
-if TYPE_CHECKING:
+if False:
 
     def _is_collection_attribute_impl(
         impl: AttributeImpl,
@@ -1867,7 +1867,7 @@ class CollectionAttributeImpl(HasCollectionAdapter, AttributeImpl):
             ), "Collection was loaded during event handling."
             state._get_pending_mutation(self.key).append(value)
         else:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(collection, CollectionAdapter)
             collection.append_with_event(value, initiator)
 
@@ -1889,7 +1889,7 @@ class CollectionAttributeImpl(HasCollectionAdapter, AttributeImpl):
             ), "Collection was loaded during event handling."
             state._get_pending_mutation(self.key).remove(value)
         else:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(collection, CollectionAdapter)
             collection.remove_with_event(value, initiator)
 
@@ -2040,7 +2040,7 @@ class CollectionAttributeImpl(HasCollectionAdapter, AttributeImpl):
 
         return user_data
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def get_collection(
             self,
@@ -2693,7 +2693,7 @@ def init_state_collection(
     """
     attr = state.manager[key].impl
 
-    if TYPE_CHECKING:
+    if False:
         assert isinstance(attr, HasCollectionAdapter)
 
     old = dict_.pop(key, None)  # discard old collection

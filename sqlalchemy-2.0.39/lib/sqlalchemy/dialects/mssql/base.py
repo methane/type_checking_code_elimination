@@ -1033,7 +1033,7 @@ from ...types import VARCHAR
 from ...util import update_wrapper
 from ...util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ...sql.dml import DMLState
     from ...sql.selectable import TableClause
 
@@ -1606,7 +1606,7 @@ class MSUUid(sqltypes.Uuid):
 class UNIQUEIDENTIFIER(sqltypes.Uuid[sqltypes._UUID_RETURN]):
     __visit_name__ = "UNIQUEIDENTIFIER"
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __init__(
             self: UNIQUEIDENTIFIER[_python_UUID], as_uuid: Literal[True] = ...
@@ -1880,7 +1880,7 @@ class MSExecutionContext(default.DefaultExecutionContext):
         """Activate IDENTITY_INSERT if needed."""
 
         if self.isinsert:
-            if TYPE_CHECKING:
+            if False:
                 assert is_sql_compiler(self.compiled)
                 assert isinstance(self.compiled.compile_state, DMLState)
                 assert isinstance(
@@ -1964,7 +1964,7 @@ class MSExecutionContext(default.DefaultExecutionContext):
             )
 
         if self._enable_identity_insert:
-            if TYPE_CHECKING:
+            if False:
                 assert is_sql_compiler(self.compiled)
                 assert isinstance(self.compiled.compile_state, DMLState)
                 assert isinstance(

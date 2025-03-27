@@ -47,7 +47,7 @@ from .elements import WithinGroup
 from .functions import FunctionElement
 from ..util.typing import Literal
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _ByArgument
     from ._typing import _ColumnExpressionArgument
     from ._typing import _ColumnExpressionOrLiteralArgument
@@ -442,7 +442,7 @@ def outparam(
     return BindParameter(key, None, type_=type_, unique=False, isoutparam=True)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def not_(clause: BinaryExpression[_T]) -> BinaryExpression[_T]: ...
 

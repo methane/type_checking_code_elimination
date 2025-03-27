@@ -41,7 +41,7 @@ from .. import util
 from ..util.typing import Literal
 from ..util.typing import Self
 
-if TYPE_CHECKING:
+if False:
     from .base import _EntityNamespace
     from .visitors import _TraverseInternalsType
 
@@ -62,7 +62,7 @@ class SupportsAnnotations(ExternallyTraversible):
     def _annotate(self, values: _AnnotationDict) -> Self:
         raise NotImplementedError()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _deannotate(
             self,
@@ -117,7 +117,7 @@ class SupportsWrappingAnnotations(SupportsAnnotations):
 
     _constructor: Callable[..., SupportsWrappingAnnotations]
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.ro_non_memoized_property
         def entity_namespace(self) -> _EntityNamespace: ...
@@ -136,7 +136,7 @@ class SupportsWrappingAnnotations(SupportsAnnotations):
         """
         return Annotated._as_annotated_instance(self, values)  # type: ignore
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _deannotate(
             self,
@@ -208,7 +208,7 @@ class SupportsCloneAnnotations(SupportsWrappingAnnotations):
         new.__dict__.pop("_generate_cache_key", None)
         return new
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _deannotate(
             self,
@@ -309,7 +309,7 @@ class Annotated(SupportsAnnotations):
         clone._annotations = util.immutabledict(values)
         return clone
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _deannotate(
             self,
@@ -481,7 +481,7 @@ def _deep_annotate(
     return element
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _deep_deannotate(
         element: Literal[None], values: Optional[Sequence[str]] = None

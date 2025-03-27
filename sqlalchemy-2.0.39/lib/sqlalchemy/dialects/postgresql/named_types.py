@@ -24,7 +24,7 @@ from ...sql.base import _NoArg
 from ...sql.ddl import InvokeCreateDDLBase
 from ...sql.ddl import InvokeDropDDLBase
 
-if TYPE_CHECKING:
+if False:
     from ...sql._typing import _TypeEngineArgument
 
 

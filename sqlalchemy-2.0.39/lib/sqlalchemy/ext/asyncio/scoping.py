@@ -32,7 +32,7 @@ from ...util import ScopedRegistry
 from ...util import warn
 from ...util import warn_deprecated
 
-if TYPE_CHECKING:
+if False:
     from .engine import AsyncConnection
     from .result import AsyncResult
     from .result import AsyncScalarResult
@@ -526,7 +526,7 @@ class async_scoped_session(Generic[_AS]):
 
         return await self._proxied.delete(instance)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def execute(
             self,
@@ -1004,7 +1004,7 @@ class async_scoped_session(Generic[_AS]):
 
         return await self._proxied.rollback()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalar(
             self,
@@ -1058,7 +1058,7 @@ class async_scoped_session(Generic[_AS]):
             **kw,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def scalars(
             self,
@@ -1200,7 +1200,7 @@ class async_scoped_session(Generic[_AS]):
             execution_options=execution_options,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def stream(
             self,
@@ -1251,7 +1251,7 @@ class async_scoped_session(Generic[_AS]):
             **kw,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         async def stream_scalars(
             self,

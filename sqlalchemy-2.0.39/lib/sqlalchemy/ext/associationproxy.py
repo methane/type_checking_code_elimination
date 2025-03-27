@@ -66,7 +66,7 @@ from ..util.typing import Self
 from ..util.typing import SupportsIndex
 from ..util.typing import SupportsKeysAndGetItem
 
-if typing.TYPE_CHECKING:
+if False:
     from ..orm.interfaces import MapperProperty
     from ..orm.interfaces import PropComparator
     from ..orm.mapper import Mapper
@@ -415,7 +415,7 @@ class AssociationProxy(
             self._has_dataclass_arguments = False
             self._attribute_options = _DEFAULT_ATTRIBUTE_OPTIONS
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __get__(
             self, instance: Literal[None], owner: Literal[None]
@@ -857,7 +857,7 @@ class AssociationProxyInstance(SQLORMOperations[_T]):
     def info(self) -> _InfoType:
         return self.parent.info
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def get(self: _Self, obj: Literal[None]) -> _Self: ...
 
@@ -1379,7 +1379,7 @@ class _AssociationCollection(Generic[_IT]):
         self.setter = setter
         self.parent = parent
 
-    if typing.TYPE_CHECKING:
+    if False:
         col: Collection[_IT]
     else:
         col = property(lambda self: self.lazy_collection())
@@ -1427,7 +1427,7 @@ class _AssociationList(_AssociationSingleItem[_T], MutableSequence[_T]):
     def _set(self, object_: Any, value: _T) -> None:
         self.setter(object_, value)
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def __getitem__(self, index: int) -> _T: ...
 
@@ -1442,7 +1442,7 @@ class _AssociationList(_AssociationSingleItem[_T], MutableSequence[_T]):
         else:
             return [self._get(member) for member in self.col[index]]
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def __setitem__(self, index: int, value: _T) -> None: ...
 
@@ -1485,7 +1485,7 @@ class _AssociationList(_AssociationSingleItem[_T], MutableSequence[_T]):
                 for i, item in zip(rng, value):
                     self._set(self.col[i], item)
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def __delitem__(self, index: int) -> None: ...
 
@@ -1615,7 +1615,7 @@ class _AssociationList(_AssociationSingleItem[_T], MutableSequence[_T]):
             self.extend(list(self) * (n - 1))
         return self
 
-    if typing.TYPE_CHECKING:
+    if False:
         # TODO: no idea how to do this without separate "stub"
         def index(
             self, value: Any, start: int = ..., stop: int = ...
@@ -1694,7 +1694,7 @@ class _AssociationDict(_AssociationCollection[_VT], MutableMapping[_KT, _VT]):
     def __repr__(self) -> str:
         return repr(dict(self))
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def get(self, __key: _KT) -> Optional[_VT]: ...
 
@@ -1730,7 +1730,7 @@ class _AssociationDict(_AssociationCollection[_VT], MutableMapping[_KT, _VT]):
     def values(self) -> ValuesView[_VT]:
         return ValuesView(self)
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def pop(self, __key: _KT) -> _VT: ...
 
@@ -1747,7 +1747,7 @@ class _AssociationDict(_AssociationCollection[_VT], MutableMapping[_KT, _VT]):
         item = self.col.popitem()
         return (item[0], self._get(item[1]))
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def update(
             self, __m: SupportsKeysAndGetItem[_KT, _VT], **kwargs: _VT

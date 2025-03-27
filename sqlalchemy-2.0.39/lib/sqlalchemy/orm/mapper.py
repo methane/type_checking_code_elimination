@@ -90,7 +90,7 @@ from ..util import HasMemoized
 from ..util import HasMemoized_ro_memoized_attribute
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from ._typing import _IdentityKeyType
     from ._typing import _InstanceDict
     from ._typing import _ORMColumnExprArgument

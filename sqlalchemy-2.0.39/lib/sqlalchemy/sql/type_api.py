@@ -44,7 +44,7 @@ from ..util.typing import TypedDict
 from ..util.typing import TypeGuard
 
 # these are back-assigned by sqltypes.
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _TypeEngineArgument
     from .elements import BindParameter
     from .elements import ColumnElement
@@ -187,7 +187,7 @@ class TypeEngine(Visitable, Generic[_T]):
         def __reduce__(self) -> Any:
             return self.__class__, (self.expr,)
 
-        if TYPE_CHECKING:
+        if False:
             @overload
             def operate(
                 self,
@@ -1012,7 +1012,7 @@ class TypeEngine(Visitable, Generic[_T]):
             and self.__dict__[k] is not None
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
 
@@ -1109,7 +1109,7 @@ class TypeEngineMixin:
 
     __slots__ = ()
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.memoized_property
         def _static_cache_key(
@@ -1430,7 +1430,7 @@ class Emulated(TypeEngineMixin):
         """
         return super().adapt(impltype, **kw)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def adapt(self, cls: Type[_TE], **kw: Any) -> _TE: ...
 
@@ -1508,7 +1508,7 @@ class NativeForEmulated(TypeEngineMixin):
         return cls(**kw)  # type: ignore
 
     # dmypy seems to crash with this, on repeated runs with changes
-    # if TYPE_CHECKING:
+    # if False:
     #    def __init__(self, **kw: Any):
     #        ...
 
@@ -1734,7 +1734,7 @@ class TypeDecorator(SchemaEventTarget, ExternalType, TypeEngine[_T]):
         def operate(
             self, op: OperatorType, *other: Any, **kwargs: Any
         ) -> ColumnElement[_CT]:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(self.expr.type, TypeDecorator)
             kwargs["_python_is_types"] = self.expr.type.coerce_to_is_types
             return super().operate(op, *other, **kwargs)
@@ -1742,7 +1742,7 @@ class TypeDecorator(SchemaEventTarget, ExternalType, TypeEngine[_T]):
         def reverse_operate(
             self, op: OperatorType, other: Any, **kwargs: Any
         ) -> ColumnElement[_CT]:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(self.expr.type, TypeDecorator)
             kwargs["_python_is_types"] = self.expr.type.coerce_to_is_types
             return super().reverse_operate(op, other, **kwargs)
@@ -2315,7 +2315,7 @@ class Variant(TypeDecorator[_T]):
         )
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def to_instance(
         typeobj: Union[Type[_TE], _TE], *arg: Any, **kw: Any

@@ -267,7 +267,7 @@ class echo_property:
     ``logging.DEBUG``.
     """
 
-    if typing.TYPE_CHECKING:
+    if False:
         @overload
         def __get__(
             self, instance: Literal[None], owner: Type[Identified]

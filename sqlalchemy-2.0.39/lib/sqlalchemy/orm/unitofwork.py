@@ -31,7 +31,7 @@ from .. import util
 from ..util import topological
 
 
-if TYPE_CHECKING:
+if False:
     from .dependency import DependencyProcessor
     from .interfaces import MapperProperty
     from .mapper import Mapper

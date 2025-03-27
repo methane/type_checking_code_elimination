@@ -876,7 +876,7 @@ from ..util.typing import ParamSpec
 from ..util.typing import Protocol
 from ..util.typing import Self
 
-if TYPE_CHECKING:
+if False:
     from ..orm.interfaces import MapperProperty
     from ..orm.util import AliasedInsp
     from ..sql import SQLColumnExpression
@@ -958,7 +958,7 @@ class _HybridClassLevelAccessor(QueryableAttribute[_T]):
 
     """
 
-    if TYPE_CHECKING:
+    if False:
 
         def getter(
             self, fget: _HybridGetterType[_T]
@@ -1037,7 +1037,7 @@ class hybrid_method(interfaces.InspectionAttrInfo, Generic[_P, _R]):
         """
         return self
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __get__(
             self, instance: Literal[None], owner: Type[object]
@@ -1120,7 +1120,7 @@ class hybrid_property(interfaces.InspectionAttrInfo, ORMDescriptor[_T]):
         self.update_expr = _unwrap_classmethod(update_expr)
         util.update_wrapper(self, fget)  # type: ignore[arg-type]
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def __get__(self, instance: Any, owner: Literal[None]) -> Self: ...
 
@@ -1467,11 +1467,11 @@ class Comparator(interfaces.PropComparator[_T]):
         if is_has_clause_element(expr):
             ret_expr = expr.__clause_element__()
         else:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(expr, ColumnElement)
             ret_expr = expr
 
-        if TYPE_CHECKING:
+        if False:
             # see test_hybrid->test_expression_isnt_clause_element
             # that exercises the usual place this is caught if not
             # true

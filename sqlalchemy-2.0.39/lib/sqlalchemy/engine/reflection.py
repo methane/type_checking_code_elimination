@@ -62,7 +62,7 @@ from ..sql.visitors import InternalTraversal
 from ..util import topological
 from ..util.typing import final
 
-if TYPE_CHECKING:
+if False:
     from .interfaces import Dialect
     from .interfaces import ReflectedCheckConstraint
     from .interfaces import ReflectedColumn

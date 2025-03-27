@@ -86,7 +86,7 @@ class _InspectableProtocol(Protocol[_TCov]):
     def _sa_inspect_instance(self) -> _TCov: ...
 
 from typing import TYPE_CHECKING
-if TYPE_CHECKING:
+if False:
     @overload
     def inspect(
         subject: Type[_InspectableTypeProtocol[_IN]], raiseerr: bool = True

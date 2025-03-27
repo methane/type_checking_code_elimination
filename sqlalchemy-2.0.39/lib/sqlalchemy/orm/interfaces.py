@@ -73,7 +73,7 @@ from ..util import warn_deprecated
 from ..util.typing import RODescriptorReference
 from ..util.typing import TypedDict
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _EntityType
     from ._typing import _IdentityKeyType
     from ._typing import _InstanceDict
@@ -860,7 +860,7 @@ class PropComparator(SQLORMOperations[_T_co], Generic[_T_co], ColumnOperators):
     has_op = cast(operators.OperatorType, _has_op)
     of_type_op = cast(operators.OperatorType, _of_type_op)
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def operate(
             self, op: OperatorType, *other: Any, **kwargs: Any
@@ -1138,7 +1138,7 @@ class StrategizedProperty(MapperProperty[_T]):
 
         for prop_cls in cls.__mro__:
             if prop_cls in cls._all_strategies:
-                if TYPE_CHECKING:
+                if False:
                     assert issubclass(prop_cls, MapperProperty)
                 strategies = cls._all_strategies[prop_cls]
                 try:

@@ -46,7 +46,7 @@ from ..event import EventTarget
 from ..event.registry import _ET
 from ..util.compat import inspect_getfullargspec
 
-if TYPE_CHECKING:
+if False:
     from weakref import ReferenceType
 
     from ._typing import _InstanceDict

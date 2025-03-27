@@ -42,7 +42,7 @@ from ..util.typing import Literal
 from ..util.typing import Protocol
 from ..util.typing import Self
 
-if TYPE_CHECKING:
+if False:
     from .annotation import _AnnotationDict
     from .elements import ColumnElement
 
@@ -97,7 +97,7 @@ class Visitable:
 
     _original_compiler_dispatch: _CompilerDispatchType
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def _compiler_dispatch(self, visitor: Any, **kw: Any) -> str: ...
 
@@ -597,7 +597,7 @@ class ExternallyTraversible(HasTraverseInternals, Visitable):
 
     _annotations: Mapping[Any, Any] = util.EMPTY_DICT
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def _annotate(self, values: _AnnotationDict) -> Self: ...
 
@@ -672,7 +672,7 @@ class ExternalTraversal(util.MemoizedSlots):
         """
         return iterate(obj, self.__traverse_options__)
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def traverse(self, obj: Literal[None]) -> None: ...
 
@@ -739,7 +739,7 @@ class CloningExternalTraversal(ExternalTraversal):
         """
         return [self.traverse(x) for x in list_]
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def traverse(self, obj: Literal[None]) -> None: ...
 
@@ -780,7 +780,7 @@ class ReplacingExternalTraversal(CloningExternalTraversal):
         """
         return None
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def traverse(self, obj: Literal[None]) -> None: ...
 
@@ -857,7 +857,7 @@ def iterate(
             stack.append(t.get_children(**opts))
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def traverse_using(
         iterator: Iterable[ExternallyTraversible],
@@ -910,7 +910,7 @@ def traverse_using(
     return obj
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def traverse(
         obj: Literal[None],
@@ -966,7 +966,7 @@ def traverse(
     return traverse_using(iterate(obj, opts), obj, visitors)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def cloned_traverse(
         obj: Literal[None],
@@ -1077,7 +1077,7 @@ def cloned_traverse(
     clone = None  # type: ignore[assignment]  # remove gc cycles
     return obj
 
-if TYPE_CHECKING:
+if False:
     @overload
     def replacement_traverse(
         obj: Literal[None],

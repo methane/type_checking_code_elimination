@@ -80,7 +80,7 @@ from ..util.typing import Literal
 from ..util.typing import ParamSpec
 from ..util.typing import Self
 
-if typing.TYPE_CHECKING:
+if False:
     from ._typing import _ByArgument
     from ._typing import _ColumnExpressionArgument
     from ._typing import _ColumnExpressionOrStrLabelArgument
@@ -128,7 +128,7 @@ _NT = TypeVar("_NT", bound="_NUMERIC")
 _NMT = TypeVar("_NMT", bound="_NUMBER")
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def literal(
         value: Any,
@@ -316,7 +316,7 @@ class CompilerElement(Visitable):
         """Return a compiler appropriate for this ClauseElement, given a
         Dialect."""
 
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self, ClauseElement)
         return dialect.statement_compiler(dialect, self, **kw)
 
@@ -339,7 +339,7 @@ class ClauseElement(
 
     __visit_name__ = "clause"
 
-    if TYPE_CHECKING:
+    if False:
 
         @util.memoized_property
         def _propagate_attrs(self) -> _PropagateAttrsType:
@@ -388,7 +388,7 @@ class ClauseElement(
 
     negation_clause: ColumnElement[bool]
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def get_children(
             self, *, omit_attrs: typing_Tuple[str, ...] = ..., **kw: Any
@@ -519,7 +519,7 @@ class ClauseElement(
         execution_options: CoreExecuteOptionsParameter,
     ) -> Result[Any]:
         if self.supports_execution:
-            if TYPE_CHECKING:
+            if False:
                 assert isinstance(self, Executable)
             return connection._execute_clauseelement(
                 self, distilled_params, execution_options
@@ -694,7 +694,7 @@ class ClauseElement(
             elem_cache_key = None
 
         if elem_cache_key is not None:
-            if TYPE_CHECKING:
+            if False:
                 assert compiled_cache is not None
 
             cache_key, extracted_params = elem_cache_key
@@ -777,7 +777,7 @@ class DQLDMLClauseElement(ClauseElement):
 
     """
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def _compiler(self, dialect: Dialect, **kw: Any) -> SQLCompiler:
             """Return a compiler appropriate for this ClauseElement, given a
@@ -819,7 +819,7 @@ class SQLCoreOperations(Generic[_T_co], ColumnOperators, TypingOnly):
     # annotations for comparison methods
     # these are from operators->Operators / ColumnOperators,
     # redefined with the specific types returned by ColumnElement hierarchies
-    if typing.TYPE_CHECKING:
+    if False:
 
         @util.non_memoized_property
         def _propagate_attrs(self) -> _PropagateAttrsType: ...
@@ -1440,7 +1440,7 @@ class ColumnElement(
 
     _alt_names: Sequence[str] = ()
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def self_group(self, against: None = None) -> ColumnElement[_T]: ...
 
@@ -1462,7 +1462,7 @@ class ColumnElement(
         else:
             return self
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def _negate(self: ColumnElement[bool]) -> ColumnElement[bool]: ...
 
@@ -3962,7 +3962,7 @@ class BinaryExpression(OperatorExpression[_T]):
         else:
             raise TypeError("Boolean value of this clause is not defined")
 
-    if typing.TYPE_CHECKING:
+    if False:
 
         def __invert__(
             self: BinaryExpression[_T],
@@ -4106,7 +4106,7 @@ class Grouping(GroupedElement, ColumnElement[_T]):
         self.element = state["element"]
         self.type = state["type"]
 
-    if TYPE_CHECKING:
+    if False:
 
         def self_group(
             self, against: Optional[OperatorType] = None
@@ -4375,7 +4375,7 @@ class WithinGroup(ColumnElement[_T]):
             rows=rows,
         )
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         def filter(self) -> Self: ...
 
@@ -5245,7 +5245,7 @@ class quoted_name(util.MemoizedSlots, str):
 
     quote: Optional[bool]
 
-    if TYPE_CHECKING:
+    if False:
         @overload
         @classmethod
         def construct(cls, value: str, quote: Optional[bool]) -> quoted_name: ...
@@ -5394,7 +5394,7 @@ class AnnotatedColumnElement(Annotated):
 
     @util.memoized_property
     def info(self) -> _InfoType:
-        if TYPE_CHECKING:
+        if False:
             assert isinstance(self._Annotated__element, Column)
         return self._Annotated__element.info
 

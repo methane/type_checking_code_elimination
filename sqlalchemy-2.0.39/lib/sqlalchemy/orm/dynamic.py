@@ -45,7 +45,7 @@ from .. import util
 from ..engine import result
 
 
-if TYPE_CHECKING:
+if False:
     from . import QueryableAttribute
     from .mapper import Mapper
     from .relationships import _RelationshipOrderByArg
@@ -172,7 +172,7 @@ class AppenderMixin(AbstractCollectionWriter[_T]):
         else:
             return self._generate(sess)._iter()
 
-    if TYPE_CHECKING:
+    if False:
 
         def __iter__(self) -> Iterator[_T]: ...
 

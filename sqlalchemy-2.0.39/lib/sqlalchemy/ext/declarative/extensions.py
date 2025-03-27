@@ -29,7 +29,7 @@ from ...orm.util import polymorphic_union
 from ...schema import Table
 from ...util import OrderedDict
 
-if TYPE_CHECKING:
+if False:
     from ...sql.schema import MetaData
 
 

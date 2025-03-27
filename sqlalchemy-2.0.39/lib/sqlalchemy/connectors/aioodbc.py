@@ -20,7 +20,7 @@ from .. import util
 from ..util.concurrency import await_fallback
 from ..util.concurrency import await_only
 
-if TYPE_CHECKING:
+if False:
     from ..engine.interfaces import ConnectArgsType
     from ..engine.url import URL
 

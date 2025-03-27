@@ -45,7 +45,7 @@ from .. import exc
 from .. import util
 from ..util.typing import Literal
 
-if TYPE_CHECKING:
+if False:
     from .compiler import _BindNameForColProtocol
     from .compiler import SQLCompiler
     from .dml import _DMLColumnElement
@@ -385,7 +385,7 @@ def _get_crud_params(
     )
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _create_bind_param(
         compiler: SQLCompiler,
@@ -505,7 +505,7 @@ def _key_getters_for_crud_column(
 
         def _col_bind_name(col: ColumnClause[Any]) -> str:
             if col.table in _et:
-                if TYPE_CHECKING:
+                if False:
                     assert isinstance(col.table, TableClause)
                 return "%s_%s" % (col.table.name, col.key)
             else:
@@ -1210,7 +1210,7 @@ def _append_param_update(
         compiler.implicit_returning.append(c)
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _create_insert_prefetch_bind_param(
         compiler: SQLCompiler,
@@ -1243,7 +1243,7 @@ def _create_insert_prefetch_bind_param(
     return param
 
 
-if TYPE_CHECKING:
+if False:
     @overload
     def _create_update_prefetch_bind_param(
         compiler: SQLCompiler,
